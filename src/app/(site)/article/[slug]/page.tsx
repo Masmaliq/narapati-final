@@ -1,9 +1,10 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import {PortableText} from '@portabletext/react'
 import {formatDate} from '@/components/date'
 import {articles} from '@/data/fallback'
-import {getArticle} from '@/sanity/lib/fetch'
+import {getArticle, getArticles} from '@/sanity/lib/fetch'
 
 type Props = {
   params: Promise<{slug: string}>
@@ -13,32 +14,63 @@ export function generateStaticParams() {
   return articles.map((article) => ({slug: article.slug}))
 }
 
+function decodeSlug(slug: string) {
+  try {
+    return decodeURIComponent(slug)
+  } catch {
+    return slug
+  }
+}
+
+function articleHref(slug: string) {
+  return `/article/${encodeURIComponent(slug)}`
+}
+
 export default async function ArticlePage({params}: Props) {
   const {slug} = await params
-  const article = await getArticle(slug)
+  const decodedSlug = decodeSlug(slug)
+  const [article, allArticles] = await Promise.all([getArticle(decodedSlug), getArticles()])
 
   if (!article) notFound()
 
+  const relatedArticles = allArticles
+    .filter((item) => item.slug !== article.slug && item.category.slug === article.category.slug)
+    .slice(0, 3)
+
+  const fallbackRelated = allArticles
+    .filter((item) => item.slug !== article.slug && !relatedArticles.some((related) => related.slug === item.slug))
+    .slice(0, 3 - relatedArticles.length)
+
+  const related = [...relatedArticles, ...fallbackRelated]
+  const body = Array.isArray(article.body) && article.body.length > 0 ? article.body : null
+  const authorInitial = article.author.name.charAt(0).toUpperCase()
+
   return (
     <>
-      <section className="page-hero">
+      <section className="page-hero article-hero">
         <div className="container">
-          <div className="eyebrow">{article.category.title}</div>
-          <h1>{article.title}</h1>
-          <p>{article.dek}</p>
-          <div className="meta hero-meta" style={{marginTop: 24}}>
-            {formatDate(article.publishedAt)} / {article.author.name}
+          <div className="article-hero-inner">
+            <Link href={`/category/${encodeURIComponent(article.category.slug)}`} className="article-category">
+              {article.category.title}
+            </Link>
+            <h1>{article.title}</h1>
+            <p>{article.dek}</p>
+            <div className="article-meta-row">
+              <span>{article.author.name}</span>
+              <span>{formatDate(article.publishedAt)}</span>
+              <span>Narapati News Network</span>
+            </div>
           </div>
         </div>
       </section>
       <div className="container">
-        <div className="thumb wide" style={{marginTop: 28}}>
+        <figure className="article-cover">
           <Image src={article.image} alt="" fill priority sizes="100vw" />
-        </div>
+        </figure>
         <div className="article-shell">
           <article className="article-body">
-            {article.body ? (
-              <PortableText value={article.body} />
+            {body ? (
+              <PortableText value={body} />
             ) : (
               <>
                 <p>
@@ -54,10 +86,52 @@ export default async function ArticlePage({params}: Props) {
             )}
           </article>
           <aside className="article-aside">
-            <strong>Editorial note</strong>
-            <p>NNN separates reporting, analysis, and opinion. Article updates are reviewed by section editors before publication.</p>
+            <div className="author-card">
+              <div className="author-avatar">
+                {article.author.image ? (
+                  <Image src={article.author.image} alt="" fill sizes="56px" />
+                ) : (
+                  <span>{authorInitial}</span>
+                )}
+              </div>
+              <div>
+                <span className="eyebrow">Penulis</span>
+                <h2>{article.author.name}</h2>
+                <p>{article.author.role || 'Editorial'}</p>
+              </div>
+            </div>
+            <div className="editorial-note">
+              <strong>Editorial note</strong>
+              <p>NNN separates reporting, analysis, and opinion. Article updates are reviewed by section editors before publication.</p>
+            </div>
           </aside>
         </div>
+        {related.length ? (
+          <section className="related-articles" aria-label="Related articles">
+            <div className="section-header">
+              <div>
+                <div className="eyebrow">Baca Juga</div>
+                <h2 className="section-title">Related Articles</h2>
+              </div>
+            </div>
+            <div className="related-grid">
+              {related.map((item) => (
+                <article className="related-card" key={item.slug}>
+                  <Link href={articleHref(item.slug)} className="related-image">
+                    <Image src={item.image} alt="" fill sizes="(max-width: 900px) 100vw, 33vw" />
+                  </Link>
+                  <div>
+                    <div className="eyebrow">{item.category.title}</div>
+                    <Link href={articleHref(item.slug)}>
+                      <h3>{item.title}</h3>
+                    </Link>
+                    <p>{formatDate(item.publishedAt)}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
       </div>
     </>
   )
