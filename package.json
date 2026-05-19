@@ -1,0 +1,32 @@
+{
+  "name": "narapati-news-network",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@portabletext/react": "^3.2.1",
+    "@portabletext/types": "^2.0.15",
+    "@sanity/image-url": "^1.1.0",
+    "@sanity/vision": "^3.88.3",
+    "lucide-react": "^0.468.0",
+    "next": "^15.0.0",
+    "next-sanity": "^9.8.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sanity": "^3.88.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.1",
+    "eslint": "^9.17.0",
+    "eslint-config-next": "^15.0.0",
+    "typescript": "^5.7.2"
+  }
+}
