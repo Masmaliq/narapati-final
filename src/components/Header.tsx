@@ -16,7 +16,10 @@ export function Header() {
       <div className="container topbar">
         <Link href="/" className="brand" aria-label="Narapati News Network home">
           <span className="brand-mark">NNN</span>
-          <span className="brand-sub">Narapati News Network</span>
+          <span className="brand-sub">
+            <span>Narapati</span>
+            <span>News Network</span>
+          </span>
         </Link>
         <nav className="nav" aria-label="Main navigation">
           {navItems.map(([label, href]) => (
