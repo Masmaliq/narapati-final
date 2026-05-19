@@ -933,7 +933,8 @@ img {
   margin-top: 28px;
 }
 
-.article-meta-row span {
+.article-meta-row span,
+.article-meta-row time {
   display: inline-flex;
   align-items: center;
   border: 1px solid rgba(234, 223, 206, 0.92);
@@ -1371,7 +1372,8 @@ img {
     gap: 8px;
   }
 
-  .article-meta-row span {
+  .article-meta-row span,
+  .article-meta-row time {
     font-size: 0.68rem;
     padding: 8px 10px;
   }
