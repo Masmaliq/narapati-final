@@ -1601,14 +1601,25 @@ img {
 }
 
 .premium-hero-card {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.78fr);
-  min-height: 390px;
+  min-height: clamp(390px, 42vw, 540px);
   overflow: hidden;
   border: 1px solid rgba(234, 223, 206, 0.94);
   border-radius: 14px;
-  background: var(--white);
+  background: var(--navy);
   box-shadow: 0 22px 70px rgba(7, 26, 45, 0.095);
+}
+
+.premium-hero-card::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(255, 253, 248, 0.96) 0%, rgba(255, 253, 248, 0.84) 34%, rgba(255, 253, 248, 0.28) 62%, rgba(7, 26, 45, 0.18) 100%),
+    linear-gradient(180deg, rgba(7, 26, 45, 0.04), rgba(7, 26, 45, 0.32));
+  content: '';
+  pointer-events: none;
 }
 
 .premium-hero-image,
@@ -1618,6 +1629,12 @@ img {
   display: block;
   overflow: hidden;
   background: var(--paper-deep);
+}
+
+.premium-hero-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
 .premium-hero-image img,
@@ -1634,17 +1651,20 @@ img {
 }
 
 .premium-hero-copy {
+  position: relative;
+  z-index: 2;
   display: grid;
   align-content: center;
+  width: min(660px, 62%);
   gap: 14px;
-  padding: clamp(24px, 3.4vw, 42px);
+  padding: clamp(30px, 5vw, 62px);
 }
 
 .premium-hero-copy h1 {
   margin: 0;
   color: var(--navy);
   font-family: var(--font-serif), Georgia, serif;
-  font-size: clamp(2.35rem, 3.45vw, 4.05rem);
+  font-size: clamp(2.55rem, 4.4vw, 5rem);
   letter-spacing: -0.012em;
   line-height: 1;
   overflow-wrap: anywhere;
@@ -2412,11 +2432,15 @@ img {
   }
 
   .premium-hero-card {
-    min-height: auto;
+    min-height: clamp(420px, 62vw, 560px);
   }
 
   .premium-hero-image {
-    aspect-ratio: 16 / 10;
+    aspect-ratio: auto;
+  }
+
+  .premium-hero-copy {
+    width: min(680px, 78%);
   }
 
   .home-section-heading,
@@ -2706,7 +2730,16 @@ img {
   }
 
   .premium-hero-copy {
-    padding: 22px;
+    width: 100%;
+    align-content: end;
+    min-height: 430px;
+    padding: 24px 22px 28px;
+  }
+
+  .premium-hero-card::after {
+    background:
+      linear-gradient(180deg, rgba(255, 253, 248, 0.68) 0%, rgba(255, 253, 248, 0.72) 34%, rgba(255, 253, 248, 0.96) 100%),
+      linear-gradient(90deg, rgba(255, 253, 248, 0.86), rgba(255, 253, 248, 0.28));
   }
 
   .premium-hero-copy h1 {
