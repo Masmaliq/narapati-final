@@ -31,4 +31,15 @@ export type MediaItem = {
   publishedAt: string
   image: string
   duration: string
+  videoUrl?: string
+  youtubeUrl?: string
+}
+
+export type PhotographyItem = MediaItem & {
+  location?: string
+  category?: Category
+  author?: Author
+  gallery?: string[]
+  body?: PortableTextBlock[]
+  featured?: boolean
 }

@@ -1,18 +1,17 @@
-import Link from 'next/link'
-
 export function Footer() {
   return (
     <footer className="site-footer">
       <div className="container footer-grid">
-        <div className="brand">
-          <span className="brand-mark">NNN</span>
-          <span className="brand-sub">Narapati News Network / Nilai Hidup</span>
+        <div className="footer-brand">
+          <span>NNN</span>
+          <strong>Narapati News Network</strong>
+          <small>© 2026 Narapati News Network. All rights reserved.</small>
         </div>
-        <div className="footer-links">
-          <Link href="/redaksi">Redaksi</Link>
-          <Link href="/privacy">Privacy</Link>
-          <Link href="/studio">Studio</Link>
-        </div>
+        <nav className="footer-links" aria-label="Footer navigation">
+          <a href="/about">About</a>
+          <a href="/redaksi">Redaksi</a>
+          <a href="/about#contact">Contact</a>
+        </nav>
       </div>
     </footer>
   )

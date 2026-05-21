@@ -84,3 +84,22 @@ export const videos: MediaItem[] = [
     duration: '21:40'
   }
 ]
+
+export const photography: MediaItem[] = [
+  {
+    title: 'Visual Essay: The Quiet Discipline of a Modern Newsroom',
+    slug: 'quiet-discipline-modern-newsroom',
+    dek: 'A photographic look at editorial rituals, research walls, and the calm machinery behind premium reporting.',
+    publishedAt: '2026-05-11',
+    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1400&q=85',
+    duration: 'Jakarta'
+  },
+  {
+    title: 'Frames From Indonesia’s New Business Districts',
+    slug: 'frames-indonesia-business-districts',
+    dek: 'Architecture, mobility, and ambition captured through the changing lines of Indonesia’s commercial centers.',
+    publishedAt: '2026-05-07',
+    image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=85',
+    duration: 'Indonesia'
+  }
+]

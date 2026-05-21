@@ -1,5 +1,5 @@
-import {articles, categories, podcasts, videos} from '@/data/fallback'
-import type {Article, Category, MediaItem} from '@/types/content'
+import {articles, categories, photography, podcasts, videos} from '@/data/fallback'
+import type {Article, Category, MediaItem, PhotographyItem} from '@/types/content'
 import {isSanityConfigured} from '../env'
 import {client} from './client'
 import {
@@ -8,18 +8,39 @@ import {
   CATEGORIES_QUERY,
   CATEGORY_ARTICLES_QUERY,
   CATEGORY_QUERY,
+  PHOTOGRAPHY_DETAIL_QUERY,
+  PHOTOGRAPHY_QUERY,
   PODCASTS_QUERY,
+  VIDEO_DETAIL_QUERY,
   VIDEOS_QUERY
 } from './queries'
 
-async function read<T>(query: string, params = {}, fallback: T): Promise<T> {
+type ReadOptions = {
+  fallbackOnEmpty?: boolean
+  fallbackOnError?: boolean
+}
+
+const SANITY_READ_TIMEOUT_MS = 8000
+
+async function read<T>(query: string, params = {}, fallback: T, options: ReadOptions = {}): Promise<T> {
   if (!isSanityConfigured) return fallback
 
   try {
-    const data = await client.fetch<T>(query, params, {next: {revalidate: 60}})
-    if (Array.isArray(data) && data.length === 0) return fallback
+    const data = await Promise.race([
+      client.fetch<T>(query, params, {next: {revalidate: 60}}),
+      new Promise<T>((_, reject) => {
+        setTimeout(() => reject(new Error('Sanity request timed out')), SANITY_READ_TIMEOUT_MS)
+      })
+    ])
+    if (Array.isArray(data) && data.length === 0) {
+      return options.fallbackOnEmpty === false ? data : fallback
+    }
     return data || fallback
   } catch {
+    if (options.fallbackOnError === false) {
+      if (Array.isArray(fallback)) return [] as T
+      return null as T
+    }
     return fallback
   }
 }
@@ -35,12 +56,12 @@ export async function getArticle(slug: string) {
 
 export async function getCategory(slug: string) {
   const fallback = categories.find((category) => category.slug === slug) || null
-  return read<Category | null>(CATEGORY_QUERY, {slug}, fallback)
+  return read<Category | null>(CATEGORY_QUERY, {slug}, fallback, {fallbackOnError: false})
 }
 
 export async function getCategoryArticles(slug: string) {
   const fallback = articles.filter((article) => article.category.slug === slug)
-  return read<Article[]>(CATEGORY_ARTICLES_QUERY, {slug}, fallback)
+  return read<Article[]>(CATEGORY_ARTICLES_QUERY, {slug}, fallback, {fallbackOnEmpty: false, fallbackOnError: false})
 }
 
 export function getCategories() {
@@ -53,4 +74,18 @@ export function getPodcasts() {
 
 export function getVideos() {
   return read<MediaItem[]>(VIDEOS_QUERY, {}, videos)
+}
+
+export async function getVideo(slug: string) {
+  const fallback = videos.find((item) => item.slug === slug) || null
+  return read<MediaItem | null>(VIDEO_DETAIL_QUERY, {slug}, fallback)
+}
+
+export function getPhotography() {
+  return read<PhotographyItem[]>(PHOTOGRAPHY_QUERY, {}, photography)
+}
+
+export async function getPhotographyItem(slug: string) {
+  const fallback = photography.find((item) => item.slug === slug) || null
+  return read<PhotographyItem | null>(PHOTOGRAPHY_DETAIL_QUERY, {slug}, fallback)
 }

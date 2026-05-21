@@ -1,18 +1,19 @@
 import {notFound} from 'next/navigation'
 import {ArticleCard} from '@/components/ArticleCard'
-import {categories} from '@/data/fallback'
-import {getCategory, getCategoryArticles} from '@/sanity/lib/fetch'
+import {getCategories, getCategory, getCategoryArticles} from '@/sanity/lib/fetch'
 
 type Props = {
   params: Promise<{slug: string}>
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const categories = await getCategories()
   return categories.map((category) => ({slug: category.slug}))
 }
 
 export default async function CategoryPage({params}: Props) {
-  const {slug} = await params
+  const {slug: rawSlug} = await params
+  const slug = decodeURIComponent(rawSlug)
   const [category, articles] = await Promise.all([getCategory(slug), getCategoryArticles(slug)])
 
   if (!category) notFound()

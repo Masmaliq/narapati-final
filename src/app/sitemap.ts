@@ -8,8 +8,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {url: absoluteUrl('/'), lastModified: now, changeFrequency: 'daily', priority: 1},
-    {url: absoluteUrl('/podcast'), lastModified: now, changeFrequency: 'weekly', priority: 0.7},
     {url: absoluteUrl('/video'), lastModified: now, changeFrequency: 'weekly', priority: 0.7},
+    {url: absoluteUrl('/photography'), lastModified: now, changeFrequency: 'weekly', priority: 0.7},
     {url: absoluteUrl('/about'), lastModified: now, changeFrequency: 'monthly', priority: 0.5},
     {url: absoluteUrl('/redaksi'), lastModified: now, changeFrequency: 'monthly', priority: 0.5},
     {url: absoluteUrl('/privacy'), lastModified: now, changeFrequency: 'yearly', priority: 0.3}

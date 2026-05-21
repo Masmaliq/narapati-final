@@ -14,7 +14,7 @@ export default function AboutPage() {
           Narapati News Network covers public life, business, culture, and global affairs with a focus on decision-makers and the communities affected by their choices. We value context over noise, original reporting over repetition, and clean design that lets the work breathe.
         </p>
         <p>
-          The newsroom is structured around specialist desks, modular publishing workflows, and a CMS-first architecture so editors can publish articles, podcasts, and video briefings without engineering support.
+          The newsroom is structured around specialist desks, modular publishing workflows, and a CMS-first architecture so editors can publish articles, visual reports, and video briefings without engineering support.
         </p>
         <h2>Editorial Identity</h2>
         <p>

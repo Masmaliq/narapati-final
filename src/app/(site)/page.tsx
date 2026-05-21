@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import {formatDate} from '@/components/date'
-import {getArticles, getCategories} from '@/sanity/lib/fetch'
+import {getArticles, getCategories, getPhotography, getVideos} from '@/sanity/lib/fetch'
 
 function articleHref(slug: string) {
   return `/article/${encodeURIComponent(slug)}`
@@ -11,10 +11,23 @@ function categoryHref(slug: string) {
   return `/category/${encodeURIComponent(slug)}`
 }
 
+function photographyHref(slug: string) {
+  return `/photography/${encodeURIComponent(slug)}`
+}
+
+function videoHref(slug: string) {
+  return `/video/${encodeURIComponent(slug)}`
+}
+
 const sponsorPartners = ['MAK Capital', 'Narapati Partner', 'Archipelago Fund', 'Meridian Advisory', 'Svara Ventures']
 
 export default async function HomePage() {
-  const [articles, categories] = await Promise.all([getArticles(), getCategories()])
+  const [articles, categories, videos, photography] = await Promise.all([
+    getArticles(),
+    getCategories(),
+    getVideos(),
+    getPhotography()
+  ])
   const featured = articles.find((article) => article.featured) || articles[0]
   const supporting = articles.filter((article) => article.slug !== featured.slug)
   const secondary = supporting.slice(0, 4)
@@ -27,12 +40,8 @@ export default async function HomePage() {
   ].filter((article, index, list) => list.findIndex((item) => item.slug === article.slug) === index).slice(0, 3)
   const sidebarStories = articles.slice(0, 5)
   const popularStories = supporting.slice(0, 4)
-  const videoStories = latest.slice(0, 3)
-  const photographyStories = [
-    ...articles.filter((article) => /foto|photo|visual|photography/i.test(article.category.title)),
-    ...articles
-  ].filter((article, index, list) => list.findIndex((item) => item.slug === article.slug) === index).slice(0, 3)
-  const podcastStories = editorsPick.slice(0, 3)
+  const videoStories = videos.slice(0, 3)
+  const photographyStories = photography.slice(0, 3)
   const recommendationStories = latest.slice(3, 7)
   const popularMainStories = popularStories.slice(0, 3)
   const mobileCategory = categories[0]
@@ -154,18 +163,18 @@ export default async function HomePage() {
                   <h2 id="video-section-heading">Video</h2>
                 </div>
                 <div className="portal-card-grid">
-                  {videoStories.map((article) => (
-                    <article className="portal-media-card" key={article.slug}>
-                      <Link href={articleHref(article.slug)} className="portal-media-image">
-                        <Image src={article.image} alt="" fill sizes="(max-width: 760px) 100vw, 30vw" />
+                  {videoStories.map((item) => (
+                    <article className="portal-media-card" key={item.slug}>
+                      <Link href={videoHref(item.slug)} className="portal-media-image">
+                        <Image src={item.image} alt="" fill sizes="(max-width: 760px) 100vw, 30vw" />
                         <span>Play</span>
                       </Link>
                       <div>
-                        <Link href={categoryHref(article.category.slug)} className="home-card-kicker">
-                          {article.category.title}
+                        <Link href="/video" className="home-card-kicker">
+                          {item.duration || 'Video'}
                         </Link>
-                        <Link href={articleHref(article.slug)}>
-                          <h3>{article.title}</h3>
+                        <Link href={videoHref(item.slug)}>
+                          <h3>{item.title}</h3>
                         </Link>
                       </div>
                     </article>
@@ -179,36 +188,20 @@ export default async function HomePage() {
                   <h2 id="photography-section-heading">Photography</h2>
                 </div>
                 <div className="portal-card-grid">
-                  {photographyStories.map((article) => (
-                    <article className="portal-media-card" key={article.slug}>
-                      <Link href={articleHref(article.slug)} className="portal-media-image">
-                        <Image src={article.image} alt="" fill sizes="(max-width: 760px) 100vw, 30vw" />
+                  {photographyStories.map((item) => (
+                    <article className="portal-media-card" key={item.slug}>
+                      <Link href={photographyHref(item.slug)} className="portal-media-image">
+                        <Image src={item.image} alt="" fill sizes="(max-width: 760px) 100vw, 30vw" />
                       </Link>
                       <div>
-                        <Link href={categoryHref(article.category.slug)} className="home-card-kicker">
-                          {article.category.title}
+                        <Link href="/photography" className="home-card-kicker">
+                          {item.duration || 'Photography'}
                         </Link>
-                        <Link href={articleHref(article.slug)}>
-                          <h3>{article.title}</h3>
+                        <Link href={photographyHref(item.slug)}>
+                          <h3>{item.title}</h3>
                         </Link>
                       </div>
                     </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className="portal-section" aria-labelledby="podcast-section-heading">
-                <div className="compact-section-heading">
-                  <span>Audio</span>
-                  <h2 id="podcast-section-heading">Podcast</h2>
-                </div>
-                <div className="podcast-strip">
-                  {podcastStories.map((article) => (
-                    <Link className="podcast-strip-item" href={articleHref(article.slug)} key={article.slug}>
-                      <span>{article.category.title}</span>
-                      <strong>{article.title}</strong>
-                      <small>{formatDate(article.publishedAt)}</small>
-                    </Link>
                   ))}
                 </div>
               </section>
@@ -251,10 +244,10 @@ export default async function HomePage() {
                     <h2>VIDEO</h2>
                     <Link href="/video">Lihat</Link>
                   </div>
-                  {videoStories.map((article) => (
-                    <Link className="sidebar-compact-item" href={articleHref(article.slug)} key={article.slug}>
-                      <span>{article.category.title}</span>
-                      <strong>{article.title}</strong>
+                  {videoStories.map((item) => (
+                    <Link className="sidebar-compact-item" href={videoHref(item.slug)} key={item.slug}>
+                      <span>{item.duration || 'Video'}</span>
+                      <strong>{item.title}</strong>
                     </Link>
                   ))}
                 </section>
@@ -263,10 +256,10 @@ export default async function HomePage() {
                   <div className="sidebar-section-heading">
                     <h2>PHOTOGRAPHY</h2>
                   </div>
-                  {photographyStories.map((article) => (
-                    <Link className="sidebar-compact-item" href={articleHref(article.slug)} key={article.slug}>
-                      <span>{article.category.title}</span>
-                      <strong>{article.title}</strong>
+                  {photographyStories.map((item) => (
+                    <Link className="sidebar-compact-item" href={photographyHref(item.slug)} key={item.slug}>
+                      <span>{item.duration || 'Photography'}</span>
+                      <strong>{item.title}</strong>
                     </Link>
                   ))}
                 </section>
@@ -332,7 +325,7 @@ export default async function HomePage() {
       <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
         <Link href="/">Home</Link>
         <Link href={mobileCategory ? categoryHref(mobileCategory.slug) : '/category/nasional'}>{mobileCategory?.title || 'News'}</Link>
-        <Link href="/podcast">Podcast</Link>
+        <Link href="/photography">Photography</Link>
         <Link href="/video">Video</Link>
       </nav>
     </>

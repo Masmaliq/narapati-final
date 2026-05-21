@@ -6,9 +6,7 @@ const fallbackNavItems = [
   ['Home', '/'],
   ['Dunia', '/category/dunia'],
   ['Analisa', '/category/analisa'],
-  ['Nilai Hidup', '/category/nilai-hidup'],
-  ['Podcast', '/podcast'],
-  ['Video', '/video']
+  ['Nilai Hidup', '/category/nilai-hidup']
 ]
 
 const fallbackTopics = [
@@ -36,8 +34,8 @@ export async function Header() {
       name: article.author.name
     }
   }))
-  const categoryItems = categories.slice(0, 6).map((category) => [category.title, `/category/${encodeURIComponent(category.slug)}`])
-  const navItems = categoryItems.length ? [['Home', '/'], ...categoryItems, ['Podcast', '/podcast'], ['Video', '/video']] : fallbackNavItems
+  const categoryItems = categories.map((category) => [category.title, `/category/${encodeURIComponent(category.slug)}`])
+  const navItems = categoryItems.length ? [['Home', '/'], ...categoryItems] : fallbackNavItems
   const topicItems = categories.length
     ? categories.slice(0, 8).map((category) => [category.title, `/category/${encodeURIComponent(category.slug)}`])
     : fallbackTopics
@@ -70,7 +68,7 @@ export async function Header() {
           <SearchOverlay articles={searchArticles} />
         </div>
         <div className="header-account">
-          <Link href="/podcast">Podcast</Link>
+          <Link href="/photography">Photography</Link>
           <Link href="/video">Video</Link>
         </div>
       </div>
