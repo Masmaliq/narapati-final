@@ -1,4 +1,4 @@
-import type {Article, Category, MediaItem} from '@/types/content'
+import type {Article, Category, MediaItem, SiteSettings} from '@/types/content'
 
 export const categories: Category[] = [
   {title: 'Nasional', slug: 'nasional', description: 'Power, policy, and civic life across Indonesia.'},
@@ -103,3 +103,27 @@ export const photography: MediaItem[] = [
     duration: 'Indonesia'
   }
 ]
+
+export const siteSettings: SiteSettings = {
+  siteTitle: 'Narapati News Network',
+  tagline: 'Independen. Visioner. Untuk Indonesia.',
+  description: 'Media independen untuk bisnis, kepemimpinan, nilai hidup, video, dan photography.',
+  address: 'Jakarta, Indonesia - alamat kantor menyusul',
+  contactEmail: 'hello@narapati.news',
+  whatsapp: '+62 812 0000 2026',
+  instagram: 'https://instagram.com/narapatinewsnetwork',
+  youtube: 'https://youtube.com/@narapatinewsnetwork',
+  linkedin: 'https://linkedin.com/company/narapati-news-network',
+  twitterX: 'https://x.com/narapatinews',
+  privacyText: 'Narapati News Network menghormati privasi pembaca dan mengelola data sesuai kebutuhan layanan digital.',
+  kodeEtikText: 'Ruang redaksi NNN bekerja dengan prinsip akurasi, independensi, akuntabilitas, dan hak jawab.',
+  footerCopyright: '© 2026 Narapati News Network. All rights reserved.',
+  aboutContent:
+    'Narapati News Network adalah platform media digital independen yang menghadirkan jurnalisme premium tentang bisnis, kepemimpinan, nilai hidup, video, dan photography.\n\nNNN dibangun untuk pembaca yang membutuhkan konteks, kejernihan, dan perspektif editorial yang matang.',
+  redaksiContent:
+    'Ruang redaksi Narapati disusun untuk peliputan yang terukur, akuntabel, dan berorientasi pada kualitas. Setiap materi editorial melewati proses penyuntingan dan penilaian konteks sebelum dipublikasikan.',
+  contactContent:
+    'Gunakan kanal resmi Narapati untuk pertanyaan redaksi, kerja sama, undangan liputan, dan komunikasi bisnis.',
+  advertiseContent:
+    'Narapati membuka ruang kerja sama untuk media placement, sponsor, advertorial, video partnership, dan photography coverage dengan pendekatan premium.'
+}

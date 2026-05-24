@@ -1,25 +1,53 @@
 import {defineQuery} from 'next-sanity'
 
-export const ARTICLES_QUERY = defineQuery(`*[_type == "article"] | order(publishedAt desc) {
+export const SITE_SETTINGS_QUERY = defineQuery(`*[_type == "siteSettings" && _id == "siteSettings"][0] {
+  siteTitle,
+  tagline,
+  description,
+  address,
+  contactEmail,
+  whatsapp,
+  instagram,
+  youtube,
+  linkedin,
+  twitterX,
+  privacyText,
+  kodeEtikText,
+  footerCopyright,
+  aboutContent,
+  redaksiContent,
+  contactContent,
+  advertiseContent
+}`)
+
+export const ARTICLES_QUERY = defineQuery(`*[
+  _type == "article" &&
+  !(_id in path("drafts.**")) &&
+  defined(slug.current)
+] | order(publishedAt desc) {
   title,
   "slug": slug.current,
-  dek,
+  "dek": coalesce(dek, ""),
   featured,
   publishedAt,
   "image": mainImage.asset->url,
-  "category": category->{title, "slug": slug.current, description},
+  "category": category->{title, "slug": slug.current, "description": coalesce(description, "")},
   "author": author->{name, role, "image": image.asset->url}
 }`)
 
-export const ARTICLE_QUERY = defineQuery(`*[_type == "article" && slug.current == $slug][0] {
+export const ARTICLE_QUERY = defineQuery(`*[
+  _type == "article" &&
+  !(_id in path("drafts.**")) &&
+  slug.current == $slug
+][0] {
   title,
   "slug": slug.current,
-  dek,
+  "dek": coalesce(dek, ""),
   featured,
   publishedAt,
   body,
   "image": mainImage.asset->url,
-  "category": category->{title, "slug": slug.current, description},
+  "category": category->{title, "slug": slug.current, "description": coalesce(description, "")},
   "author": author->{name, role, "image": image.asset->url}
 }`)
 
@@ -56,7 +84,7 @@ export const CATEGORY_ARTICLES_QUERY = defineQuery(`*[
   featured,
   publishedAt,
   "image": mainImage.asset->url,
-  "category": category->{title, "slug": slug.current, description},
+  "category": category->{title, "slug": slug.current, "description": coalesce(description, "")},
   "author": author->{name, role, "image": image.asset->url}
 }`)
 

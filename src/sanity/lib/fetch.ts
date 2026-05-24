@@ -1,5 +1,5 @@
-import {articles, categories, photography, podcasts, videos} from '@/data/fallback'
-import type {Article, Category, MediaItem, PhotographyItem} from '@/types/content'
+import {articles, categories, photography, podcasts, siteSettings, videos} from '@/data/fallback'
+import type {Article, Category, MediaItem, PhotographyItem, SiteSettings} from '@/types/content'
 import {isSanityConfigured} from '../env'
 import {client} from './client'
 import {
@@ -11,6 +11,7 @@ import {
   PHOTOGRAPHY_DETAIL_QUERY,
   PHOTOGRAPHY_QUERY,
   PODCASTS_QUERY,
+  SITE_SETTINGS_QUERY,
   VIDEO_DETAIL_QUERY,
   VIDEOS_QUERY
 } from './queries'
@@ -49,9 +50,19 @@ export function getArticles() {
   return read<Article[]>(ARTICLES_QUERY, {}, articles)
 }
 
+export async function getSiteSettings() {
+  const settings = await read<Partial<SiteSettings>>(SITE_SETTINGS_QUERY, {}, siteSettings)
+  return {...siteSettings, ...settings}
+}
+
 export async function getArticle(slug: string) {
   const fallback = articles.find((article) => article.slug === slug) || null
-  return read<Article | null>(ARTICLE_QUERY, {slug}, fallback)
+  const article = await read<Article | null>(ARTICLE_QUERY, {slug}, fallback)
+
+  if (article) return article
+
+  const allArticles = await getArticles()
+  return allArticles.find((item) => item.slug === slug) || null
 }
 
 export async function getCategory(slug: string) {

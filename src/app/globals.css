@@ -1371,23 +1371,150 @@ img {
   line-height: 1.78;
 }
 
-.site-footer {
-  border-top: 1px solid var(--line);
-  background: var(--white);
-  color: var(--navy);
-  padding: 44px 0;
+.identity-hero {
+  background:
+    radial-gradient(circle at 82% 16%, rgba(198, 151, 67, 0.22), transparent 32%),
+    linear-gradient(135deg, #071a2d 0%, #0d2a45 100%);
 }
 
-.footer-grid {
+.identity-page {
+  padding: clamp(52px, 7vw, 92px) 0 clamp(72px, 9vw, 116px);
+}
+
+.identity-lead {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 28px;
-  align-items: end;
+  max-width: 900px;
+  gap: 14px;
+  margin-bottom: clamp(32px, 5vw, 54px);
+}
+
+.identity-lead span,
+.identity-card span,
+.contact-card span {
+  color: var(--gold);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.identity-lead h2 {
+  max-width: 760px;
+  margin: 0;
+  color: var(--navy);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(2.3rem, 4.5vw, 4.8rem);
+  line-height: 0.96;
+}
+
+.identity-lead p {
+  max-width: 760px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.06rem;
+  line-height: 1.76;
+}
+
+.identity-card-grid,
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.editorial-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.identity-card,
+.contact-card,
+.identity-note {
+  border: 1px solid rgba(234, 223, 206, 0.95);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 16px 42px rgba(7, 26, 45, 0.055);
+}
+
+.identity-card,
+.contact-card {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-height: 190px;
+  padding: 22px;
+}
+
+.identity-card h3 {
+  margin: 0;
+  color: var(--navy);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(1.45rem, 2vw, 2rem);
+  line-height: 1.04;
+}
+
+.identity-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.62;
+}
+
+.contact-card {
+  min-height: 145px;
+}
+
+.contact-card strong {
+  color: var(--navy);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(1.25rem, 2vw, 1.85rem);
+  line-height: 1.08;
+}
+
+.identity-note {
+  display: grid;
+  gap: 8px;
+  border-top: 3px solid var(--gold);
+  margin-top: clamp(28px, 5vw, 54px);
+  padding: 22px;
+}
+
+.identity-note strong {
+  color: var(--navy);
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.identity-note p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.62;
+}
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(255, 253, 248, 0.96), #fff);
+  color: var(--navy);
+  padding: clamp(44px, 7vw, 74px) 0 32px;
+}
+
+.footer-shell {
+  display: grid;
+  gap: 34px;
+}
+
+.footer-main {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.6fr) repeat(4, minmax(120px, 1fr));
+  gap: clamp(22px, 4vw, 48px);
+  align-items: start;
 }
 
 .footer-brand {
   display: grid;
-  gap: 6px;
+  max-width: 360px;
+  gap: 10px;
 }
 
 .footer-brand span {
@@ -1407,26 +1534,52 @@ img {
   text-transform: uppercase;
 }
 
-.footer-brand small {
+.footer-brand p,
+.footer-bottom small {
+  margin: 0;
   color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 700;
+  line-height: 1.62;
 }
 
-.footer-links {
-  display: flex;
-  gap: 18px;
-  color: var(--muted);
-  font-size: 0.9rem;
+.footer-column {
+  display: grid;
+  gap: 10px;
 }
 
-.footer-links a {
-  color: inherit;
+.footer-column h2 {
+  margin: 0 0 4px;
+  color: var(--navy);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.footer-column a,
+.footer-bottom-links a {
+  color: var(--muted);
   font-weight: 800;
 }
 
-.footer-links a:hover {
+.footer-column a:hover,
+.footer-bottom-links a:hover {
   color: var(--gold);
+}
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+}
+
+.footer-bottom-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.82rem;
 }
 
 .empty-state {
@@ -2527,6 +2680,10 @@ img {
   .brand-band-grid,
   .grid-2,
   .grid-3,
+  .identity-card-grid,
+  .editorial-grid,
+  .contact-grid,
+  .footer-main,
   .photography-grid,
   .photography-gallery,
   .latest-grid,
@@ -2570,6 +2727,16 @@ img {
 
   .footer-sponsor-strip .container > div {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-bottom {
+    display: grid;
+    justify-content: start;
+  }
+
+  .identity-card,
+  .contact-card {
+    min-height: auto;
   }
 
   .portal-card-grid,

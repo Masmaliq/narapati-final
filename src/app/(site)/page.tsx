@@ -21,6 +21,53 @@ function videoHref(slug: string) {
 
 const sponsorPartners = ['MAK Capital', 'Narapati Partner', 'Archipelago Fund', 'Meridian Advisory', 'Svara Ventures']
 
+const homePageContent = {
+  newsroom: {
+    label: 'Narapati News Network',
+    tagline: 'Business, leadership, and nilai hidup for modern Indonesia'
+  },
+  sections: {
+    utama: {label: 'Top Stories', title: 'Berita Utama'},
+    editorsPick: {label: 'Curated', title: "EDITOR'S PICK"},
+    latest: {
+      label: 'Latest News',
+      title: 'Editorial Briefing',
+      description: 'Fresh reporting and analysis from the Narapati newsroom.'
+    },
+    video: {label: 'Watch', title: 'Video', playLabel: 'Play'},
+    photography: {label: 'Visual', title: 'Photography'},
+    popular: {label: 'Most Read', title: 'Terpopuler'}
+  },
+  sidebar: {
+    ariaLabel: 'Post terbaru',
+    latest: {label: 'Update', title: 'POST TERBARU'},
+    video: {title: 'VIDEO', linkLabel: 'Lihat'},
+    photography: {title: 'PHOTOGRAPHY'},
+    recommendation: {title: 'REKOMENDASI'},
+    popular: {title: 'TERPOPULER'}
+  },
+  intelligence: {
+    ariaLabel: 'NNN Intelligence Network',
+    label: 'NNN Intelligence Network',
+    title: 'Tentang NNN',
+    description: 'Narapati News Network adalah media premium untuk kepemimpinan, bisnis, nilai hidup, dan percakapan strategis Indonesia.',
+    ctaLabel: 'Partnership / Branding',
+    ctaTitle: 'Bangun kolaborasi editorial dan brand storytelling bersama NNN.',
+    ctaSmall: 'Hubungi kami'
+  },
+  sponsors: {
+    ariaLabel: 'Sponsor partners',
+    title: 'Premium Partners'
+  },
+  mobileNav: {
+    ariaLabel: 'Mobile navigation',
+    home: 'Home',
+    photography: 'Photography',
+    video: 'Video',
+    fallbackCategory: 'News'
+  }
+}
+
 export default async function HomePage() {
   const [articles, categories, videos, photography] = await Promise.all([
     getArticles(),
@@ -52,8 +99,8 @@ export default async function HomePage() {
         <div className="container">
           <div className="newsroom-bar">
             <div>
-              <span>Narapati News Network</span>
-              <strong>Business, leadership, and nilai hidup for modern Indonesia</strong>
+              <span>{homePageContent.newsroom.label}</span>
+              <strong>{homePageContent.newsroom.tagline}</strong>
             </div>
           </div>
 
@@ -80,8 +127,8 @@ export default async function HomePage() {
 
               <section className="utama-news-section" aria-labelledby="utama-news-heading">
                 <div className="compact-section-heading">
-                  <span>Top Stories</span>
-                  <h2 id="utama-news-heading">Berita Utama</h2>
+                  <span>{homePageContent.sections.utama.label}</span>
+                  <h2 id="utama-news-heading">{homePageContent.sections.utama.title}</h2>
                 </div>
                 <div className="secondary-news-grid">
                   {secondary.map((article) => (
@@ -106,8 +153,8 @@ export default async function HomePage() {
 
               <section className="editors-pick-section" aria-labelledby="editors-pick-heading">
                 <div className="compact-section-heading">
-                  <span>Curated</span>
-                  <h2 id="editors-pick-heading">EDITOR&apos;S PICK</h2>
+                  <span>{homePageContent.sections.editorsPick.label}</span>
+                  <h2 id="editors-pick-heading">{homePageContent.sections.editorsPick.title}</h2>
                 </div>
                 <div className="editors-pick-grid">
                   {editorsPick.map((article) => (
@@ -132,10 +179,10 @@ export default async function HomePage() {
               <section className="latest-news-section">
                 <div className="home-section-heading">
                   <div>
-                    <span>Latest News</span>
-                    <h2>Editorial Briefing</h2>
+                    <span>{homePageContent.sections.latest.label}</span>
+                    <h2>{homePageContent.sections.latest.title}</h2>
                   </div>
-                  <p>Fresh reporting and analysis from the Narapati newsroom.</p>
+                  <p>{homePageContent.sections.latest.description}</p>
                 </div>
                 <div className="latest-news-grid">
                   {latest.map((article) => (
@@ -159,15 +206,15 @@ export default async function HomePage() {
 
               <section className="portal-section" aria-labelledby="video-section-heading">
                 <div className="compact-section-heading">
-                  <span>Watch</span>
-                  <h2 id="video-section-heading">Video</h2>
+                  <span>{homePageContent.sections.video.label}</span>
+                  <h2 id="video-section-heading">{homePageContent.sections.video.title}</h2>
                 </div>
                 <div className="portal-card-grid">
                   {videoStories.map((item) => (
                     <article className="portal-media-card" key={item.slug}>
                       <Link href={videoHref(item.slug)} className="portal-media-image">
                         <Image src={item.image} alt="" fill sizes="(max-width: 760px) 100vw, 30vw" />
-                        <span>Play</span>
+                        <span>{homePageContent.sections.video.playLabel}</span>
                       </Link>
                       <div>
                         <Link href="/video" className="home-card-kicker">
@@ -184,8 +231,8 @@ export default async function HomePage() {
 
               <section className="portal-section" aria-labelledby="photography-section-heading">
                 <div className="compact-section-heading">
-                  <span>Visual</span>
-                  <h2 id="photography-section-heading">Photography</h2>
+                  <span>{homePageContent.sections.photography.label}</span>
+                  <h2 id="photography-section-heading">{homePageContent.sections.photography.title}</h2>
                 </div>
                 <div className="portal-card-grid">
                   {photographyStories.map((item) => (
@@ -208,8 +255,8 @@ export default async function HomePage() {
 
               <section className="portal-section" aria-labelledby="popular-section-heading">
                 <div className="compact-section-heading">
-                  <span>Most Read</span>
-                  <h2 id="popular-section-heading">Terpopuler</h2>
+                  <span>{homePageContent.sections.popular.label}</span>
+                  <h2 id="popular-section-heading">{homePageContent.sections.popular.title}</h2>
                 </div>
                 <div className="popular-main-list">
                   {popularMainStories.map((article, index) => (
@@ -223,12 +270,12 @@ export default async function HomePage() {
               </section>
             </main>
 
-            <aside className="home-ad-sidebar" aria-label="Post terbaru">
+            <aside className="home-ad-sidebar" aria-label={homePageContent.sidebar.ariaLabel}>
               <div className="sidebar-sticky">
                 <section className="sidebar-news-card">
                   <div className="post-terbaru-heading">
-                    <span>Update</span>
-                    <h2>POST TERBARU</h2>
+                    <span>{homePageContent.sidebar.latest.label}</span>
+                    <h2>{homePageContent.sidebar.latest.title}</h2>
                   </div>
                   {sidebarStories.map((article) => (
                     <Link className="post-terbaru-item" href={articleHref(article.slug)} key={article.slug}>
@@ -241,8 +288,8 @@ export default async function HomePage() {
 
                 <section className="sidebar-news-card sidebar-news-card-compact">
                   <div className="sidebar-section-heading">
-                    <h2>VIDEO</h2>
-                    <Link href="/video">Lihat</Link>
+                    <h2>{homePageContent.sidebar.video.title}</h2>
+                    <Link href="/video">{homePageContent.sidebar.video.linkLabel}</Link>
                   </div>
                   {videoStories.map((item) => (
                     <Link className="sidebar-compact-item" href={videoHref(item.slug)} key={item.slug}>
@@ -254,7 +301,7 @@ export default async function HomePage() {
 
                 <section className="sidebar-news-card sidebar-news-card-compact">
                   <div className="sidebar-section-heading">
-                    <h2>PHOTOGRAPHY</h2>
+                    <h2>{homePageContent.sidebar.photography.title}</h2>
                   </div>
                   {photographyStories.map((item) => (
                     <Link className="sidebar-compact-item" href={photographyHref(item.slug)} key={item.slug}>
@@ -266,7 +313,7 @@ export default async function HomePage() {
 
                 <section className="sidebar-news-card sidebar-news-card-compact">
                   <div className="sidebar-section-heading">
-                    <h2>REKOMENDASI</h2>
+                    <h2>{homePageContent.sidebar.recommendation.title}</h2>
                   </div>
                   {recommendationStories.map((article) => (
                     <Link className="sidebar-compact-item" href={articleHref(article.slug)} key={article.slug}>
@@ -278,7 +325,7 @@ export default async function HomePage() {
 
                 <section className="sidebar-news-card sidebar-news-card-compact">
                   <div className="sidebar-section-heading">
-                    <h2>TERPOPULER</h2>
+                    <h2>{homePageContent.sidebar.popular.title}</h2>
                   </div>
                   {popularStories.map((article, index) => (
                     <Link className="sidebar-ranked-item" href={articleHref(article.slug)} key={article.slug}>
@@ -293,27 +340,27 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="nnn-intelligence-section" aria-label="NNN Intelligence Network">
+      <section className="nnn-intelligence-section" aria-label={homePageContent.intelligence.ariaLabel}>
         <div className="container nnn-intelligence-grid">
           <div className="nnn-intelligence-image">
             <Image src={featured.image} alt="" fill sizes="(max-width: 900px) 100vw, 34vw" />
           </div>
           <div className="nnn-intelligence-copy">
-            <span>NNN Intelligence Network</span>
-            <h2>Tentang NNN</h2>
-            <p>Narapati News Network adalah media premium untuk kepemimpinan, bisnis, nilai hidup, dan percakapan strategis Indonesia.</p>
+            <span>{homePageContent.intelligence.label}</span>
+            <h2>{homePageContent.intelligence.title}</h2>
+            <p>{homePageContent.intelligence.description}</p>
           </div>
           <Link className="nnn-intelligence-cta" href="/about">
-            <span>Partnership / Branding</span>
-            <strong>Bangun kolaborasi editorial dan brand storytelling bersama NNN.</strong>
-            <small>Hubungi kami</small>
+            <span>{homePageContent.intelligence.ctaLabel}</span>
+            <strong>{homePageContent.intelligence.ctaTitle}</strong>
+            <small>{homePageContent.intelligence.ctaSmall}</small>
           </Link>
         </div>
       </section>
 
-      <section className="footer-sponsor-strip" aria-label="Sponsor partners">
+      <section className="footer-sponsor-strip" aria-label={homePageContent.sponsors.ariaLabel}>
         <div className="container">
-          <span>Premium Partners</span>
+          <span>{homePageContent.sponsors.title}</span>
           <div>
             {sponsorPartners.map((partner) => (
               <div key={partner}>{partner}</div>
@@ -322,11 +369,13 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
-        <Link href="/">Home</Link>
-        <Link href={mobileCategory ? categoryHref(mobileCategory.slug) : '/category/nasional'}>{mobileCategory?.title || 'News'}</Link>
-        <Link href="/photography">Photography</Link>
-        <Link href="/video">Video</Link>
+      <nav className="mobile-bottom-nav" aria-label={homePageContent.mobileNav.ariaLabel}>
+        <Link href="/">{homePageContent.mobileNav.home}</Link>
+        <Link href={mobileCategory ? categoryHref(mobileCategory.slug) : '/category/nasional'}>
+          {mobileCategory?.title || homePageContent.mobileNav.fallbackCategory}
+        </Link>
+        <Link href="/photography">{homePageContent.mobileNav.photography}</Link>
+        <Link href="/video">{homePageContent.mobileNav.video}</Link>
       </nav>
     </>
   )

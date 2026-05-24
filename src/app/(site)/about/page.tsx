@@ -1,25 +1,56 @@
-export default function AboutPage() {
+import {TextBlocks} from '@/components/RichText'
+import {getSiteSettings} from '@/sanity/lib/fetch'
+
+const aboutPageContent = {
+  eyebrow: 'Tentang NNN',
+  leadLabel: 'NNN',
+  cards: [
+    {
+      title: 'Business',
+      description: 'Peliputan ekonomi, perusahaan, pasar, investasi, dan strategi pertumbuhan Indonesia.'
+    },
+    {
+      title: 'Leadership',
+      description: 'Wawancara, profil, dan analisis tentang pemimpin, institusi, serta pengambilan keputusan.'
+    },
+    {
+      title: 'Nilai Hidup',
+      description: 'Ruang editorial untuk prinsip, karakter, budaya kerja, dan arah hidup yang membangun.'
+    },
+    {
+      title: 'Video & Photography',
+      description: 'Format visual premium untuk dokumentasi, wawancara, liputan lapangan, dan cerita manusia.'
+    }
+  ]
+}
+
+export default async function AboutPage() {
+  const settings = await getSiteSettings()
+
   return (
     <>
-      <section className="page-hero">
+      <section className="page-hero identity-hero">
         <div className="container">
-          <div className="eyebrow">About</div>
-          <h1>Narapati News Network</h1>
-          <p>NNN is a premium editorial network built for readers who need clear judgment, elegant presentation, and disciplined reporting from Indonesia to the world.</p>
+          <div className="eyebrow">{aboutPageContent.eyebrow}</div>
+          <h1>{settings.siteTitle}</h1>
+          <p>{settings.description}</p>
         </div>
       </section>
-      <section className="container text-page">
-        <h2>Our Standard</h2>
-        <p>
-          Narapati News Network covers public life, business, culture, and global affairs with a focus on decision-makers and the communities affected by their choices. We value context over noise, original reporting over repetition, and clean design that lets the work breathe.
-        </p>
-        <p>
-          The newsroom is structured around specialist desks, modular publishing workflows, and a CMS-first architecture so editors can publish articles, visual reports, and video briefings without engineering support.
-        </p>
-        <h2>Editorial Identity</h2>
-        <p>
-          NNN’s gold, navy, and white system is designed to feel authoritative, modern, and distinctly premium while remaining fast and readable on mobile screens.
-        </p>
+      <section className="container identity-page">
+        <div className="identity-lead">
+          <span>{aboutPageContent.leadLabel}</span>
+          <h2>{settings.tagline}</h2>
+          <TextBlocks text={settings.aboutContent} />
+        </div>
+
+        <div className="identity-card-grid">
+          {aboutPageContent.cards.map((card) => (
+            <article className="identity-card" key={card.title}>
+              <h3>{card.title}</h3>
+              <p>{card.description}</p>
+            </article>
+          ))}
+        </div>
       </section>
     </>
   )

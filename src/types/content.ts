@@ -43,3 +43,23 @@ export type PhotographyItem = MediaItem & {
   body?: PortableTextBlock[]
   featured?: boolean
 }
+
+export type SiteSettings = {
+  siteTitle: string
+  tagline: string
+  description: string
+  address: string
+  contactEmail: string
+  whatsapp: string
+  instagram: string
+  youtube: string
+  linkedin: string
+  twitterX: string
+  privacyText: string
+  kodeEtikText: string
+  footerCopyright: string
+  aboutContent: string
+  redaksiContent: string
+  contactContent: string
+  advertiseContent: string
+}
