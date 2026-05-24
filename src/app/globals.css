@@ -1491,6 +1491,221 @@ img {
   line-height: 1.62;
 }
 
+.admin-page {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(198, 151, 67, 0.12), transparent 28%),
+    linear-gradient(180deg, #fffdf8 0%, #f7f1e8 100%);
+  padding: clamp(42px, 6vw, 76px) 0 clamp(72px, 9vw, 118px);
+}
+
+.admin-editor-shell {
+  display: grid;
+  gap: 22px;
+}
+
+.admin-editor-toolbar,
+.admin-panel {
+  border: 1px solid rgba(234, 223, 206, 0.95);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 20px 54px rgba(7, 26, 45, 0.07);
+}
+
+.admin-editor-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  padding: clamp(22px, 4vw, 34px);
+}
+
+.admin-editor-toolbar span,
+.admin-panel-heading span {
+  color: var(--gold);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.admin-editor-toolbar h1,
+.admin-panel-heading h2 {
+  margin: 6px 0 0;
+  color: var(--navy);
+  font-family: var(--font-serif), Georgia, serif;
+  line-height: 1;
+}
+
+.admin-editor-toolbar h1 {
+  font-size: clamp(2.2rem, 4vw, 4rem);
+}
+
+.admin-editor-toolbar p {
+  max-width: 660px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.admin-save-button,
+.admin-secondary-button,
+.admin-card-editor-heading button {
+  border: 1px solid rgba(198, 151, 67, 0.36);
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 900;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.admin-save-button {
+  flex: 0 0 auto;
+  background: var(--gold);
+  color: #fff;
+  padding: 13px 20px;
+}
+
+.admin-save-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.admin-save-button:hover:not(:disabled),
+.admin-secondary-button:hover,
+.admin-card-editor-heading button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(7, 26, 45, 0.12);
+}
+
+.admin-status {
+  margin: 0;
+  border-radius: 12px;
+  padding: 13px 16px;
+  font-weight: 800;
+}
+
+.admin-status-success {
+  border: 1px solid rgba(22, 101, 52, 0.18);
+  background: rgba(220, 252, 231, 0.8);
+  color: #166534;
+}
+
+.admin-status-error {
+  border: 1px solid rgba(153, 27, 27, 0.18);
+  background: rgba(254, 226, 226, 0.82);
+  color: #991b1b;
+}
+
+.admin-panel {
+  display: grid;
+  gap: 20px;
+  padding: clamp(20px, 4vw, 30px);
+}
+
+.admin-panel-heading h2 {
+  font-size: clamp(1.65rem, 3vw, 2.6rem);
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.admin-field {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-field span {
+  color: var(--navy);
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-field input,
+.admin-field textarea {
+  width: 100%;
+  border: 1px solid rgba(7, 26, 45, 0.14);
+  border-radius: 12px;
+  background: #fffdf8;
+  color: var(--navy);
+  font: inherit;
+  line-height: 1.55;
+  outline: none;
+  padding: 12px 13px;
+}
+
+.admin-field textarea {
+  min-height: 118px;
+  resize: vertical;
+}
+
+.admin-field input:focus,
+.admin-field textarea:focus {
+  border-color: rgba(198, 151, 67, 0.72);
+  box-shadow: 0 0 0 4px rgba(198, 151, 67, 0.12);
+}
+
+.admin-card-list {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-card-editor {
+  display: grid;
+  gap: 14px;
+  border: 1px solid rgba(234, 223, 206, 0.95);
+  border-radius: 14px;
+  background: rgba(255, 253, 248, 0.76);
+  padding: 18px;
+}
+
+.admin-card-editor-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.admin-card-editor-heading strong {
+  color: var(--navy);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.35rem;
+}
+
+.admin-card-editor-heading button,
+.admin-secondary-button {
+  background: #fff;
+  color: var(--navy);
+  padding: 9px 14px;
+}
+
+.admin-secondary-button {
+  justify-self: start;
+}
+
+@media (max-width: 760px) {
+  .admin-editor-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-save-button {
+    width: 100%;
+  }
+
+  .admin-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-card-editor-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
 .site-footer {
   border-top: 1px solid var(--line);
   background:

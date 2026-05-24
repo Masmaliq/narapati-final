@@ -1,0 +1,68 @@
+export type RedaksiCard = {
+  label: string
+  title: string
+  description: string
+}
+
+export type RedaksiContent = {
+  heroLabel: string
+  heroTitle: string
+  heroDescription: string
+  introLabel: string
+  introTitle: string
+  introDescription: string
+  mastheadLabel: string
+  mastheadTitle: string
+  ethicsTitle: string
+  ethicsDescription: string
+  ethicsContactText: string
+  cards: RedaksiCard[]
+}
+
+export const redaksiContent: RedaksiContent = {
+  heroLabel: 'EDITORIAL',
+  heroTitle: 'Independen. Visioner. Untuk Indonesia.',
+  heroDescription:
+    'Ruang redaksi Narapati News Network disusun untuk menjaga akurasi, akuntabilitas, dan standar editorial yang tenang, tajam, serta bertanggung jawab.',
+
+  introLabel: 'Editorial',
+  introTitle: 'Suara Pemimpin, Perspektif Nusantara.',
+  introDescription:
+    'Tim editorial NNN bekerja melalui desk yang fokus pada bisnis, kepemimpinan, analisis, video, dan photography. Setiap karya dirancang untuk memberi konteks yang jernih bagi pembaca modern Indonesia.',
+
+  mastheadLabel: 'Masthead',
+  mastheadTitle: 'Struktur Redaksi',
+
+  ethicsTitle: 'Kode Etik & Kontak Redaksi',
+  ethicsDescription:
+    'NNN menjunjung prinsip akurasi, independensi, keberimbangan, dan tanggung jawab publik dalam setiap penerbitan.',
+  ethicsContactText: 'Koreksi, hak jawab, dan catatan editorial dapat dikirim ke redaksi@narapati.news.',
+
+  cards: [
+    {
+      label: 'PEMIMPIN REDAKSI',
+      title: 'Pemimpin Redaksi',
+      description: 'Bertanggung jawab atas arah editorial, standar publikasi, dan integritas ruang redaksi.'
+    },
+    {
+      label: 'REDAKTUR PELAKSANA',
+      title: 'Redaktur Pelaksana',
+      description: 'Mengelola agenda harian, koordinasi desk, alur penyuntingan, dan prioritas penerbitan.'
+    },
+    {
+      label: 'TIM ANALISIS',
+      title: 'Tim Analisis',
+      description: 'Menyusun konteks, riset, dan pembacaan mendalam untuk isu bisnis, ekonomi, dan kepemimpinan.'
+    },
+    {
+      label: 'TIM VIDEO',
+      title: 'Tim Video',
+      description: 'Mengembangkan wawancara, laporan visual, dan format video editorial Narapati.'
+    },
+    {
+      label: 'TIM PHOTOGRAPHY',
+      title: 'Tim Photography',
+      description: 'Mengerjakan dokumentasi visual, photo story, liputan ruang, dan arsip gambar editorial.'
+    }
+  ]
+}
