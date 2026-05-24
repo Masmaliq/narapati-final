@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import {formatDate} from '@/components/date'
+import {marketIndicators, tickerItems} from '@/content/ticker'
+import {getHomeContent} from '@/lib/homeContent'
 import {getArticles, getCategories, getPhotography, getVideos} from '@/sanity/lib/fetch'
 
 function articleHref(slug: string) {
@@ -22,10 +24,6 @@ function videoHref(slug: string) {
 const sponsorPartners = ['MAK Capital', 'Narapati Partner', 'Archipelago Fund', 'Meridian Advisory', 'Svara Ventures']
 
 const homePageContent = {
-  newsroom: {
-    label: 'Narapati News Network',
-    tagline: 'Business, leadership, and nilai hidup for modern Indonesia'
-  },
   sections: {
     utama: {label: 'Top Stories', title: 'Berita Utama'},
     editorsPick: {label: 'Curated', title: "EDITOR'S PICK"},
@@ -75,6 +73,7 @@ export default async function HomePage() {
     getVideos(),
     getPhotography()
   ])
+  const editableContent = await getHomeContent()
   const featured = articles.find((article) => article.featured) || articles[0]
   const supporting = articles.filter((article) => article.slug !== featured.slug)
   const secondary = supporting.slice(0, 4)
@@ -91,40 +90,150 @@ export default async function HomePage() {
   const photographyStories = photography.slice(0, 3)
   const recommendationStories = latest.slice(3, 7)
   const popularMainStories = popularStories.slice(0, 3)
+  const topLatestStories = [featured, ...supporting]
+    .filter((article, index, list) => list.findIndex((item) => item.slug === article.slug) === index)
+    .slice(0, 5)
+  const tokohStories = [
+    ...articles.filter((article) => {
+      const categoryName = article.category.title.toLowerCase()
+      const categorySlug = article.category.slug.toLowerCase()
+      return categoryName.includes('tokoh') || categoryName.includes('kolom') || categorySlug.includes('tokoh') || categorySlug.includes('kolom')
+    }),
+    ...articles
+  ].filter((article, index, list) => list.findIndex((item) => item.slug === article.slug) === index).slice(0, 4)
+  const topStoryArticles = [
+    ...articles.filter((article) => article.featured),
+    ...articles
+  ].filter((article, index, list) => list.findIndex((item) => item.slug === article.slug) === index).slice(0, 5)
   const mobileCategory = categories[0]
+  const tickerLoop = [...tickerItems, ...tickerItems]
 
   return (
     <>
       <section className="home-newsroom">
         <div className="container">
-          <div className="newsroom-bar">
-            <div>
-              <span>{homePageContent.newsroom.label}</span>
-              <strong>{homePageContent.newsroom.tagline}</strong>
+          <div className="breaking-insight-ticker" aria-label="Breaking insight ticker">
+            <span className="ticker-label">Market</span>
+            <div className="ticker-viewport">
+              <div className="ticker-track">
+                {tickerLoop.map((item, index) => (
+                  <span className="ticker-item" key={`${item}-${index}`}>
+                    {item}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 
+          <section className="market-indicators-panel" aria-label="Market indicators">
+            {marketIndicators.map((indicator) => (
+              <div className="market-indicator" data-tone={indicator.tone} key={indicator.label}>
+                <span>{indicator.label}</span>
+                <strong>{indicator.value}</strong>
+                <small>{indicator.change}</small>
+              </div>
+            ))}
+          </section>
+
+          <section className="home-top-layout" aria-label="Hero news and latest posts">
+            <article className="premium-hero-card">
+              <Link href={articleHref(featured.slug)} className="premium-hero-image">
+                <Image src={featured.image} alt="" fill priority sizes="(max-width: 980px) 100vw, 68vw" />
+              </Link>
+              <div className="premium-hero-copy">
+                <Link href={categoryHref(featured.category.slug)} className="home-category-pill">
+                  {featured.category.title}
+                </Link>
+                <Link href={articleHref(featured.slug)}>
+                  <h1>{featured.title}</h1>
+                </Link>
+                <p>{featured.dek}</p>
+                <div className="home-meta">
+                  <span>{featured.author.name}</span>
+                  <span>{formatDate(featured.publishedAt)}</span>
+                </div>
+                <Link className="hero-read-more" href={articleHref(featured.slug)}>
+                  Baca Selengkapnya
+                </Link>
+              </div>
+            </article>
+
+            <aside className="top-latest-panel" aria-label="Post terbaru">
+              <div className="top-latest-heading">
+                <span>Terkini</span>
+                <h2>Post Terbaru</h2>
+              </div>
+              <div className="top-latest-list">
+                {topLatestStories.map((article) => (
+                  <Link className="top-latest-item" href={articleHref(article.slug)} key={article.slug}>
+                    <span className="top-latest-thumb">
+                      <Image src={article.image} alt="" fill sizes="88px" />
+                    </span>
+                    <span className="top-latest-copy">
+                      <span className="top-latest-meta">{article.category.title} / {formatDate(article.publishedAt)}</span>
+                      <strong>{article.title}</strong>
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </aside>
+          </section>
+
+          <section className="home-quote-strip" aria-label="Narapati insight quote">
+            <div>
+              <span>Narapati Insight</span>
+              <blockquote>{editableContent.quoteText}</blockquote>
+              <cite>{editableContent.quoteSource}</cite>
+            </div>
+          </section>
+
+          <section className="tokoh-kolom-section" aria-labelledby="tokoh-kolom-heading">
+            <div className="compact-section-heading">
+              <span>Kolom / Analisis / Opini</span>
+              <h2 id="tokoh-kolom-heading">Tokoh & Kolom</h2>
+            </div>
+            <div className="tokoh-kolom-grid">
+              {tokohStories.map((article) => (
+                <Link className="tokoh-kolom-card" href={articleHref(article.slug)} key={article.slug}>
+                  <span className="tokoh-avatar">
+                    <Image src={article.author.image || article.image} alt="" fill sizes="72px" />
+                  </span>
+                  <span className="tokoh-card-copy">
+                    <span className="tokoh-label">Kolom / Analisis / Opini</span>
+                    <strong>{article.title}</strong>
+                    <em>{article.author.name}</em>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          <section className="top-story-section" aria-labelledby="top-story-heading">
+            <div className="compact-section-heading compact-section-heading-inverted">
+              <span>Top Story</span>
+              <h2 id="top-story-heading">Berita Utama</h2>
+            </div>
+            <div className="top-story-grid">
+              {topStoryArticles.map((article) => (
+                <article className="top-story-card" key={article.slug}>
+                  <Link href={articleHref(article.slug)} className="top-story-image">
+                    <Image src={article.image} alt="" fill sizes="(max-width: 760px) 50vw, 20vw" />
+                  </Link>
+                  <div>
+                    <Link href={categoryHref(article.category.slug)} className="top-story-label">
+                      {article.category.title}
+                    </Link>
+                    <Link href={articleHref(article.slug)}>
+                      <h3>{article.title}</h3>
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+
           <div className="home-editorial-layout">
             <main className="home-main">
-              <article className="premium-hero-card">
-                <Link href={articleHref(featured.slug)} className="premium-hero-image">
-                  <Image src={featured.image} alt="" fill priority sizes="(max-width: 980px) 100vw, 62vw" />
-                </Link>
-                <div className="premium-hero-copy">
-                  <Link href={categoryHref(featured.category.slug)} className="home-category-pill">
-                    {featured.category.title}
-                  </Link>
-                  <Link href={articleHref(featured.slug)}>
-                    <h1>{featured.title}</h1>
-                  </Link>
-                  <p>{featured.dek}</p>
-                  <div className="home-meta">
-                    <span>{featured.author.name}</span>
-                    <span>{formatDate(featured.publishedAt)}</span>
-                  </div>
-                </div>
-              </article>
-
               <section className="utama-news-section" aria-labelledby="utama-news-heading">
                 <div className="compact-section-heading">
                   <span>{homePageContent.sections.utama.label}</span>
@@ -282,31 +391,6 @@ export default async function HomePage() {
                       <span>{article.category.title}</span>
                       <strong>{article.title}</strong>
                       <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
-                    </Link>
-                  ))}
-                </section>
-
-                <section className="sidebar-news-card sidebar-news-card-compact">
-                  <div className="sidebar-section-heading">
-                    <h2>{homePageContent.sidebar.video.title}</h2>
-                    <Link href="/video">{homePageContent.sidebar.video.linkLabel}</Link>
-                  </div>
-                  {videoStories.map((item) => (
-                    <Link className="sidebar-compact-item" href={videoHref(item.slug)} key={item.slug}>
-                      <span>{item.duration || 'Video'}</span>
-                      <strong>{item.title}</strong>
-                    </Link>
-                  ))}
-                </section>
-
-                <section className="sidebar-news-card sidebar-news-card-compact">
-                  <div className="sidebar-section-heading">
-                    <h2>{homePageContent.sidebar.photography.title}</h2>
-                  </div>
-                  {photographyStories.map((item) => (
-                    <Link className="sidebar-compact-item" href={photographyHref(item.slug)} key={item.slug}>
-                      <span>{item.duration || 'Photography'}</span>
-                      <strong>{item.title}</strong>
                     </Link>
                   ))}
                 </section>

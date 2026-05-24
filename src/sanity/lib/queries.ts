@@ -140,7 +140,7 @@ export const PHOTOGRAPHY_QUERY = defineQuery(`*[
   "image": mainImage.asset->url,
   location,
   featured,
-  "category": category->{title, "slug": slug.current, description},
+  "category": category->{title, "slug": slug.current, "description": coalesce(description, "")},
   "author": photographer->{name, role, "image": image.asset->url}
 }`)
 
@@ -159,6 +159,6 @@ export const PHOTOGRAPHY_DETAIL_QUERY = defineQuery(`*[
   location,
   featured,
   body,
-  "category": category->{title, "slug": slug.current, description},
+  "category": category->{title, "slug": slug.current, "description": coalesce(description, "")},
   "author": photographer->{name, role, "image": image.asset->url}
 }`)

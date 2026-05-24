@@ -14,11 +14,5 @@ export default defineConfig({
   projectId,
   dataset,
   plugins: [structureTool({structure}), visionTool({defaultApiVersion: apiVersion})],
-  document: {
-    actions: (prev, context) =>
-      context.schemaType === 'siteSettings'
-        ? prev.filter((action) => !['duplicate', 'delete'].includes(action.action || ''))
-        : prev
-  },
   schema: {types: schemaTypes}
 })
