@@ -56,12 +56,6 @@ function fillItems<T>(source: T[], count: number) {
   return filled.slice(0, count)
 }
 
-const insightTicker = [
-  'Manusia modern sering kehilangan arah karena terlalu lama berjalan tanpa diam.',
-  'Pasar bergerak lebih cepat daripada ketenangan manusia.',
-  'Kadang perjalanan terbesar adalah pulang kepada diri sendiri.'
-]
-
 export default async function HomePage() {
   const [articles, videos, photography] = await Promise.all([
     getArticles(),
@@ -141,23 +135,9 @@ export default async function HomePage() {
         ) : null}
       </section>
 
-      <section className="journal-ticker" aria-label="Breaking insight">
-        <div className="journal-ticker-inner">
-          <span>Breaking Insight</span>
-          <div className="journal-ticker-viewport">
-            <div className="journal-ticker-track">
-              {[...insightTicker, ...insightTicker].map((item, index) => (
-                <b key={`${item}-${index}`}>{item}</b>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="journal-section nnn-container" aria-labelledby="latest-heading">
-        <div className="journal-section-head">
-          <span>Journal</span>
-          <h2 id="latest-heading">Latest Articles</h2>
+        <div className="journal-section-head journal-section-head-split">
+          <span id="latest-heading">Journal</span>
         </div>
         <div className="journal-latest-grid">
           {latestArticles.map((article, index) => (
@@ -183,9 +163,8 @@ export default async function HomePage() {
 
       <section className="journal-section journal-story-section nnn-container" aria-label="Top stories dan catatan perjalanan">
         <div className="journal-top-story">
-          <div className="journal-section-head">
+          <div className="journal-section-head journal-section-head-featured">
             <span>Featured</span>
-            <h2>Top Stories</h2>
           </div>
           {topStories[0] ? (
             <article className="journal-feature-row">
@@ -208,7 +187,6 @@ export default async function HomePage() {
 
         <aside className="journal-travel-notes" aria-labelledby="travel-heading">
           <div className="journal-section-head compact">
-            <span>Curated</span>
             <h2 id="travel-heading">Catatan Perjalanan</h2>
           </div>
           <div className="journal-note-list">

@@ -5786,7 +5786,7 @@ body {
   grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
   gap: clamp(34px, 5vw, 76px);
   align-items: center;
-  padding: clamp(62px, 8vw, 118px) 0 clamp(48px, 7vw, 92px);
+  padding: clamp(48px, 6vw, 78px) 0 clamp(44px, 5.6vw, 72px);
 }
 
 .journal-hero-copy {
@@ -5912,62 +5912,8 @@ body {
   transform: scale(1.025);
 }
 
-.journal-ticker {
-  border-top: 1px solid var(--journal-line);
-  border-bottom: 1px solid var(--journal-line);
-  background: rgba(251, 248, 242, 0.86);
-}
-
-.journal-ticker-inner {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 18px;
-  align-items: center;
-  width: min(1280px, calc(100% - 40px));
-  min-height: 52px;
-  margin: 0 auto;
-}
-
-.journal-ticker-inner > span {
-  color: var(--journal-gold);
-  font-size: 0.68rem;
-  font-weight: 950;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-.journal-ticker-viewport {
-  overflow: hidden;
-}
-
-.journal-ticker-track {
-  display: flex;
-  width: max-content;
-  animation: ticker-scroll 58s linear infinite;
-}
-
-.journal-ticker-track:hover {
-  animation-play-state: paused;
-}
-
-.journal-ticker-track b {
-  position: relative;
-  color: rgba(15, 23, 42, 0.72);
-  font-size: 0.78rem;
-  font-weight: 650;
-  letter-spacing: 0.01em;
-  padding: 0 22px;
-}
-
-.journal-ticker-track b::after {
-  position: absolute;
-  right: -3px;
-  color: rgba(179, 138, 86, 0.7);
-  content: '•';
-}
-
 .journal-section {
-  padding: clamp(66px, 8vw, 116px) 0;
+  padding: clamp(56px, 6.4vw, 72px) 0;
 }
 
 .journal-section + .journal-section {
@@ -5980,8 +5926,41 @@ body {
   justify-content: space-between;
   gap: 24px;
   border-bottom: 1px solid var(--journal-line);
-  margin-bottom: clamp(26px, 4vw, 42px);
-  padding-bottom: 18px;
+  margin-bottom: clamp(22px, 3vw, 32px);
+  padding-bottom: 15px;
+}
+
+.journal-section-head span {
+  flex: 0 0 auto;
+}
+
+.journal-section-head-minimal {
+  justify-content: center;
+  border-bottom-color: rgba(179, 138, 86, 0.48);
+}
+
+.journal-section-head-minimal h2 {
+  width: 100%;
+  color: var(--journal-ink);
+  text-align: center;
+}
+
+.journal-section-head-split {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-bottom-color: rgba(179, 138, 86, 0.48);
+}
+
+.journal-section-head-featured {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-bottom-color: rgba(179, 138, 86, 0.48);
+}
+
+.journal-section-head-featured span {
+  justify-self: start;
 }
 
 .journal-section-head h2 {
@@ -5998,6 +5977,10 @@ body {
 
 .journal-section-head.compact h2 {
   font-size: clamp(1.75rem, 2.4vw, 2.55rem);
+}
+
+.journal-travel-notes .journal-section-head {
+  border-bottom-color: rgba(179, 138, 86, 0.5);
 }
 
 .journal-latest-grid,
@@ -6148,7 +6131,7 @@ body {
     radial-gradient(circle at 82% 0%, rgba(179, 138, 86, 0.16), transparent 30%),
     linear-gradient(135deg, var(--journal-dark) 0%, var(--journal-dark-soft) 100%);
   color: #fbf8f2;
-  padding: clamp(72px, 8vw, 108px) 0;
+  padding: clamp(58px, 6.5vw, 78px) 0;
 }
 
 .journal-dark-head {
@@ -6372,7 +6355,7 @@ body {
   }
 
   .journal-hero {
-    padding-top: 46px;
+    padding-top: 38px;
   }
 
   .journal-latest-grid,
@@ -6385,21 +6368,15 @@ body {
     font-size: clamp(2.7rem, 13vw, 4.8rem);
   }
 
-  .journal-ticker-inner {
-    grid-template-columns: 1fr;
-    gap: 4px;
-    padding: 10px 0;
-  }
 }
 
 @media (max-width: 620px) {
-  .nnn-container,
-  .journal-ticker-inner {
+  .nnn-container {
     width: min(100% - 28px, 1280px);
   }
 
   .journal-section {
-    padding: 54px 0;
+    padding: 46px 0;
   }
 
   .journal-section-head,
@@ -6407,6 +6384,17 @@ body {
     display: grid;
     gap: 12px;
     align-items: start;
+  }
+
+  .journal-section-head-split,
+  .journal-section-head-featured {
+    display: flex;
+  }
+
+  .journal-section-head-split h2,
+  .journal-section-head-featured h2 {
+    grid-column: auto;
+    text-align: left;
   }
 
   .journal-hero-media {
