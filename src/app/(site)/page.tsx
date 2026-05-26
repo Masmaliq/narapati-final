@@ -135,7 +135,7 @@ export default async function HomePage() {
         ) : null}
       </section>
 
-      <section className="journal-section nnn-container" aria-labelledby="latest-heading">
+      <section className="journal-section journal-section-first nnn-container" aria-labelledby="latest-heading">
         <div className="journal-section-head journal-section-head-split">
           <span id="latest-heading">Journal</span>
         </div>
