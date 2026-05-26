@@ -26,10 +26,10 @@ const fallbackArticleImage = 'https://images.unsplash.com/photo-1497366754035-f2
 
 const homePageContent = {
   sections: {
-    utama: {label: 'Top Stories'},
-    editorsPick: {label: 'Curated'},
+    utama: {label: 'Global'},
+    editorsPick: {label: 'Market'},
     latest: {
-      label: 'Latest News'
+      label: 'Curated'
     },
     video: {label: 'Watch', playLabel: 'Play'},
     photography: {label: 'Visual'},
@@ -208,7 +208,7 @@ export default async function HomePage() {
 
           <section className="top-story-section" aria-labelledby="top-story-heading">
             <div className="compact-section-heading compact-section-heading-inverted compact-section-heading-label-only">
-              <h2 id="top-story-heading">Top Stories</h2>
+              <h2 id="top-story-heading">Global</h2>
             </div>
             <div className="top-story-grid">
               {topStoryArticles.map((article) => (
