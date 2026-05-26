@@ -4,6 +4,7 @@ export type Category = {
   title: string
   slug: string
   description: string
+  order?: number
 }
 
 export type Author = {

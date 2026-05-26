@@ -58,6 +58,7 @@ export const CATEGORY_QUERY = defineQuery(`*[
 ][0] {
   title,
   "slug": slug.current,
+  order,
   "description": coalesce(description, "")
 }`)
 
@@ -66,9 +67,10 @@ export const CATEGORIES_QUERY = defineQuery(`*[
   !(_id in path("drafts.**")) &&
   defined(title) &&
   defined(slug.current)
-] | order(title asc) {
+] | order(coalesce(order, 9999) asc, title asc) {
   title,
   "slug": slug.current,
+  order,
   "description": coalesce(description, "")
 }`)
 
