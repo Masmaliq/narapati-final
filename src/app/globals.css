@@ -5387,6 +5387,110 @@ body {
   background: #fff;
 }
 
+/* Featured Videos premium editorial refinement */
+.nnn-video-section {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(176, 138, 87, 0.12), transparent 28%),
+    linear-gradient(180deg, #111 0%, #171717 100%);
+  padding: clamp(76px, 9vw, 124px) 0;
+}
+
+.nnn-video-layout {
+  grid-template-columns: minmax(0, 1.9fr) minmax(340px, 0.86fr);
+  gap: clamp(34px, 5vw, 72px);
+}
+
+.nnn-video-main {
+  min-height: clamp(470px, 48vw, 680px);
+  box-shadow: 0 34px 80px rgba(0, 0, 0, 0.32);
+}
+
+.nnn-video-main::after {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.03) 18%, rgba(0, 0, 0, 0.86)),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.28), transparent 58%);
+}
+
+.nnn-play-button {
+  width: 82px;
+  height: 82px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.nnn-video-main:hover .nnn-play-button {
+  border-color: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.16);
+  transform: translate(-50%, -50%) scale(1.04);
+}
+
+.nnn-video-list {
+  gap: clamp(18px, 2.4vw, 28px);
+  border-top: 0;
+}
+
+.nnn-video-item {
+  grid-template-columns: 1fr;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 0 0 clamp(18px, 2.2vw, 26px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.nnn-video-item:hover {
+  opacity: 0.88;
+  transform: translateY(-2px);
+}
+
+.nnn-video-thumb {
+  aspect-ratio: 16 / 9;
+  min-height: 150px;
+}
+
+.nnn-video-thumb::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 42%, rgba(0, 0, 0, 0.28));
+  content: '';
+}
+
+.nnn-video-item span:last-child {
+  gap: 8px;
+}
+
+.nnn-video-item strong {
+  font-size: clamp(1.22rem, 1.35vw, 1.52rem);
+  line-height: 1.02;
+}
+
+@media (max-width: 980px) {
+  .nnn-video-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .nnn-video-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .nnn-video-thumb {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 620px) {
+  .nnn-video-section {
+    padding: 58px 0;
+  }
+
+  .nnn-video-list {
+    grid-template-columns: 1fr;
+  }
+
+  .nnn-video-main {
+    min-height: 360px;
+  }
+}
+
 @media (max-width: 620px) {
   .header-topics-inner {
     grid-template-columns: 1fr;
