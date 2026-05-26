@@ -160,7 +160,7 @@ export default async function HomePage() {
   const heroHref = articleHref(featured.slug)
   const leadGlobal = storyAt(globalStories, 0)
   const videoLead = videos[0] || fallbackVideos[0]
-  const videoList = (videos.length > 1 ? videos.slice(1, 4) : fallbackVideos.slice(1, 4))
+  const videoList = (videos.length > 1 ? videos.slice(1, 3) : fallbackVideos.slice(1, 3))
 
   return (
     <>
@@ -256,7 +256,6 @@ export default async function HomePage() {
         <div className="nnn-container">
           <div className="nnn-section-top nnn-section-top-dark">
             <h2 id="featured-videos-heading">Featured Videos</h2>
-            <Link href="/video">View All Videos</Link>
           </div>
           <div className="nnn-video-layout">
             <Link href={mediaHref('video', videoLead.slug)} className="nnn-video-main">
@@ -280,6 +279,9 @@ export default async function HomePage() {
                 </Link>
               ))}
             </div>
+          </div>
+          <div className="nnn-video-actions">
+            <Link href="/video">View All Videos</Link>
           </div>
         </div>
       </section>
