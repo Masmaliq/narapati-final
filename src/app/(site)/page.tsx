@@ -25,8 +25,8 @@ const sponsorPartners = ['MAK Capital', 'Narapati Partner', 'Archipelago Fund', 
 
 const homePageContent = {
   sections: {
-    utama: {label: 'Top Stories', title: 'Berita Utama'},
-    editorsPick: {label: 'Curated', title: "EDITOR'S PICK"},
+    utama: {label: 'Top Stories'},
+    editorsPick: {label: 'Curated'},
     latest: {
       label: 'Latest News',
       title: 'Editorial Briefing',
@@ -187,10 +187,9 @@ export default async function HomePage() {
             </div>
           </section>
 
-          <section className="tokoh-kolom-section" aria-labelledby="tokoh-kolom-heading">
-            <div className="compact-section-heading">
-              <span>Kolom / Analisis / Opini</span>
-              <h2 id="tokoh-kolom-heading">Tokoh & Kolom</h2>
+          <section className="tokoh-kolom-section" aria-labelledby="insight-heading">
+            <div className="compact-section-heading compact-section-heading-label-only">
+              <h2 id="insight-heading">Insight</h2>
             </div>
             <div className="tokoh-kolom-grid">
               {tokohStories.map((article) => (
@@ -199,7 +198,7 @@ export default async function HomePage() {
                     <Image src={article.author.image || article.image} alt="" fill sizes="72px" />
                   </span>
                   <span className="tokoh-card-copy">
-                    <span className="tokoh-label">Kolom / Analisis / Opini</span>
+                    <span className="tokoh-label">Insight</span>
                     <strong>{article.title}</strong>
                     <em>{article.author.name}</em>
                   </span>
@@ -209,9 +208,8 @@ export default async function HomePage() {
           </section>
 
           <section className="top-story-section" aria-labelledby="top-story-heading">
-            <div className="compact-section-heading compact-section-heading-inverted">
-              <span>Top Story</span>
-              <h2 id="top-story-heading">Berita Utama</h2>
+            <div className="compact-section-heading compact-section-heading-inverted compact-section-heading-label-only">
+              <h2 id="top-story-heading">Top Stories</h2>
             </div>
             <div className="top-story-grid">
               {topStoryArticles.map((article) => (
@@ -235,9 +233,8 @@ export default async function HomePage() {
           <div className="home-editorial-layout">
             <main className="home-main">
               <section className="utama-news-section" aria-labelledby="utama-news-heading">
-                <div className="compact-section-heading">
-                  <span>{homePageContent.sections.utama.label}</span>
-                  <h2 id="utama-news-heading">{homePageContent.sections.utama.title}</h2>
+                <div className="compact-section-heading compact-section-heading-label-only">
+                  <h2 id="utama-news-heading">{homePageContent.sections.utama.label}</h2>
                 </div>
                 <div className="secondary-news-grid">
                   {secondary.map((article) => (
@@ -261,9 +258,8 @@ export default async function HomePage() {
               </section>
 
               <section className="editors-pick-section" aria-labelledby="editors-pick-heading">
-                <div className="compact-section-heading">
-                  <span>{homePageContent.sections.editorsPick.label}</span>
-                  <h2 id="editors-pick-heading">{homePageContent.sections.editorsPick.title}</h2>
+                <div className="compact-section-heading compact-section-heading-label-only">
+                  <h2 id="editors-pick-heading">{homePageContent.sections.editorsPick.label}</h2>
                 </div>
                 <div className="editors-pick-grid">
                   {editorsPick.map((article) => (

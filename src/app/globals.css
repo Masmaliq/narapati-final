@@ -2751,9 +2751,26 @@ img {
   line-height: 1;
 }
 
+.compact-section-heading-label-only {
+  align-items: center;
+}
+
+.compact-section-heading-label-only h2 {
+  color: var(--gold);
+  font-family: var(--font-sans), Arial, sans-serif;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.compact-section-heading-inverted.compact-section-heading-label-only h2 {
+  color: var(--gold-soft);
+}
+
 .utama-news-section .compact-section-heading h2 {
-  margin-left: auto;
-  text-align: right;
+  text-align: left;
 }
 
 .secondary-news-grid {
