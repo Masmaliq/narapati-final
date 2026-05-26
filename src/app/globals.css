@@ -5479,15 +5479,16 @@ body {
 }
 
 .nnn-video-layout {
-  grid-template-columns: minmax(0, 1.86fr) minmax(340px, 0.88fr);
-  gap: clamp(28px, 4.2vw, 56px);
+  grid-template-columns: minmax(0, 1.64fr) minmax(410px, 0.9fr);
+  gap: clamp(30px, 4.5vw, 58px);
+  align-items: stretch;
 }
 
 .nnn-video-main {
   border: 1px solid rgba(184, 146, 90, 0.26);
   border-radius: 2px;
   min-height: 0;
-  height: clamp(420px, 38vw, 520px);
+  height: clamp(410px, 35vw, 500px);
   box-shadow: 0 22px 56px rgba(7, 27, 58, 0.16);
 }
 
@@ -5531,20 +5532,30 @@ body {
 .nnn-video-list {
   display: grid;
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: clamp(18px, 2.2vw, 24px);
+  gap: 0;
   border-top: 0;
-  height: clamp(420px, 38vw, 520px);
+  height: clamp(410px, 35vw, 500px);
 }
 
 .nnn-video-item {
-  grid-template-columns: 1fr;
-  grid-template-rows: auto minmax(0, 1fr);
-  align-content: start;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: minmax(170px, 0.9fr) minmax(0, 1fr);
+  grid-template-rows: 1fr;
+  align-items: center;
+  gap: clamp(18px, 2.2vw, 26px);
   min-height: 0;
   border-bottom: 1px solid rgba(184, 146, 90, 0.3);
-  padding: 0 0 clamp(14px, 1.8vw, 20px);
+  padding: clamp(22px, 2.4vw, 30px) 0;
   transition: opacity 180ms ease, transform 180ms ease, border-color 180ms ease;
+}
+
+.nnn-video-item:first-child {
+  padding-top: 0;
+}
+
+.nnn-video-item:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
 }
 
 .nnn-video-item:hover {
@@ -5554,7 +5565,8 @@ body {
 }
 
 .nnn-video-thumb {
-  height: clamp(132px, 12.4vw, 158px);
+  width: 100%;
+  height: clamp(132px, 12vw, 160px);
   min-height: 0;
   border: 1px solid rgba(184, 146, 90, 0.22);
   background: #f5efe4;
@@ -5571,7 +5583,10 @@ body {
 }
 
 .nnn-video-item span:last-child {
+  display: grid;
   gap: 8px;
+  align-content: center;
+  min-width: 0;
 }
 
 .nnn-video-item strong {
@@ -5599,6 +5614,15 @@ body {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: none;
     height: auto;
+    gap: clamp(18px, 2.6vw, 24px);
+  }
+
+  .nnn-video-item {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 12px;
+    border-bottom: 1px solid rgba(184, 146, 90, 0.3);
+    padding: 0 0 18px;
   }
 
   .nnn-video-thumb {
