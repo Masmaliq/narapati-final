@@ -290,6 +290,10 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <div className="nnn-section-divider" aria-hidden="true">
+        <span />
+      </div>
+
       <section className="nnn-photo-day" aria-label="Photo of the day">
         <Image src={photoFeature.image || monochromeImages.photo} alt="" fill sizes="100vw" />
         <div className="nnn-photo-overlay">

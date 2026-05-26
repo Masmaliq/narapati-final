@@ -615,6 +615,20 @@ body {
   background: #111;
 }
 
+.nnn-section-divider {
+  background: #fff;
+  padding: clamp(28px, 4vw, 48px) 0;
+}
+
+.nnn-section-divider span {
+  display: block;
+  width: min(1180px, calc(100% - 40px));
+  height: 1px;
+  margin: 0 auto;
+  background: linear-gradient(90deg, transparent, #d9d2c7 12%, #d9d2c7 88%, transparent);
+  opacity: 0.78;
+}
+
 .nnn-photo-day::after {
   position: absolute;
   inset: 0;
