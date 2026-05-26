@@ -55,16 +55,15 @@ export async function Header() {
           </div>
         </div>
 
-        <Link href="/" className="brand" aria-label="Narapati News Network home">
+        <Link href="/" className="brand" aria-label="Narapati Journal home">
           <Image
             className="brand-logo"
             src="/brand/narapati-logo-transparent.png"
-            alt="Narapati News Network"
+            alt="Narapati - Journal of a Modern Wanderer"
             width={1536}
             height={300}
             priority
           />
-          <span className="brand-journal-subtitle">Journal of a Modern Wanderer</span>
         </Link>
 
         <div className="header-account">

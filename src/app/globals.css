@@ -5681,20 +5681,21 @@ body {
 }
 
 .header-brand-row {
-  min-height: 112px;
-  padding: 19px 0 15px;
+  min-height: 104px;
+  padding: 17px 0 13px;
 }
 
 .brand {
-  gap: 8px;
+  gap: 0;
 }
 
 .brand-logo {
-  width: min(250px, 40vw);
+  width: min(340px, 42vw);
   height: auto;
 }
 
 .brand-journal-subtitle {
+  display: none;
   color: rgba(15, 23, 42, 0.68);
   font-size: 0.62rem;
   font-weight: 900;
@@ -6351,7 +6352,7 @@ body {
   }
 
   .brand-logo {
-    width: min(230px, 68vw);
+    width: min(280px, 72vw);
   }
 
   .journal-hero {
