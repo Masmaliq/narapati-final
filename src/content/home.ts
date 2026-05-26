@@ -10,6 +10,6 @@ export const homeContent: HomeContent = {
   heroLabel: '',
   heroTitle: '',
   heroDescription: '',
-  quoteText: 'Kemajuan tanpa karakter hanya melahirkan kekacauan baru.',
-  quoteSource: 'Narapati Insight'
+  quoteText: 'Di tengah kebisingan dunia, manusia tetap mencari makna.',
+  quoteSource: 'Narapati Editorial'
 }

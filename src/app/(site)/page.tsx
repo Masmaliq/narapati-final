@@ -1,459 +1,298 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import {formatDate} from '@/components/date'
-import {marketIndicators, tickerItems} from '@/content/ticker'
-import {getHomeContent} from '@/lib/homeContent'
-import {getArticles, getCategories, getPhotography, getVideos} from '@/sanity/lib/fetch'
+import {getArticles, getPhotography, getVideos} from '@/sanity/lib/fetch'
+import type {Article, MediaItem} from '@/types/content'
 
 function articleHref(slug: string) {
   return `/article/${encodeURIComponent(slug)}`
 }
 
-function categoryHref(slug: string) {
-  return `/category/${encodeURIComponent(slug)}`
+function mediaHref(section: 'video' | 'photography', slug: string) {
+  return `/${section}/${encodeURIComponent(slug)}`
 }
 
-function photographyHref(slug: string) {
-  return `/photography/${encodeURIComponent(slug)}`
+const monochromeImages = {
+  hero: 'https://images.unsplash.com/photo-1518186285589-2f7649de83e0?auto=format&fit=crop&w=1800&q=88',
+  global: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1300&q=86',
+  insight: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1300&q=86',
+  video: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=86',
+  photo: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=88'
 }
 
-function videoHref(slug: string) {
-  return `/video/${encodeURIComponent(slug)}`
+const heroContent = {
+  category: 'Global',
+  title: 'Pasar Saham dan Investor Masih Waspada di Tengah Ketidakpastian Global',
+  description:
+    'Di tengah perubahan arah ekonomi dunia, investor membaca ulang risiko, peluang, dan arah baru pasar global.',
+  date: '2026-05-20',
+  image: monochromeImages.hero
 }
 
-function isGlobalArticle(article: {category: {title: string; slug: string}}) {
-  return article.category.slug.toLowerCase() === 'global' || article.category.title.toLowerCase() === 'global'
+const globalCopy = {
+  lead: {
+    title: 'Dunia Bergerak di Tengah Ketegangan Baru',
+    dek: 'Peta global berubah perlahan ketika diplomasi, pasar, dan kepentingan strategis saling bertemu dalam satu ruang ketidakpastian.',
+    image: monochromeImages.global
+  },
+  small: [
+    'Diplomasi Global Memasuki Babak Baru',
+    'Asia Menjadi Pusat Perhatian Ekonomi Dunia'
+  ]
 }
 
-const sponsorPartners = ['MAK Capital', 'Narapati Partner', 'Archipelago Fund', 'Meridian Advisory', 'Svara Ventures']
-const fallbackArticleImage = 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=85'
-
-const homePageContent = {
-  sections: {
-    utama: {label: 'Global'},
-    editorsPick: {label: 'Market'},
-    latest: {
-      label: 'Curated'
-    },
-    video: {label: 'Watch', playLabel: 'Play'},
-    photography: {label: 'Visual'},
-    popular: {label: 'Most Read', title: 'Terpopuler'}
+const insightStories = [
+  {
+    label: 'Insight',
+    title: 'Di Antara Riuh Pasar dan Sunyi Hati',
+    dek: 'Sebuah catatan tentang manusia yang tetap mencari makna di tengah angka, target, dan tekanan zaman.',
+    image: monochromeImages.insight
   },
-  sidebar: {
-    ariaLabel: 'Post terbaru',
-    latest: {label: 'Update', title: 'POST TERBARU'},
-    video: {title: 'VIDEO', linkLabel: 'Lihat'},
-    photography: {title: 'PHOTOGRAPHY'},
-    recommendation: {title: 'REKOMENDASI'},
-    popular: {title: 'TERPOPULER'}
+  {
+    label: 'Kontemplasi',
+    title: 'Sunyi yang Menghidupkan',
+    dek: 'Kadang yang paling strategis bukan suara paling keras, melainkan kejernihan yang tumbuh perlahan.'
   },
-  intelligence: {
-    ariaLabel: 'NNN Intelligence Network',
-    label: 'NNN Intelligence Network',
-    title: 'Tentang NNN',
-    description: 'Narapati News Network adalah media premium untuk kepemimpinan, bisnis, nilai hidup, dan percakapan strategis Indonesia.',
-    ctaLabel: 'Partnership / Branding',
-    ctaTitle: 'Bangun kolaborasi editorial dan brand storytelling bersama NNN.',
-    ctaSmall: 'Hubungi kami'
-  },
-  sponsors: {
-    ariaLabel: 'Sponsor partners',
-    title: 'Premium Partners'
-  },
-  mobileNav: {
-    ariaLabel: 'Mobile navigation',
-    home: 'Home',
-    photography: 'Photography',
-    video: 'Video',
-    fallbackCategory: 'News'
+  {
+    label: 'Nilai Hidup',
+    title: 'Setetes Cahaya di Jalan Pulang',
+    dek: 'Tentang arah, jeda, dan keberanian untuk kembali pada nilai yang membuat hidup tetap utuh.'
   }
+]
+
+const marketRows = [
+  {label: 'IHSG', value: '7,214.89', change: '+0.42%', tone: 'up'},
+  {label: 'XAUUSD', value: '2,337.10', change: '-0.18%', tone: 'down'},
+  {label: 'USDIDR', value: '16,255', change: '+0.21%', tone: 'up'},
+  {label: 'NASDAQ', value: '17,688.88', change: '+0.63%', tone: 'up'},
+  {label: 'OIL', value: '78.42', change: '-0.31%', tone: 'down'}
+]
+
+const fallbackArticles: Article[] = [
+  {
+    title: 'Arus Modal Global Bergerak Lebih Selektif',
+    slug: 'arus-modal-global-bergerak-selektif',
+    dek: 'Pasar membaca ulang risiko kawasan, kualitas institusi, dan daya tahan ekonomi riil.',
+    category: {title: 'Global', slug: 'global', description: ''},
+    publishedAt: '2026-05-20',
+    image: monochromeImages.global,
+    author: {name: 'Narapati Desk', role: 'Editorial'}
+  },
+  {
+    title: 'Diplomasi Ekonomi Asia Memasuki Babak Baru',
+    slug: 'diplomasi-ekonomi-asia-babak-baru',
+    dek: 'Negara-negara Asia menata kembali rantai pasok, teknologi, dan pengaruh strategis.',
+    category: {title: 'Global', slug: 'global', description: ''},
+    publishedAt: '2026-05-19',
+    image: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1300&q=86',
+    author: {name: 'Narapati Desk', role: 'Editorial'}
+  },
+  {
+    title: 'Kota, Modal, dan Masa Depan Kelas Menengah',
+    slug: 'kota-modal-masa-depan-kelas-menengah',
+    dek: 'Pertumbuhan baru akan ditentukan oleh kualitas kota, akses, dan kepercayaan publik.',
+    category: {title: 'Market', slug: 'market', description: ''},
+    publishedAt: '2026-05-18',
+    image: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1300&q=86',
+    author: {name: 'Narapati Desk', role: 'Editorial'}
+  }
+]
+
+const fallbackVideos: MediaItem[] = [
+  {
+    title: 'Narapati Visual Journal: Membaca Zaman dalam Sunyi',
+    slug: 'market-hall-ekonomi-global',
+    dek: 'Editorial video tentang arah pasar, geopolitik, dan keputusan investor.',
+    publishedAt: '2026-05-20',
+    image: monochromeImages.video,
+    duration: '12:08'
+  },
+  {
+    title: 'Percakapan Tentang Pasar dan Manusia',
+    slug: 'quiet-briefing-kepemimpinan',
+    dek: 'Percakapan ringkas dari meja redaksi Narapati.',
+    publishedAt: '2026-05-18',
+    image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1300&q=86',
+    duration: '09:44'
+  },
+  {
+    title: 'Catatan Malam dari Ruang Redaksi',
+    slug: 'indonesia-after-hours',
+    dek: 'Catatan visual tentang kota, manusia, dan perubahan.',
+    publishedAt: '2026-05-16',
+    image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1300&q=86',
+    duration: '07:25'
+  }
+]
+
+const smallVideoTitles = [
+  'Percakapan Tentang Pasar dan Manusia',
+  'Catatan Malam dari Ruang Redaksi',
+  'Ketika Dunia Berlari Terlalu Cepat'
+]
+
+function storyAt(stories: Article[], index: number) {
+  return stories[index] || fallbackArticles[index % fallbackArticles.length]
 }
 
 export default async function HomePage() {
-  const [articles, categories, videos, photography] = await Promise.all([
+  const [cmsArticles, cmsVideos, cmsPhotography] = await Promise.all([
     getArticles(),
-    getCategories(),
     getVideos(),
     getPhotography()
   ])
-  const editableContent = await getHomeContent()
-  const featured = articles.find((article) => article.featured) || articles[0]
-  const supporting = articles.filter((article) => article.slug !== featured.slug)
-  const globalStories = articles.filter(isGlobalArticle).slice(0, 4)
-  const latest = [...supporting.slice(4), ...articles].filter((article, index, list) => (
-    list.findIndex((item) => item.slug === article.slug) === index && article.slug !== featured.slug
-  )).slice(0, 8)
-  const editorsPick = [
-    ...articles.filter((article) => article.featured && article.slug !== featured.slug),
-    ...supporting
-  ].filter((article, index, list) => list.findIndex((item) => item.slug === article.slug) === index).slice(0, 3)
-  const sidebarStories = articles.slice(0, 5)
-  const popularStories = supporting.slice(0, 4)
-  const videoStories = videos.slice(0, 3)
-  const photographyStories = photography.slice(0, 3)
-  const recommendationStories = latest.slice(3, 7)
-  const popularMainStories = popularStories.slice(0, 3)
-  const topLatestStories = [featured, ...supporting]
-    .filter((article, index, list) => list.findIndex((item) => item.slug === article.slug) === index)
-    .slice(0, 5)
-  const tokohStories = [
+
+  const articles = cmsArticles.length ? cmsArticles : fallbackArticles
+  const videos = cmsVideos.length ? cmsVideos : fallbackVideos
+  const featured = articles.find((article) => article.featured) || articles[0] || fallbackArticles[0]
+  const globalStories = [
     ...articles.filter((article) => {
-      const categoryName = article.category.title.toLowerCase()
-      const categorySlug = article.category.slug.toLowerCase()
-      return categoryName.includes('tokoh') || categoryName.includes('kolom') || categorySlug.includes('tokoh') || categorySlug.includes('kolom')
+      const category = `${article.category.title} ${article.category.slug}`.toLowerCase()
+      return category.includes('global')
     }),
     ...articles
-  ].filter((article, index, list) => list.findIndex((item) => item.slug === article.slug) === index).slice(0, 4)
-  const topStoryArticles = [
-    ...articles.filter((article) => article.featured),
-    ...articles
-  ].filter((article, index, list) => list.findIndex((item) => item.slug === article.slug) === index).slice(0, 5)
-  const mobileCategory = categories[0]
-  const tickerLoop = [...tickerItems, ...tickerItems]
+  ].filter((article, index, list) => list.findIndex((item) => item.slug === article.slug) === index)
+
+  const photoFeature = cmsPhotography[0] || {
+    title: 'Communist Climb',
+    slug: 'communist-climb',
+    dek: 'Sebuah lanskap tentang tubuh, ruang, dan ingatan kolektif yang bergerak di antara sejarah dan hari ini.',
+    publishedAt: '2026-05-20',
+    image: monochromeImages.photo,
+    duration: 'Photo of the Day'
+  }
+
+  const heroHref = articleHref(featured.slug)
+  const leadGlobal = storyAt(globalStories, 0)
+  const videoLead = videos[0] || fallbackVideos[0]
+  const videoList = (videos.length > 1 ? videos.slice(1, 4) : fallbackVideos.slice(1, 4))
 
   return (
     <>
-      <section className="home-newsroom">
-        <div className="container">
-          <div className="breaking-insight-ticker" aria-label="Breaking insight ticker">
-            <span className="ticker-label">Market</span>
-            <div className="ticker-viewport">
-              <div className="ticker-track">
-                {tickerLoop.map((item, index) => (
-                  <span className="ticker-item" key={`${item}-${index}`}>
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <section className="market-indicators-panel" aria-label="Market indicators">
-            {marketIndicators.map((indicator) => (
-              <div className="market-indicator" data-tone={indicator.tone} key={indicator.label}>
-                <span>{indicator.label}</span>
-                <strong>{indicator.value}</strong>
-                <small>{indicator.change}</small>
-              </div>
-            ))}
-          </section>
-
-          <section className="home-top-layout" aria-label="Hero news and latest posts">
-            <article className="premium-hero-card">
-              <Link href={articleHref(featured.slug)} className="premium-hero-image">
-                <Image src={featured.image} alt="" fill priority sizes="(max-width: 980px) 100vw, 68vw" />
+      <section className="nnn-home">
+        <div className="nnn-container">
+          <section className="nnn-hero" aria-label="Featured story">
+            <div className="nnn-hero-copy">
+              <span>{heroContent.category}</span>
+              <Link href={heroHref}>
+                <h1>{heroContent.title}</h1>
               </Link>
-              <div className="premium-hero-copy">
-                <Link href={categoryHref(featured.category.slug)} className="home-category-pill">
-                  {featured.category.title}
-                </Link>
-                <Link href={articleHref(featured.slug)}>
-                  <h1>{featured.title}</h1>
-                </Link>
-                <p>{featured.dek}</p>
-                <div className="home-meta">
-                  <span>{featured.author.name}</span>
-                  <span>{formatDate(featured.publishedAt)}</span>
-                </div>
-                <Link className="hero-read-more" href={articleHref(featured.slug)}>
-                  Baca Selengkapnya
-                </Link>
-              </div>
-            </article>
+              <p>{heroContent.description}</p>
+              <time dateTime={heroContent.date}>20 Mei 2026</time>
+              <Link className="nnn-button" href={heroHref}>BACA SELENGKAPNYA</Link>
+            </div>
+            <Link href={heroHref} className="nnn-hero-image" aria-label={heroContent.title}>
+              <Image src={heroContent.image} alt="" fill priority sizes="(max-width: 900px) 100vw, 60vw" />
+            </Link>
+          </section>
 
-            <aside className="top-latest-panel" aria-label="Post terbaru">
-              <div className="top-latest-heading">
-                <span>Terkini</span>
-                <h2>Post Terbaru</h2>
-              </div>
-              <div className="top-latest-list">
-                {topLatestStories.map((article) => (
-                  <Link className="top-latest-item" href={articleHref(article.slug)} key={article.slug}>
-                    <span className="top-latest-thumb">
-                      <Image src={article.image} alt="" fill sizes="88px" />
-                    </span>
-                    <span className="top-latest-copy">
-                      <span className="top-latest-meta">{article.category.title} / {formatDate(article.publishedAt)}</span>
-                      <strong>{article.title}</strong>
-                    </span>
+          <section className="nnn-triad" aria-label="Global Insight Market">
+            <div className="nnn-column">
+              <h2>Global</h2>
+              <article className="nnn-column-lead">
+                <Link href={articleHref(leadGlobal.slug)} className="nnn-column-image">
+                  <Image src={leadGlobal.image || globalCopy.lead.image} alt="" fill sizes="(max-width: 900px) 100vw, 32vw" />
+                </Link>
+                <Link href={articleHref(leadGlobal.slug)}>
+                  <h3>{globalCopy.lead.title}</h3>
+                </Link>
+                <p>{globalCopy.lead.dek}</p>
+              </article>
+              <div className="nnn-mini-list">
+                {[storyAt(globalStories, 1), storyAt(globalStories, 2)].map((article, index) => (
+                  <Link href={articleHref(article.slug)} className="nnn-mini-story" key={article.slug}>
+                    <span>Global</span>
+                    <strong>{globalCopy.small[index] || article.title}</strong>
                   </Link>
                 ))}
               </div>
+            </div>
+
+            <div className="nnn-column">
+              <h2>Insight</h2>
+              <article className="nnn-column-lead">
+                <div className="nnn-column-image">
+                  <Image src={insightStories[0].image || monochromeImages.insight} alt="" fill sizes="(max-width: 900px) 100vw, 32vw" />
+                </div>
+                <h3>{insightStories[0].title}</h3>
+                <p>{insightStories[0].dek}</p>
+              </article>
+              <div className="nnn-mini-list">
+                {insightStories.slice(1).map((story) => (
+                  <div className="nnn-mini-story" key={story.title}>
+                    <span>{story.label}</span>
+                    <strong>{story.title}</strong>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <aside className="nnn-market-card" aria-label="Market dashboard">
+              <div className="nnn-market-heading">
+                <h2>Market</h2>
+              </div>
+              <div className="nnn-market-tabs">
+                <span>Indeks</span>
+                <span>Forex</span>
+                <span>Komoditas</span>
+                <span>Crypto</span>
+              </div>
+              <div className="nnn-market-rows">
+                {marketRows.map((row) => (
+                  <div className="nnn-market-row" data-tone={row.tone} key={row.label}>
+                    <strong>{row.label}</strong>
+                    <i aria-hidden="true" />
+                    <span>{row.value}</span>
+                    <small>{row.change}</small>
+                  </div>
+                ))}
+              </div>
+              <Link href="/category/market">Lihat Data Pasar Lengkap</Link>
             </aside>
           </section>
+        </div>
+      </section>
 
-          <section className="home-quote-strip" aria-label="Narapati insight quote">
-            <div>
-              <span>Narapati Insight</span>
-              <blockquote>{editableContent.quoteText}</blockquote>
-              <cite>{editableContent.quoteSource}</cite>
-            </div>
-          </section>
-
-          <section className="tokoh-kolom-section" aria-labelledby="insight-heading">
-            <div className="compact-section-heading compact-section-heading-label-only">
-              <h2 id="insight-heading">Insight</h2>
-            </div>
-            <div className="tokoh-kolom-grid">
-              {tokohStories.map((article) => (
-                <Link className="tokoh-kolom-card" href={articleHref(article.slug)} key={article.slug}>
-                  <span className="tokoh-avatar">
-                    <Image src={article.image || fallbackArticleImage} alt="" fill sizes="72px" />
+      <section className="nnn-video-section" aria-labelledby="featured-videos-heading">
+        <div className="nnn-container">
+          <div className="nnn-section-top nnn-section-top-dark">
+            <h2 id="featured-videos-heading">Featured Videos</h2>
+            <Link href="/video">View All Videos</Link>
+          </div>
+          <div className="nnn-video-layout">
+            <Link href={mediaHref('video', videoLead.slug)} className="nnn-video-main">
+              <Image src={videoLead.image || monochromeImages.video} alt="" fill sizes="(max-width: 900px) 100vw, 62vw" />
+              <span className="nnn-play-button" aria-hidden="true">▶</span>
+              <div>
+                <small>{videoLead.duration || 'Video'}</small>
+                <h3>Narapati Visual Journal: Membaca Zaman dalam Sunyi</h3>
+              </div>
+            </Link>
+            <div className="nnn-video-list">
+              {videoList.map((video, index) => (
+                <Link href={mediaHref('video', video.slug)} className="nnn-video-item" key={video.slug}>
+                  <span className="nnn-video-thumb">
+                    <Image src={video.image || monochromeImages.video} alt="" fill sizes="120px" />
                   </span>
-                  <span className="tokoh-card-copy">
-                    <span className="tokoh-label">Insight</span>
-                    <strong>{article.title}</strong>
-                    <em>{article.author.name}</em>
+                  <span>
+                    <small>{video.duration || 'Video'}</small>
+                    <strong>{smallVideoTitles[index] || video.title}</strong>
                   </span>
                 </Link>
               ))}
             </div>
-          </section>
-
-          <section className="top-story-section" aria-labelledby="top-story-heading">
-            <div className="compact-section-heading compact-section-heading-inverted compact-section-heading-label-only">
-              <h2 id="top-story-heading">Top Stories</h2>
-            </div>
-            <div className="top-story-grid">
-              {topStoryArticles.map((article) => (
-                <article className="top-story-card" key={article.slug}>
-                  <Link href={articleHref(article.slug)} className="top-story-image">
-                    <Image src={article.image} alt="" fill sizes="(max-width: 760px) 50vw, 20vw" />
-                  </Link>
-                  <div>
-                    <Link href={categoryHref(article.category.slug)} className="top-story-label">
-                      {article.category.title}
-                    </Link>
-                    <Link href={articleHref(article.slug)}>
-                      <h3>{article.title}</h3>
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <div className="home-editorial-layout">
-            <main className="home-main">
-              <section className="utama-news-section" aria-labelledby="utama-news-heading">
-                <div className="compact-section-heading compact-section-heading-label-only">
-                  <h2 id="utama-news-heading">{homePageContent.sections.utama.label}</h2>
-                </div>
-                <div className="secondary-news-grid">
-                  {globalStories.map((article) => (
-                    <article className="editorial-card" key={article.slug}>
-                      <Link href={articleHref(article.slug)} className="editorial-card-image">
-                        <Image src={article.image} alt="" fill sizes="(max-width: 760px) 100vw, 25vw" />
-                      </Link>
-                      <div>
-                        <Link href={categoryHref(article.category.slug)} className="home-card-kicker">
-                          {article.category.title}
-                        </Link>
-                        <Link href={articleHref(article.slug)}>
-                          <h2>{article.title}</h2>
-                        </Link>
-                        <p>{article.dek}</p>
-                        <div className="home-meta">{formatDate(article.publishedAt)}</div>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className="editors-pick-section" aria-labelledby="editors-pick-heading">
-                <div className="compact-section-heading compact-section-heading-label-only">
-                  <h2 id="editors-pick-heading">{homePageContent.sections.editorsPick.label}</h2>
-                </div>
-                <div className="editors-pick-grid">
-                  {editorsPick.map((article) => (
-                    <article className="editors-pick-card" key={article.slug}>
-                      <Link href={articleHref(article.slug)} className="editors-pick-image">
-                        <Image src={article.image} alt="" fill sizes="(max-width: 760px) 96px, 120px" />
-                      </Link>
-                      <div>
-                        <Link href={categoryHref(article.category.slug)} className="home-card-kicker">
-                          {article.category.title}
-                        </Link>
-                        <Link href={articleHref(article.slug)}>
-                          <h3>{article.title}</h3>
-                        </Link>
-                        <p>{article.dek}</p>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className="latest-news-section" aria-labelledby="latest-news-heading">
-                <div className="compact-section-heading compact-section-heading-label-only">
-                  <h2 id="latest-news-heading">{homePageContent.sections.latest.label}</h2>
-                </div>
-                <div className="latest-news-grid">
-                  {latest.map((article) => (
-                    <article className="latest-news-card" key={article.slug}>
-                      <Link href={articleHref(article.slug)} className="latest-news-image">
-                        <Image src={article.image} alt="" fill sizes="(max-width: 760px) 100vw, 22vw" />
-                      </Link>
-                      <div>
-                        <Link href={categoryHref(article.category.slug)} className="home-card-kicker">
-                          {article.category.title}
-                        </Link>
-                        <Link href={articleHref(article.slug)}>
-                          <h3>{article.title}</h3>
-                        </Link>
-                        <div className="home-meta">{article.author.name} / {formatDate(article.publishedAt)}</div>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className="portal-section" aria-labelledby="video-section-heading">
-                <div className="compact-section-heading compact-section-heading-label-only">
-                  <h2 id="video-section-heading">{homePageContent.sections.video.label}</h2>
-                </div>
-                <div className="portal-card-grid">
-                  {videoStories.map((item) => (
-                    <article className="portal-media-card" key={item.slug}>
-                      <Link href={videoHref(item.slug)} className="portal-media-image">
-                        <Image src={item.image} alt="" fill sizes="(max-width: 760px) 100vw, 30vw" />
-                        <span>{homePageContent.sections.video.playLabel}</span>
-                      </Link>
-                      <div>
-                        <Link href="/video" className="home-card-kicker">
-                          {item.duration || 'Video'}
-                        </Link>
-                        <Link href={videoHref(item.slug)}>
-                          <h3>{item.title}</h3>
-                        </Link>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className="portal-section" aria-labelledby="photography-section-heading">
-                <div className="compact-section-heading compact-section-heading-label-only">
-                  <h2 id="photography-section-heading">{homePageContent.sections.photography.label}</h2>
-                </div>
-                <div className="portal-card-grid">
-                  {photographyStories.map((item) => (
-                    <article className="portal-media-card" key={item.slug}>
-                      <Link href={photographyHref(item.slug)} className="portal-media-image">
-                        <Image src={item.image} alt="" fill sizes="(max-width: 760px) 100vw, 30vw" />
-                      </Link>
-                      <div>
-                        <Link href="/photography" className="home-card-kicker">
-                          {item.duration || 'Photography'}
-                        </Link>
-                        <Link href={photographyHref(item.slug)}>
-                          <h3>{item.title}</h3>
-                        </Link>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className="portal-section" aria-labelledby="popular-section-heading">
-                <div className="compact-section-heading">
-                  <span>{homePageContent.sections.popular.label}</span>
-                  <h2 id="popular-section-heading">{homePageContent.sections.popular.title}</h2>
-                </div>
-                <div className="popular-main-list">
-                  {popularMainStories.map((article, index) => (
-                    <Link className="popular-main-item" href={articleHref(article.slug)} key={article.slug}>
-                      <span>{String(index + 1).padStart(2, '0')}</span>
-                      <strong>{article.title}</strong>
-                      <small>{article.category.title}</small>
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            </main>
-
-            <aside className="home-ad-sidebar" aria-label={homePageContent.sidebar.ariaLabel}>
-              <div className="sidebar-sticky">
-                <section className="sidebar-news-card">
-                  <div className="post-terbaru-heading">
-                    <span>{homePageContent.sidebar.latest.label}</span>
-                    <h2>{homePageContent.sidebar.latest.title}</h2>
-                  </div>
-                  {sidebarStories.map((article) => (
-                    <Link className="post-terbaru-item" href={articleHref(article.slug)} key={article.slug}>
-                      <span>{article.category.title}</span>
-                      <strong>{article.title}</strong>
-                      <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
-                    </Link>
-                  ))}
-                </section>
-
-                <section className="sidebar-news-card sidebar-news-card-compact">
-                  <div className="sidebar-section-heading">
-                    <h2>{homePageContent.sidebar.recommendation.title}</h2>
-                  </div>
-                  {recommendationStories.map((article) => (
-                    <Link className="sidebar-compact-item" href={articleHref(article.slug)} key={article.slug}>
-                      <span>{article.category.title}</span>
-                      <strong>{article.title}</strong>
-                    </Link>
-                  ))}
-                </section>
-
-                <section className="sidebar-news-card sidebar-news-card-compact">
-                  <div className="sidebar-section-heading">
-                    <h2>{homePageContent.sidebar.popular.title}</h2>
-                  </div>
-                  {popularStories.map((article, index) => (
-                    <Link className="sidebar-ranked-item" href={articleHref(article.slug)} key={article.slug}>
-                      <span>{String(index + 1).padStart(2, '0')}</span>
-                      <strong>{article.title}</strong>
-                    </Link>
-                  ))}
-                </section>
-              </div>
-            </aside>
           </div>
         </div>
       </section>
 
-      <section className="nnn-intelligence-section" aria-label={homePageContent.intelligence.ariaLabel}>
-        <div className="container nnn-intelligence-grid">
-          <div className="nnn-intelligence-image">
-            <Image src={featured.image} alt="" fill sizes="(max-width: 900px) 100vw, 34vw" />
-          </div>
-          <div className="nnn-intelligence-copy">
-            <span>{homePageContent.intelligence.label}</span>
-            <h2>{homePageContent.intelligence.title}</h2>
-            <p>{homePageContent.intelligence.description}</p>
-          </div>
-          <Link className="nnn-intelligence-cta" href="/about">
-            <span>{homePageContent.intelligence.ctaLabel}</span>
-            <strong>{homePageContent.intelligence.ctaTitle}</strong>
-            <small>{homePageContent.intelligence.ctaSmall}</small>
-          </Link>
+      <section className="nnn-photo-day" aria-label="Photo of the day">
+        <Image src={photoFeature.image || monochromeImages.photo} alt="" fill sizes="100vw" />
+        <div className="nnn-photo-overlay">
+          <span>Photo of the Day</span>
+          <h2>Capture The Moment, Keep The Story.</h2>
+          <p>Sebuah ruang visual untuk membaca manusia, tempat, perjalanan, dan peristiwa melalui bahasa gambar yang tenang.</p>
+          <Link href="/photography">See More Photos</Link>
         </div>
       </section>
-
-      <section className="footer-sponsor-strip" aria-label={homePageContent.sponsors.ariaLabel}>
-        <div className="container">
-          <span>{homePageContent.sponsors.title}</span>
-          <div>
-            {sponsorPartners.map((partner) => (
-              <div key={partner}>{partner}</div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <nav className="mobile-bottom-nav" aria-label={homePageContent.mobileNav.ariaLabel}>
-        <Link href="/">{homePageContent.mobileNav.home}</Link>
-        <Link href={mobileCategory ? categoryHref(mobileCategory.slug) : '/category/nasional'}>
-          {mobileCategory?.title || homePageContent.mobileNav.fallbackCategory}
-        </Link>
-        <Link href="/photography">{homePageContent.mobileNav.photography}</Link>
-        <Link href="/video">{homePageContent.mobileNav.video}</Link>
-      </nav>
     </>
   )
 }
