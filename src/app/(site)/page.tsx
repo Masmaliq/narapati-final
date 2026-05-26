@@ -126,12 +126,6 @@ const fallbackVideos: MediaItem[] = [
   }
 ]
 
-const smallVideoTitles = [
-  'Percakapan Tentang Pasar dan Manusia',
-  'Catatan Malam dari Ruang Redaksi',
-  'Ketika Dunia Berlari Terlalu Cepat'
-]
-
 function storyAt(stories: Article[], index: number) {
   return stories[index] || fallbackArticles[index % fallbackArticles.length]
 }
@@ -270,18 +264,18 @@ export default async function HomePage() {
               <span className="nnn-play-button" aria-hidden="true">▶</span>
               <div>
                 <small>{videoLead.duration || 'Video'}</small>
-                <h3>Narapati Visual Journal: Membaca Zaman dalam Sunyi</h3>
+                <h3>{videoLead.title}</h3>
               </div>
             </Link>
             <div className="nnn-video-list">
-              {videoList.map((video, index) => (
+              {videoList.map((video) => (
                 <Link href={mediaHref('video', video.slug)} className="nnn-video-item" key={video.slug}>
                   <span className="nnn-video-thumb">
-                    <Image src={video.image || monochromeImages.video} alt="" fill sizes="120px" />
+                    <Image src={video.image || monochromeImages.video} alt="" fill sizes="(max-width: 900px) 33vw, 360px" />
                   </span>
                   <span>
                     <small>{video.duration || 'Video'}</small>
-                    <strong>{smallVideoTitles[index] || video.title}</strong>
+                    <strong>{video.title}</strong>
                   </span>
                 </Link>
               ))}
