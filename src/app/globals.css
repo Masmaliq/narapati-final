@@ -217,6 +217,24 @@ body {
   text-transform: uppercase;
 }
 
+.nnn-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  color: rgba(17, 17, 17, 0.54);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.nnn-hero-meta span,
+.nnn-hero-meta time {
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
 .nnn-button,
 .nnn-photo-overlay a,
 .nnn-market-card > a {

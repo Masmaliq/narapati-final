@@ -20,11 +20,13 @@ const monochromeImages = {
 }
 
 const heroContent = {
-  category: 'Global',
-  title: 'Pasar Saham dan Investor Masih Waspada di Tengah Ketidakpastian Global',
+  category: 'Insight',
+  title: 'Ketika Qurban Menjadi Latihan Memotong Ego',
   description:
-    'Di tengah perubahan arah ekonomi dunia, investor membaca ulang risiko, peluang, dan arah baru pasar global.',
-  date: '2026-05-20',
+    '“Yang sampai kepada Allah itu bukan darah dan dagingnya, tetapi ketakwaan dan keikhlasan kita.”',
+  author: 'Mas Maliq Ibrahim',
+  publisher: 'Narapati News Network',
+  date: '2026-05-24',
   image: monochromeImages.hero
 }
 
@@ -143,7 +145,7 @@ export default async function HomePage() {
 
   const articles = cmsArticles.length ? cmsArticles : fallbackArticles
   const videos = cmsVideos.length ? cmsVideos : fallbackVideos
-  const featured = articles.find((article) => article.featured) || articles[0] || fallbackArticles[0]
+  const featured = articles.find((article) => article.slug === 'ketika-qurban-menjadi-latihan-memotong-ego') || articles.find((article) => article.featured) || articles[0] || fallbackArticles[0]
   const globalStories = [
     ...articles.filter((article) => {
       const category = `${article.category.title} ${article.category.slug}`.toLowerCase()
@@ -177,11 +179,15 @@ export default async function HomePage() {
                 <h1>{heroContent.title}</h1>
               </Link>
               <p>{heroContent.description}</p>
-              <time dateTime={heroContent.date}>20 Mei 2026</time>
+              <div className="nnn-hero-meta">
+                <span>{heroContent.author}</span>
+                <time dateTime={heroContent.date}>May 24, 2026</time>
+                <span>{heroContent.publisher}</span>
+              </div>
               <Link className="nnn-button" href={heroHref}>BACA SELENGKAPNYA</Link>
             </div>
             <Link href={heroHref} className="nnn-hero-image" aria-label={heroContent.title}>
-              <Image src={heroContent.image} alt="" fill priority sizes="(max-width: 900px) 100vw, 60vw" />
+              <Image src={featured.image || heroContent.image} alt="" fill priority sizes="(max-width: 900px) 100vw, 60vw" />
             </Link>
           </section>
 
