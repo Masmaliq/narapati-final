@@ -21,6 +21,10 @@ function videoHref(slug: string) {
   return `/video/${encodeURIComponent(slug)}`
 }
 
+function isGlobalArticle(article: {category: {title: string; slug: string}}) {
+  return article.category.slug.toLowerCase() === 'global' || article.category.title.toLowerCase() === 'global'
+}
+
 const sponsorPartners = ['MAK Capital', 'Narapati Partner', 'Archipelago Fund', 'Meridian Advisory', 'Svara Ventures']
 const fallbackArticleImage = 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=85'
 
@@ -75,7 +79,7 @@ export default async function HomePage() {
   const editableContent = await getHomeContent()
   const featured = articles.find((article) => article.featured) || articles[0]
   const supporting = articles.filter((article) => article.slug !== featured.slug)
-  const secondary = supporting.slice(0, 4)
+  const globalStories = articles.filter(isGlobalArticle).slice(0, 4)
   const latest = [...supporting.slice(4), ...articles].filter((article, index, list) => (
     list.findIndex((item) => item.slug === article.slug) === index && article.slug !== featured.slug
   )).slice(0, 8)
@@ -208,7 +212,7 @@ export default async function HomePage() {
 
           <section className="top-story-section" aria-labelledby="top-story-heading">
             <div className="compact-section-heading compact-section-heading-inverted compact-section-heading-label-only">
-              <h2 id="top-story-heading">Global</h2>
+              <h2 id="top-story-heading">Top Stories</h2>
             </div>
             <div className="top-story-grid">
               {topStoryArticles.map((article) => (
@@ -236,7 +240,7 @@ export default async function HomePage() {
                   <h2 id="utama-news-heading">{homePageContent.sections.utama.label}</h2>
                 </div>
                 <div className="secondary-news-grid">
-                  {secondary.map((article) => (
+                  {globalStories.map((article) => (
                     <article className="editorial-card" key={article.slug}>
                       <Link href={articleHref(article.slug)} className="editorial-card-image">
                         <Image src={article.image} alt="" fill sizes="(max-width: 760px) 100vw, 25vw" />
