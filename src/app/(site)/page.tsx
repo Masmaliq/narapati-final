@@ -22,18 +22,17 @@ function videoHref(slug: string) {
 }
 
 const sponsorPartners = ['MAK Capital', 'Narapati Partner', 'Archipelago Fund', 'Meridian Advisory', 'Svara Ventures']
+const fallbackArticleImage = 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=85'
 
 const homePageContent = {
   sections: {
     utama: {label: 'Top Stories'},
     editorsPick: {label: 'Curated'},
     latest: {
-      label: 'Latest News',
-      title: 'Editorial Briefing',
-      description: 'Fresh reporting and analysis from the Narapati newsroom.'
+      label: 'Latest News'
     },
-    video: {label: 'Watch', title: 'Video', playLabel: 'Play'},
-    photography: {label: 'Visual', title: 'Photography'},
+    video: {label: 'Watch', playLabel: 'Play'},
+    photography: {label: 'Visual'},
     popular: {label: 'Most Read', title: 'Terpopuler'}
   },
   sidebar: {
@@ -195,7 +194,7 @@ export default async function HomePage() {
               {tokohStories.map((article) => (
                 <Link className="tokoh-kolom-card" href={articleHref(article.slug)} key={article.slug}>
                   <span className="tokoh-avatar">
-                    <Image src={article.author.image || article.image} alt="" fill sizes="72px" />
+                    <Image src={article.image || fallbackArticleImage} alt="" fill sizes="72px" />
                   </span>
                   <span className="tokoh-card-copy">
                     <span className="tokoh-label">Insight</span>
@@ -281,13 +280,9 @@ export default async function HomePage() {
                 </div>
               </section>
 
-              <section className="latest-news-section">
-                <div className="home-section-heading">
-                  <div>
-                    <span>{homePageContent.sections.latest.label}</span>
-                    <h2>{homePageContent.sections.latest.title}</h2>
-                  </div>
-                  <p>{homePageContent.sections.latest.description}</p>
+              <section className="latest-news-section" aria-labelledby="latest-news-heading">
+                <div className="compact-section-heading compact-section-heading-label-only">
+                  <h2 id="latest-news-heading">{homePageContent.sections.latest.label}</h2>
                 </div>
                 <div className="latest-news-grid">
                   {latest.map((article) => (
@@ -310,9 +305,8 @@ export default async function HomePage() {
               </section>
 
               <section className="portal-section" aria-labelledby="video-section-heading">
-                <div className="compact-section-heading">
-                  <span>{homePageContent.sections.video.label}</span>
-                  <h2 id="video-section-heading">{homePageContent.sections.video.title}</h2>
+                <div className="compact-section-heading compact-section-heading-label-only">
+                  <h2 id="video-section-heading">{homePageContent.sections.video.label}</h2>
                 </div>
                 <div className="portal-card-grid">
                   {videoStories.map((item) => (
@@ -335,9 +329,8 @@ export default async function HomePage() {
               </section>
 
               <section className="portal-section" aria-labelledby="photography-section-heading">
-                <div className="compact-section-heading">
-                  <span>{homePageContent.sections.photography.label}</span>
-                  <h2 id="photography-section-heading">{homePageContent.sections.photography.title}</h2>
+                <div className="compact-section-heading compact-section-heading-label-only">
+                  <h2 id="photography-section-heading">{homePageContent.sections.photography.label}</h2>
                 </div>
                 <div className="portal-card-grid">
                   {photographyStories.map((item) => (
