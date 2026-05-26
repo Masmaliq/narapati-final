@@ -5682,7 +5682,7 @@ body {
 
 .header-brand-row {
   min-height: 56px;
-  padding: 7px 0 6px;
+  padding: 5px 0 0;
 }
 
 .brand {
@@ -5717,13 +5717,13 @@ body {
 
 .header-nav-inner {
   gap: clamp(18px, 3.4vw, 46px);
-  min-height: 32px;
+  min-height: 30px;
 }
 
 .header-nav a {
   font-size: 0.62rem;
   letter-spacing: 0.18em;
-  padding: 9px 0 8px;
+  padding: 7px 0 7px;
 }
 
 .header-topics {
