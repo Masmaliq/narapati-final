@@ -5681,8 +5681,8 @@ body {
 }
 
 .header-brand-row {
-  min-height: 56px;
-  padding: 5px 0 0;
+  min-height: 82px;
+  padding: 14px 0 12px;
 }
 
 .brand {
@@ -5690,8 +5690,10 @@ body {
 }
 
 .brand-logo {
-  width: min(250px, 32vw);
+  display: block;
+  width: min(280px, 34vw);
   height: auto;
+  background: transparent;
 }
 
 .brand-journal-subtitle {
@@ -5712,18 +5714,23 @@ body {
 }
 
 .header-nav {
-  border-top-color: rgba(221, 211, 195, 0.9);
+  border-top: 1px solid rgba(221, 211, 195, 0.92);
+  border-bottom: 1px solid rgba(221, 211, 195, 0.92);
+  background: rgba(251, 248, 242, 0.88);
 }
 
 .header-nav-inner {
-  gap: clamp(18px, 3.4vw, 46px);
-  min-height: 30px;
+  width: min(780px, calc(100% - 40px));
+  margin: 0 auto;
+  justify-content: center;
+  gap: clamp(18px, 2.4vw, 32px);
+  min-height: 34px;
 }
 
 .header-nav a {
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   letter-spacing: 0.18em;
-  padding: 7px 0 7px;
+  padding: 9px 0 8px;
 }
 
 .header-topics {
@@ -6418,7 +6425,7 @@ body {
   }
 
   .brand-logo {
-    width: min(210px, 48vw);
+    width: min(230px, 50vw);
   }
 
   .journal-hero {

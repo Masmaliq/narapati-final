@@ -58,10 +58,10 @@ export async function Header() {
         <Link href="/" className="brand" aria-label="Narapati Journal home">
           <Image
             className="brand-logo"
-            src="/brand/narapati-logo-transparent.png"
+            src="/brand/narapati-logo-journal.png"
             alt="Narapati - Journal of a Modern Wanderer"
-            width={1536}
-            height={300}
+            width={1429}
+            height={248}
             priority
           />
         </Link>
