@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   description: 'Premium independent journalism from Narapati News Network.'
 }
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default function SiteLayout({children}: {children: ReactNode}) {
   return (
     <html lang="en">

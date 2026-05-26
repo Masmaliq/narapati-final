@@ -9,10 +9,6 @@ const footerContent = {
     companyTitle: 'Perusahaan',
     socialTitle: 'Social'
   },
-  fallbackCategory: {
-    label: 'Bisnis',
-    href: '/category/bisnis'
-  },
   fallbackSocial: {
     label: 'Contact',
     href: '/contact'
@@ -68,11 +64,9 @@ export async function Footer() {
 
           <nav className="footer-column" aria-label="Footer categories">
             <h2>{footerContent.columns.categoryTitle}</h2>
-            {categoryLinks.length ? categoryLinks.map((item) => (
+            {categoryLinks.map((item) => (
               <Link href={item.href} key={item.href}>{item.label}</Link>
-            )) : (
-              <Link href={footerContent.fallbackCategory.href}>{footerContent.fallbackCategory.label}</Link>
-            )}
+            ))}
           </nav>
 
           <nav className="footer-column" aria-label="Company links">

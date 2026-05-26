@@ -28,7 +28,7 @@ async function read<T>(query: string, params = {}, fallback: T, options: ReadOpt
 
   try {
     const data = await Promise.race([
-      client.fetch<T>(query, params, {next: {revalidate: 60}}),
+      client.fetch<T>(query, params, {cache: 'no-store'}),
       new Promise<T>((_, reject) => {
         setTimeout(() => reject(new Error('Sanity request timed out')), SANITY_READ_TIMEOUT_MS)
       })
@@ -76,7 +76,7 @@ export async function getCategoryArticles(slug: string) {
 }
 
 export function getCategories() {
-  return read<Category[]>(CATEGORIES_QUERY, {}, categories)
+  return read<Category[]>(CATEGORIES_QUERY, {}, categories, {fallbackOnEmpty: false, fallbackOnError: false})
 }
 
 export function getPodcasts() {

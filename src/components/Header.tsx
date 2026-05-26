@@ -4,23 +4,6 @@ import {SearchOverlay, type SearchArticle} from '@/components/SearchOverlay'
 import {breakingInsightItems} from '@/content/ticker'
 import {getArticles, getCategories} from '@/sanity/lib/fetch'
 
-const fallbackNavItems = [
-  ['Home', '/'],
-  ['Bisnis', '/category/bisnis'],
-  ['Dunia', '/category/dunia'],
-  ['Analisis', '/category/analisis'],
-  ['Nilai Hidup', '/category/nilai-hidup'],
-  ['Tokoh & Kolom', '/category/tokoh-kolom']
-]
-
-const mainCategoryItems = [
-  {title: 'Bisnis', slugs: ['bisnis']},
-  {title: 'Dunia', slugs: ['dunia']},
-  {title: 'Analisis', slugs: ['analisis', 'analisa']},
-  {title: 'Nilai Hidup', slugs: ['nilai-hidup']},
-  {title: 'Tokoh & Kolom', slugs: ['tokoh-kolom', 'tokoh-dan-kolom']}
-]
-
 export async function Header() {
   const [articles, categories] = await Promise.all([getArticles(), getCategories()])
   const searchArticles: SearchArticle[] = articles.map((article) => ({
@@ -37,13 +20,13 @@ export async function Header() {
       name: article.author.name
     }
   }))
-  const categoryItems = mainCategoryItems.map((item) => {
-    const category = categories.find((candidate) => (
-      item.slugs.includes(candidate.slug) || candidate.title.toLowerCase() === item.title.toLowerCase()
-    ))
-    return [item.title, `/category/${encodeURIComponent(category?.slug || item.slugs[0])}`]
-  })
-  const navItems = categories.length ? [['Home', '/'], ...categoryItems] : fallbackNavItems
+  const navItems = [
+    ['Home', '/'],
+    ...categories.map((category) => [
+      category.title,
+      `/category/${encodeURIComponent(category.slug)}`
+    ])
+  ]
   const insightItems = articles.length
     ? articles.slice(0, 6).map((article) => article.title)
     : breakingInsightItems
