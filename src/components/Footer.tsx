@@ -2,16 +2,15 @@ import Link from 'next/link'
 
 const footerColumns = [
   {
-    title: 'Informasi',
+    title: 'Journal',
     links: [
       {label: 'Tentang Kami', href: '/about'},
       {label: 'Redaksi', href: '/redaksi'},
-      {label: 'Karir', href: '/contact'},
       {label: 'Kontak', href: '/contact'}
     ]
   },
   {
-    title: 'Kategori',
+    title: 'Explore',
     links: [
       {label: 'Global', href: '/category/global'},
       {label: 'Insight', href: '/category/insight'},
@@ -21,12 +20,11 @@ const footerColumns = [
     ]
   },
   {
-    title: 'Layanan',
+    title: 'Resources',
     links: [
-      {label: 'Newsletter', href: '/contact'},
-      {label: 'Podcast', href: '/contact'},
       {label: 'Iklan', href: '/advertise'},
-      {label: 'Kerja Sama', href: '/advertise'}
+      {label: 'Kerja Sama', href: '/advertise'},
+      {label: 'Newsletter', href: '/contact'}
     ]
   },
   {
@@ -46,8 +44,8 @@ export function Footer() {
         <div className="footer-main">
           <div className="footer-brand">
             <span>Narapati</span>
-            <strong>News Network</strong>
-            <p className="footer-identity">Capture The Moment, Keep The Story.</p>
+            <strong>Journal of a Modern Wanderer</strong>
+            <p className="footer-identity">Tentang dunia, manusia, dan perjalanan memahami kehidupan.</p>
           </div>
 
           {footerColumns.map((column) => (

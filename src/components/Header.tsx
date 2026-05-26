@@ -64,6 +64,7 @@ export async function Header() {
             height={300}
             priority
           />
+          <span className="brand-journal-subtitle">Journal of a Modern Wanderer</span>
         </Link>
 
         <div className="header-account">
