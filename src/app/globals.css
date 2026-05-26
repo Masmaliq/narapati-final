@@ -5681,8 +5681,8 @@ body {
 }
 
 .header-brand-row {
-  min-height: 104px;
-  padding: 17px 0 13px;
+  min-height: 56px;
+  padding: 7px 0 6px;
 }
 
 .brand {
@@ -5690,7 +5690,7 @@ body {
 }
 
 .brand-logo {
-  width: min(340px, 42vw);
+  width: min(250px, 32vw);
   height: auto;
 }
 
@@ -5716,17 +5716,45 @@ body {
 }
 
 .header-nav-inner {
-  gap: clamp(24px, 4.4vw, 66px);
+  gap: clamp(18px, 3.4vw, 46px);
+  min-height: 32px;
 }
 
 .header-nav a {
-  font-size: 0.72rem;
-  letter-spacing: 0.2em;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  padding: 9px 0 8px;
 }
 
 .header-topics {
+  display: none;
   border-bottom-color: rgba(221, 211, 195, 0.9);
   background: var(--journal-paper-light);
+}
+
+.header-menu-button {
+  width: 34px;
+  height: 34px;
+}
+
+.header-search {
+  width: min(132px, 100%);
+}
+
+.header-search .search-trigger {
+  min-height: 34px;
+  font-size: 0.62rem;
+  padding: 0 11px;
+}
+
+.header-account {
+  gap: 12px;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+}
+
+.header-account span {
+  padding-left: 12px;
 }
 
 .header-topics-inner {
@@ -6370,18 +6398,27 @@ body {
 
 @media (max-width: 820px) {
   .header-brand-row {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    min-height: auto;
+    grid-template-columns: minmax(70px, 1fr) auto minmax(70px, 1fr);
+    gap: 10px;
+    min-height: 54px;
   }
 
   .header-left-tools,
   .header-account {
-    justify-content: center;
+    justify-content: flex-start;
+  }
+
+  .header-account {
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .header-account time {
+    display: none;
   }
 
   .brand-logo {
-    width: min(280px, 72vw);
+    width: min(210px, 48vw);
   }
 
   .journal-hero {
