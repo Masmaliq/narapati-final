@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import {MobileMenu} from '@/components/MobileMenu'
 import {SearchOverlay, type SearchArticle} from '@/components/SearchOverlay'
 import {getArticles, getCategories} from '@/sanity/lib/fetch'
 
@@ -27,7 +28,7 @@ export async function Header() {
       name: article.author.name
     }
   }))
-  const navItems = ['Global', 'Insight', 'Market', 'Video', 'Photography'].map((label) => {
+  const navItems: Array<[string, string]> = ['Global', 'Insight', 'Market', 'Video', 'Photography'].map((label) => {
     const category = categories.find((item) => item.title.toLowerCase() === label.toLowerCase())
     if (label === 'Video') return [label, '/video']
     if (label === 'Photography') return [label, '/photography']
@@ -46,10 +47,7 @@ export async function Header() {
     <header className="site-header">
       <div className="container header-brand-row">
         <div className="header-left-tools">
-          <button className="header-menu-button" type="button" aria-label="Open menu">
-            <span />
-            <span />
-          </button>
+          <MobileMenu navItems={navItems} />
           <div className="header-search">
             <SearchOverlay articles={searchArticles} />
           </div>
