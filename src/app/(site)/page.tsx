@@ -279,8 +279,7 @@ export default async function HomePage() {
       {videoLead ? (
         <section className="journal-section journal-video-journal nnn-container" aria-labelledby="video-heading">
           <div className="journal-section-head">
-            <span>Video</span>
-            <h2 id="video-heading">Video Journal</h2>
+            <span id="video-heading">Video</span>
           </div>
           <div className="journal-video-grid">
             <Link href={mediaHref('video', videoLead.slug)} className="journal-video-main">
