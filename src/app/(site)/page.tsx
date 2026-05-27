@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import {JournalHeroCarousel} from '@/components/JournalHeroCarousel'
 import {getArticles, getPhotography, getVideos} from '@/sanity/lib/fetch'
 import type {Article, MediaItem, PhotographyItem} from '@/types/content'
 
@@ -65,9 +66,12 @@ export default async function HomePage() {
 
   const availableArticles = articles.filter((article) => article.slug)
   const featured = availableArticles.find((article) => article.featured) || availableArticles[0]
-  const heroImage = featured?.image || availableArticles.find((article) => article.image)?.image || ''
   const articlesAfterHero = availableArticles.filter((article) => article.slug !== featured?.slug)
   const articlePool = articlesAfterHero.length ? articlesAfterHero : availableArticles
+  const heroSlides = uniqueArticles([
+    ...(featured ? [featured] : []),
+    ...articlePool.filter((article) => article.image)
+  ]).slice(0, 4)
   const latestArticles = fillItems(
     uniqueArticles(articlePool),
     3
@@ -112,28 +116,7 @@ export default async function HomePage() {
 
   return (
     <main className="journal-home">
-      <section className="journal-hero nnn-container" aria-label="Artikel utama">
-        <div className="journal-hero-copy">
-          <span className="journal-eyebrow">{categoryOf(featured)}</span>
-          <Link href={articleHref(featured.slug)}>
-            <h1>{featured.title}</h1>
-          </Link>
-          {featured.dek ? <p>{featured.dek}</p> : null}
-          <div className="journal-meta">
-            <span>{authorOf(featured)}</span>
-            <time dateTime={featured.publishedAt}>{formatDate(featured.publishedAt)}</time>
-            <span>{readingTime(featured)}</span>
-          </div>
-          <Link className="journal-button" href={articleHref(featured.slug)}>
-            Baca Selengkapnya
-          </Link>
-        </div>
-        {heroImage ? (
-          <Link href={articleHref(featured.slug)} className="journal-hero-media" aria-label={featured.title}>
-            <Image src={heroImage} alt="" fill priority sizes="(max-width: 900px) 100vw, 58vw" />
-          </Link>
-        ) : null}
-      </section>
+      <JournalHeroCarousel slides={heroSlides.length ? heroSlides : [featured]} />
 
       <section className="journal-section journal-section-first nnn-container" aria-labelledby="latest-heading">
         <div className="journal-section-head journal-section-head-split">
