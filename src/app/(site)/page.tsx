@@ -209,7 +209,7 @@ export default async function HomePage() {
 
         <aside className="journal-travel-notes" aria-labelledby="travel-heading">
           <div className="journal-section-head compact">
-            <h2 id="travel-heading">Catatan Perjalanan</h2>
+            <span id="travel-heading">Catatan Perjalanan</span>
           </div>
           <div className="journal-note-list">
             {travelNotes.map((article, index) => (
@@ -222,6 +222,7 @@ export default async function HomePage() {
                 <span>
                   <small>{categoryOf(article)} · {formatDate(article.publishedAt)}</small>
                   <strong>{article.title}</strong>
+                  <em>Baca →</em>
                 </span>
               </Link>
             ))}
@@ -229,16 +230,16 @@ export default async function HomePage() {
         </aside>
       </section>
 
-      <section className="journal-section nnn-container" aria-label="Global Insight Market">
+      <section className="journal-section journal-category-section nnn-container" aria-label="Global Insight Market">
         <div className="journal-category-grid">
           {journalColumns.map(({title, article}, index) => article ? (
             <article className="journal-category-card" key={`${title}-${article.slug}-${index}`}>
+              <span>{title}</span>
               {article.image ? (
                 <Link href={articleHref(article.slug)} className="journal-category-image">
                   <Image src={article.image} alt="" fill sizes="(max-width: 900px) 100vw, 33vw" />
                 </Link>
               ) : null}
-              <span>{title}</span>
               <Link href={articleHref(article.slug)}>
                 <h3>{article.title}</h3>
               </Link>

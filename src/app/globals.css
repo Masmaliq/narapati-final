@@ -6066,8 +6066,12 @@ body {
   padding-bottom: clamp(26px, 3.2vw, 38px);
 }
 
+.journal-category-section {
+  padding-top: clamp(24px, 3vw, 36px);
+}
+
 .journal-section + .journal-section {
-  border-top: 1px solid rgba(221, 211, 195, 0.7);
+  border-top: 1px solid rgba(221, 211, 195, 0.42);
 }
 
 .journal-section-head {
@@ -6161,7 +6165,7 @@ body {
 }
 
 .journal-category-card {
-  gap: 16px;
+  gap: 13px;
 }
 
 .journal-card-image,
@@ -6175,6 +6179,28 @@ body {
 
 .journal-category-image {
   border: 1px solid rgba(221, 211, 195, 0.86);
+  aspect-ratio: 4 / 3;
+}
+
+.journal-category-card > span {
+  display: grid;
+  grid-template-columns: auto minmax(44px, 0.8fr);
+  gap: 12px;
+  align-items: center;
+  color: var(--journal-gold);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.journal-category-card > span::after {
+  display: block;
+  height: 1px;
+  max-width: 82%;
+  background: rgba(179, 138, 86, 0.28);
+  content: '';
 }
 
 .journal-card > div,
@@ -6210,6 +6236,18 @@ body {
   transition: text-decoration-color 180ms ease;
 }
 
+.journal-category-card h3 {
+  margin: 3px 0 4px;
+}
+
+.journal-category-card p {
+  margin-top: 0;
+}
+
+.journal-category-card small {
+  margin-top: 2px;
+}
+
 .journal-card:hover h3 {
   text-decoration-color: rgba(179, 138, 86, 0.55);
 }
@@ -6222,8 +6260,8 @@ body {
   overflow: hidden;
   margin: 0;
   color: rgba(15, 23, 42, 0.62);
-  font-size: 0.94rem;
-  line-height: 1.6;
+  font-size: 0.9rem;
+  line-height: 1.68;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
 }
@@ -6245,13 +6283,19 @@ body {
   margin-top: 12px;
   border: 0;
   background: transparent;
-  color: var(--journal-gold);
+  color: rgba(179, 138, 86, 0.78);
   padding: 0;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color 180ms ease, text-decoration-color 180ms ease;
 }
 
 .journal-read:hover {
   background: transparent;
   color: var(--journal-ink);
+  text-decoration-color: rgba(179, 138, 86, 0.55);
   transform: none;
 }
 
@@ -6261,24 +6305,25 @@ body {
   gap: clamp(36px, 5vw, 72px);
   align-items: start;
   padding-top: clamp(20px, 2.8vw, 28px);
+  padding-bottom: clamp(24px, 3.2vw, 36px);
 }
 
 .journal-feature-row {
   display: grid;
-  grid-template-columns: minmax(0, 0.76fr) minmax(0, 1fr);
-  gap: clamp(24px, 3.6vw, 48px);
+  grid-template-columns: minmax(0, 0.68fr) minmax(0, 1.14fr);
+  gap: clamp(22px, 3.2vw, 42px);
   align-items: center;
 }
 
 .journal-feature-row h3 {
-  margin: 12px 0 14px;
-  font-size: clamp(2rem, 3.5vw, 4.2rem);
-  line-height: 0.98;
+  margin: 10px 0 12px;
+  font-size: clamp(1.9rem, 3.15vw, 3.8rem);
+  line-height: 1;
 }
 
 .journal-feature-image {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 11;
   overflow: hidden;
   border: 1px solid rgba(221, 211, 195, 0.86);
   background: #e8dfd1;
@@ -6289,34 +6334,60 @@ body {
   padding-left: clamp(24px, 3vw, 38px);
 }
 
+.journal-travel-notes .journal-section-head.compact {
+  border-bottom-color: rgba(179, 138, 86, 0.5);
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+}
+
+.journal-travel-notes .journal-section-head span {
+  color: var(--journal-gold);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
 .journal-note-list {
   display: grid;
 }
 
 .journal-note {
   display: grid;
-  grid-template-columns: 98px minmax(0, 1fr);
-  gap: 15px;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 14px;
   align-items: center;
   border-bottom: 1px solid rgba(221, 211, 195, 0.8);
-  padding: 17px 0;
+  padding: 15px 0;
 }
 
 .journal-note-image {
   position: relative;
   aspect-ratio: 1 / 1;
   overflow: hidden;
+  border-radius: 999px;
   background: #e8dfd1;
 }
 
 .journal-note strong {
   display: block;
-  margin-top: 7px;
+  margin-top: 5px;
   color: var(--journal-ink);
   font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.2rem;
+  font-size: 1.08rem;
   font-weight: 500;
-  line-height: 1.06;
+  line-height: 1.08;
+}
+
+.journal-note em {
+  display: inline-flex;
+  margin-top: 8px;
+  color: var(--journal-gold);
+  font-size: 0.64rem;
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .journal-category-card {
