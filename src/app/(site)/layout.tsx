@@ -1,8 +1,21 @@
 import type {Metadata} from 'next'
 import type {ReactNode} from 'react'
+import {Cormorant_Garamond, Inter} from 'next/font/google'
 import '@/app/globals.css'
 import {Footer} from '@/components/Footer'
 import {Header} from '@/components/Header'
+
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  variable: '--font-cormorant',
+  weight: ['400', '500', '600', '700']
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  weight: ['400', '500', '600', '700', '800']
+})
 
 export const metadata: Metadata = {
   title: {
@@ -17,7 +30,7 @@ export const revalidate = 0
 
 export default function SiteLayout({children}: {children: ReactNode}) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
       <body>
         <Header />
         <main>{children}</main>
