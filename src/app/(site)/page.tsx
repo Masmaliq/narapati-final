@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import {JournalHeroCarousel} from '@/components/JournalHeroCarousel'
+import {JournalHeroCarousel, type JournalHeroSlide} from '@/components/JournalHeroCarousel'
 import {getArticles, getPhotography, getVideos} from '@/sanity/lib/fetch'
 import type {Article, MediaItem, PhotographyItem} from '@/types/content'
 
@@ -68,10 +68,49 @@ export default async function HomePage() {
   const featured = availableArticles.find((article) => article.featured) || availableArticles[0]
   const articlesAfterHero = availableArticles.filter((article) => article.slug !== featured?.slug)
   const articlePool = articlesAfterHero.length ? articlesAfterHero : availableArticles
-  const heroSlides = uniqueArticles([
+  const heroArticleSlides: JournalHeroSlide[] = uniqueArticles([
     ...(featured ? [featured] : []),
     ...articlePool.filter((article) => article.image)
-  ]).slice(0, 4)
+  ]).slice(0, 3).map((article) => ({
+    kind: 'article',
+    title: article.title,
+    slug: article.slug,
+    dek: article.dek,
+    image: article.image,
+    publishedAt: article.publishedAt,
+    href: articleHref(article.slug),
+    label: categoryOf(article),
+    source: authorOf(article)
+  }))
+  const heroPhotoSlides: JournalHeroSlide[] = photography.filter((photo) => photo.slug && photo.image).slice(0, 1).map((photo) => ({
+    kind: 'photography',
+    title: photo.title,
+    slug: photo.slug,
+    dek: photo.dek,
+    image: photo.image,
+    publishedAt: photo.publishedAt,
+    href: mediaHref('photography', photo.slug),
+    label: 'Visual Journal',
+    source: photo.location || photo.duration || 'Narapati Photography'
+  }))
+  const heroVideoSlides: JournalHeroSlide[] = videos.filter((video) => video.slug && video.image).slice(0, 1).map((video) => ({
+    kind: 'video',
+    title: video.title,
+    slug: video.slug,
+    dek: video.dek,
+    image: video.image,
+    publishedAt: video.publishedAt,
+    href: mediaHref('video', video.slug),
+    label: 'Video Journal',
+    source: 'Narapati Video',
+    duration: video.duration
+  }))
+  const heroSlides = [
+    ...heroArticleSlides.slice(0, 1),
+    ...heroPhotoSlides,
+    ...heroVideoSlides,
+    ...heroArticleSlides.slice(1)
+  ].slice(0, 5)
   const latestArticles = fillItems(
     uniqueArticles(articlePool),
     3
@@ -116,7 +155,7 @@ export default async function HomePage() {
 
   return (
     <main className="journal-home">
-      <JournalHeroCarousel slides={heroSlides.length ? heroSlides : [featured]} />
+      <JournalHeroCarousel slides={heroSlides} />
 
       <section className="journal-section journal-section-first nnn-container" aria-labelledby="latest-heading">
         <div className="journal-section-head journal-section-head-split">
