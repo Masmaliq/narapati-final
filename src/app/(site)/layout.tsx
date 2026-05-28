@@ -4,6 +4,7 @@ import {Cormorant_Garamond, Inter} from 'next/font/google'
 import '@/app/globals.css'
 import {Footer} from '@/components/Footer'
 import {Header} from '@/components/Header'
+import {ScrollReveal} from '@/components/ScrollReveal'
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -35,6 +36,7 @@ export default function SiteLayout({children}: {children: ReactNode}) {
         <Header />
         <main>{children}</main>
         <Footer />
+        <ScrollReveal />
       </body>
     </html>
   )
