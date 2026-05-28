@@ -3,8 +3,11 @@ import 'server-only'
 import {promises as fs} from 'fs'
 import path from 'path'
 import {redaksiContent, type RedaksiCard, type RedaksiContent} from '@/content/redaksi'
+import {isSanityConfigured} from '@/sanity/env'
+import {client} from '@/sanity/lib/client'
 
 const redaksiContentPath = path.join(process.cwd(), 'src/content/redaksi.json')
+const redaksiSettingsId = 'siteSettings'
 
 function asString(value: unknown, fallback: string) {
   return typeof value === 'string' ? value : fallback
@@ -57,7 +60,17 @@ export function normalizeRedaksiContent(value: unknown): RedaksiContent {
   }
 }
 
-export async function getRedaksiContent() {
+function parseRedaksiText(value: unknown) {
+  if (typeof value !== 'string' || !value.trim()) return null
+
+  try {
+    return JSON.parse(value)
+  } catch {
+    return null
+  }
+}
+
+async function getFileRedaksiContent() {
   try {
     const file = await fs.readFile(redaksiContentPath, 'utf8')
     return normalizeRedaksiContent(JSON.parse(file))
@@ -66,8 +79,64 @@ export async function getRedaksiContent() {
   }
 }
 
+export async function getRedaksiContent() {
+  if (isSanityConfigured) {
+    try {
+      const settings = await client.fetch<{redaksiContent?: string} | null>(
+        `*[_type == "siteSettings" && _id == $id][0]{redaksiContent}`,
+        {id: redaksiSettingsId},
+        {cache: 'no-store'}
+      )
+      const parsedContent = parseRedaksiText(settings?.redaksiContent)
+
+      if (parsedContent) {
+        return normalizeRedaksiContent(parsedContent)
+      }
+    } catch {
+      return getFileRedaksiContent()
+    }
+  }
+
+  return getFileRedaksiContent()
+}
+
+async function saveFileRedaksiContent(content: RedaksiContent) {
+  await fs.writeFile(redaksiContentPath, `${JSON.stringify(content, null, 2)}\n`, 'utf8')
+}
+
 export async function saveRedaksiContent(content: unknown) {
   const normalizedContent = normalizeRedaksiContent(content)
-  await fs.writeFile(redaksiContentPath, `${JSON.stringify(normalizedContent, null, 2)}\n`, 'utf8')
-  return normalizedContent
+  const token = process.env.SANITY_API_WRITE_TOKEN
+
+  if (isSanityConfigured && token) {
+    const writeClient = client.withConfig({
+      token,
+      useCdn: false
+    })
+
+    await writeClient.createIfNotExists({
+      _id: redaksiSettingsId,
+      _type: 'siteSettings'
+    })
+
+    await writeClient
+      .patch(redaksiSettingsId)
+      .set({
+        redaksiContent: JSON.stringify(normalizedContent, null, 2)
+      })
+      .commit()
+
+    return normalizedContent
+  }
+
+  try {
+    await saveFileRedaksiContent(normalizedContent)
+    return normalizedContent
+  } catch (error) {
+    if (isSanityConfigured && !token) {
+      throw new Error('Missing SANITY_API_WRITE_TOKEN for Redaksi content save.', {cause: error})
+    }
+
+    throw error
+  }
 }

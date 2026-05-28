@@ -16,7 +16,8 @@ export async function PUT(request: Request) {
     revalidatePath('/admin/redaksi')
 
     return NextResponse.json({ok: true, content})
-  } catch {
+  } catch (error) {
+    console.error('Failed to save Redaksi content', error)
     return NextResponse.json({ok: false, message: 'Konten Redaksi gagal disimpan.'}, {status: 400})
   }
 }
