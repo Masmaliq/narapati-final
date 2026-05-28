@@ -1,66 +1,51 @@
 import Link from 'next/link'
+import {Instagram, Music2, Youtube} from 'lucide-react'
 
-const footerColumns = [
-  {
-    title: 'Journal',
-    links: [
-      {label: 'Tentang Kami', href: '/about'},
-      {label: 'Redaksi', href: '/redaksi'},
-      {label: 'Kontak', href: '/contact'}
-    ]
-  },
-  {
-    title: 'Explore',
-    links: [
-      {label: 'Global', href: '/category/global'},
-      {label: 'Insight', href: '/category/insight'},
-      {label: 'Market', href: '/category/market'},
-      {label: 'Video', href: '/video'},
-      {label: 'Photography', href: '/photography'}
-    ]
-  },
-  {
-    title: 'Resources',
-    links: [
-      {label: 'Iklan', href: '/advertise'},
-      {label: 'Kerja Sama', href: '/advertise'},
-      {label: 'Newsletter', href: '/contact'}
-    ]
-  },
-  {
-    title: 'Legal',
-    links: [
-      {label: 'Kebijakan Privasi', href: '/privacy'},
-      {label: 'Syarat & Ketentuan', href: '/privacy'},
-      {label: 'Pedoman Komunitas', href: '/redaksi'}
-    ]
-  }
+const footerLinks = [
+  {label: 'About', href: '/about'},
+  {label: 'Redaksi', href: '/redaksi'},
+  {label: 'Contact', href: '/contact'},
+  {label: 'Advertise Content', href: '/advertise'}
+]
+
+const socialLinks = [
+  {label: 'Instagram', href: '#', icon: Instagram},
+  {label: 'YouTube', href: '#', icon: Youtube},
+  {label: 'TikTok', href: '#', icon: Music2}
 ]
 
 export function Footer() {
   return (
-    <footer className="site-footer">
-      <div className="container footer-shell">
-        <div className="footer-main">
-          <div className="footer-brand">
-            <span>Narapati</span>
-            <strong>Journal of a Modern Wanderer</strong>
-            <p className="footer-identity">Tentang dunia, manusia, dan perjalanan memahami kehidupan.</p>
-          </div>
+    <footer className="site-footer luxury-footer">
+      <div className="container luxury-footer-inner">
+        <Link href="/" className="luxury-footer-monogram" aria-label="Narapati home">
+          N
+        </Link>
 
-          {footerColumns.map((column) => (
-            <nav className="footer-column" aria-label={column.title} key={column.title}>
-              <h2>{column.title}</h2>
-              {column.links.map((item) => (
-                <Link href={item.href} key={item.label}>{item.label}</Link>
-              ))}
-            </nav>
+        <p className="luxury-footer-kicker">Journal of a Modern Wanderer</p>
+
+        <p className="luxury-footer-quote">
+          Tentang dunia, manusia,<br />
+          dan perjalanan memahami kehidupan.
+        </p>
+
+        <nav className="luxury-footer-social" aria-label="Social media">
+          {socialLinks.map(({label, href, icon: Icon}) => (
+            <a href={href} aria-label={label} key={label}>
+              <Icon size={16} strokeWidth={1.45} />
+            </a>
           ))}
-        </div>
+        </nav>
 
-        <div className="footer-bottom">
-          <small>© 2026 Narapati News Network. All rights reserved.</small>
-        </div>
+        <nav className="luxury-footer-nav" aria-label="Footer navigation">
+          {footerLinks.map((item) => (
+            <Link href={item.href} key={item.label}>
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <p className="luxury-footer-copy">© Narapati Journal — Indonesia 2026</p>
       </div>
     </footer>
   )
