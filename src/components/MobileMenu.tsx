@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import {useEffect, useState} from 'react'
+import {createPortal} from 'react-dom'
 import {Menu, X} from 'lucide-react'
 
 type MobileMenuProps = {
@@ -33,19 +34,8 @@ export function MobileMenu({navItems}: MobileMenuProps) {
     }
   }, [open])
 
-  return (
-    <>
-      <button
-        className="header-menu-button"
-        type="button"
-        aria-label="Open menu"
-        aria-expanded={open}
-        onClick={() => setOpen(true)}
-      >
-        <Menu size={18} strokeWidth={1.7} />
-      </button>
-
-      {open ? (
+  const overlay = open
+    ? createPortal(
         <div className="mobile-menu-overlay" role="dialog" aria-modal="true" aria-label="Narapati mobile menu">
           <div className="mobile-menu-panel">
             <div className="mobile-menu-head">
@@ -71,8 +61,24 @@ export function MobileMenu({navItems}: MobileMenuProps) {
               ))}
             </nav>
           </div>
-        </div>
-      ) : null}
+        </div>,
+        document.body
+      )
+    : null
+
+  return (
+    <>
+      <button
+        className="header-menu-button"
+        type="button"
+        aria-label="Open menu"
+        aria-expanded={open}
+        onClick={() => setOpen(true)}
+      >
+        <Menu size={18} strokeWidth={1.7} />
+      </button>
+
+      {overlay}
     </>
   )
 }

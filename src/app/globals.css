@@ -7191,11 +7191,10 @@ body {
 .mobile-menu-overlay {
   position: fixed;
   inset: 0;
-  z-index: 120;
+  z-index: 9999;
   display: grid;
-  background:
-    radial-gradient(circle at 76% 18%, rgba(179, 138, 86, 0.1), transparent 26%),
-    var(--journal-paper-light);
+  isolation: isolate;
+  background: #fbf8f2;
   animation: mobile-menu-fade 220ms ease both;
 }
 
@@ -7203,7 +7202,11 @@ body {
   display: grid;
   grid-template-rows: auto 1fr auto;
   min-height: 100dvh;
-  padding: 22px clamp(24px, 7vw, 44px) 34px;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at 82% 14%, rgba(179, 138, 86, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(251, 248, 242, 1), rgba(246, 241, 232, 1));
+  padding: 18px clamp(24px, 7vw, 42px) 30px;
   animation: mobile-menu-rise 280ms ease both;
 }
 
@@ -7212,14 +7215,14 @@ body {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(179, 138, 86, 0.26);
-  padding-bottom: 18px;
+  padding-bottom: 15px;
 }
 
 .mobile-menu-head span {
   color: var(--journal-gold);
   font-family: var(--font-serif), Georgia, serif;
-  font-size: 1.1rem;
-  letter-spacing: 0.18em;
+  font-size: 0.92rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 
@@ -7239,17 +7242,17 @@ body {
 .mobile-menu-primary {
   display: grid;
   align-content: center;
-  gap: clamp(17px, 4.8vw, 26px);
-  padding: 34px 0;
+  gap: clamp(13px, 3.8vw, 20px);
+  padding: clamp(30px, 8vh, 70px) 0;
 }
 
 .mobile-menu-primary a {
   color: var(--journal-ink);
   font-family: var(--font-serif), Georgia, serif;
-  font-size: clamp(2.55rem, 12vw, 5.4rem);
+  font-size: clamp(1.82rem, 8.6vw, 3.55rem);
   font-weight: 500;
-  letter-spacing: -0.035em;
-  line-height: 0.88;
+  letter-spacing: -0.018em;
+  line-height: 0.94;
   text-transform: uppercase;
   transition: color 180ms ease, transform 180ms ease;
 }
@@ -7262,14 +7265,14 @@ body {
 .mobile-menu-secondary {
   display: flex;
   flex-wrap: wrap;
-  gap: 18px 24px;
+  gap: 14px 22px;
   border-top: 1px solid rgba(179, 138, 86, 0.22);
-  padding-top: 22px;
+  padding-top: 20px;
 }
 
 .mobile-menu-secondary a {
   color: rgba(15, 23, 42, 0.64);
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
