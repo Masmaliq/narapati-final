@@ -8538,3 +8538,80 @@ html {
     aspect-ratio: 4 / 3;
   }
 }
+
+/* Automatic Narapati image watermark */
+.narapati-watermark {
+  position: absolute;
+  right: clamp(20px, 2.35vw, 32px);
+  bottom: clamp(20px, 2.35vw, 32px);
+  z-index: 4;
+  display: grid;
+  justify-items: end;
+  gap: clamp(8px, 0.7vw, 12px);
+  color: #f5f2ea;
+  pointer-events: none;
+  text-align: right;
+  text-shadow: 0 1px 10px rgba(7, 17, 31, 0.28);
+  user-select: none;
+  animation: narapati-watermark-fade 600ms ease-out both;
+}
+
+.narapati-watermark span {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: clamp(2.35rem, 4.25vw, 4.7rem);
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  line-height: 0.72;
+  opacity: 0.55;
+}
+
+.narapati-watermark small {
+  font-size: clamp(0.46rem, 0.62vw, 0.66rem);
+  font-weight: 300;
+  letter-spacing: 0.055em;
+  line-height: 1;
+  opacity: 0.4;
+}
+
+@keyframes narapati-watermark-fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.article-inline-image-frame {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.article-inline-image-frame img {
+  display: block;
+}
+
+.journal-note-image .narapati-watermark {
+  display: none;
+}
+
+@media (max-width: 620px) {
+  .narapati-watermark {
+    right: 20px;
+    bottom: 20px;
+    gap: 8px;
+  }
+
+  .narapati-watermark span {
+    font-size: clamp(1.78rem, 9vw, 2.7rem);
+  }
+
+  .narapati-watermark small {
+    font-size: 0.46rem;
+  }
+}

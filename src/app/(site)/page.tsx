@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import {JournalHeroCarousel, type JournalHeroSlide} from '@/components/JournalHeroCarousel'
+import {WatermarkedImage} from '@/components/WatermarkedImage'
 import {getArticles, getPhotography, getVideos} from '@/sanity/lib/fetch'
 import type {Article, MediaItem, PhotographyItem} from '@/types/content'
 
@@ -166,7 +167,7 @@ export default async function HomePage() {
             <article className="journal-card" key={`${article.slug}-${index}`}>
               {article.image ? (
                 <Link href={articleHref(article.slug)} className="journal-card-image">
-                  <Image src={article.image} alt="" fill sizes="(max-width: 900px) 100vw, 33vw" />
+                  <WatermarkedImage src={article.image} alt="" fill sizes="(max-width: 900px) 100vw, 33vw" />
                 </Link>
               ) : null}
               <div>
@@ -200,7 +201,7 @@ export default async function HomePage() {
               </div>
               {topStories[0].image ? (
                 <Link href={articleHref(topStories[0].slug)} className="journal-feature-image">
-                  <Image src={topStories[0].image} alt="" fill sizes="(max-width: 900px) 100vw, 44vw" />
+                  <WatermarkedImage src={topStories[0].image} alt="" fill sizes="(max-width: 900px) 100vw, 44vw" />
                 </Link>
               ) : null}
             </article>
@@ -216,7 +217,7 @@ export default async function HomePage() {
               <Link href={articleHref(article.slug)} className="journal-note" key={`${article.slug}-note-${index}`}>
                 {article.image ? (
                   <span className="journal-note-image">
-                    <Image src={article.image} alt="" fill sizes="120px" />
+                    <WatermarkedImage src={article.image} alt="" fill sizes="120px" />
                   </span>
                 ) : null}
                 <span>
@@ -237,7 +238,7 @@ export default async function HomePage() {
               <span>{title}</span>
               {article.image ? (
                 <Link href={articleHref(article.slug)} className="journal-category-image">
-                  <Image src={article.image} alt="" fill sizes="(max-width: 900px) 100vw, 33vw" />
+                  <WatermarkedImage src={article.image} alt="" fill sizes="(max-width: 900px) 100vw, 33vw" />
                 </Link>
               ) : null}
               <Link href={articleHref(article.slug)}>
@@ -264,7 +265,9 @@ export default async function HomePage() {
             <div className="journal-photo-grid">
               {photoItems.map((photo, index) => (
                 <Link href={mediaHref('photography', photo.slug)} className="journal-photo-card" key={`${photo.slug}-${index}`}>
-                  {photo.image ? <Image src={photo.image} alt="" fill sizes="(max-width: 900px) 100vw, 25vw" /> : null}
+                  {photo.image ? (
+                    <WatermarkedImage src={photo.image} alt="" fill sizes="(max-width: 900px) 100vw, 25vw" watermark="moment" />
+                  ) : null}
                   <span>
                     <small>{photo.location || photo.duration || formatDate(photo.publishedAt)}</small>
                     <strong>{photo.title}</strong>

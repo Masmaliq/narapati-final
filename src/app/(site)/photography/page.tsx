@@ -1,6 +1,6 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import {formatDate} from '@/components/date'
+import {WatermarkedImage} from '@/components/WatermarkedImage'
 import {getPhotography} from '@/sanity/lib/fetch'
 
 function photographyHref(slug: string) {
@@ -24,7 +24,7 @@ export default async function PhotographyPage() {
           {items.map((item) => (
             <article className="photography-card" key={item.slug}>
               <Link href={photographyHref(item.slug)} className="photography-card-image">
-                <Image src={item.image} alt="" fill sizes="(max-width: 900px) 100vw, 33vw" />
+                <WatermarkedImage src={item.image} alt="" fill sizes="(max-width: 900px) 100vw, 33vw" watermark="moment" />
               </Link>
               <div>
                 <span>{item.duration}</span>

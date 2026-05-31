@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
 import {PortableText, type PortableTextComponents} from '@portabletext/react'
+import {WatermarkedImage} from '@/components/WatermarkedImage'
 import {formatDate} from '@/components/date'
 import {articles} from '@/data/fallback'
 import {articleJsonLd, articlePath, articleUrl, imageUrl, metaDescription, siteName} from '@/lib/seo'
@@ -57,13 +58,15 @@ const portableTextComponents: PortableTextComponents = {
 
       return (
         <figure className="article-inline-image">
-          <Image
-            src={src}
-            alt={image.alt || image.caption || ''}
-            width={1400}
-            height={900}
-            sizes="(max-width: 900px) 100vw, 760px"
-          />
+          <span className="article-inline-image-frame">
+            <WatermarkedImage
+              src={src}
+              alt={image.alt || image.caption || ''}
+              width={1400}
+              height={900}
+              sizes="(max-width: 900px) 100vw, 760px"
+            />
+          </span>
           {imageCaption(image.caption, image.credit)}
         </figure>
       )
@@ -172,7 +175,7 @@ export default async function ArticlePage({params}: Props) {
         <div className="container">
           <figure className="article-cover-frame" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
             <div className="article-cover">
-              <Image src={article.image} alt={article.imageAlt || article.title} fill priority sizes="100vw" />
+              <WatermarkedImage src={article.image} alt={article.imageAlt || article.title} fill priority sizes="100vw" />
               <meta itemProp="url" content={imageUrl(article.image)} />
             </div>
             {imageCaption(article.imageCaption, article.imageCredit)}
@@ -231,7 +234,7 @@ export default async function ArticlePage({params}: Props) {
               {related.map((item) => (
                 <article className="related-card" key={item.slug}>
                   <Link href={articleHref(item.slug)} className="related-image">
-                    <Image src={item.image} alt="" fill sizes="(max-width: 900px) 100vw, 33vw" />
+                    <WatermarkedImage src={item.image} alt="" fill sizes="(max-width: 900px) 100vw, 33vw" />
                   </Link>
                   <div>
                     <div className="eyebrow">{item.category.title}</div>

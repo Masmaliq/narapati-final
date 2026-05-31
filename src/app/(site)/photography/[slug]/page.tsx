@@ -1,7 +1,7 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import {notFound} from 'next/navigation'
 import {PortableText} from '@portabletext/react'
+import {WatermarkedImage} from '@/components/WatermarkedImage'
 import {formatDate} from '@/components/date'
 import {getPhotography, getPhotographyItem} from '@/sanity/lib/fetch'
 
@@ -54,7 +54,7 @@ export default async function PhotographyDetailPage({params}: Props) {
 
       <div className="container">
         <figure className="article-cover photography-cover">
-          <Image src={item.image} alt="" fill priority sizes="100vw" />
+          <WatermarkedImage src={item.image} alt="" fill priority sizes="100vw" watermark="moment" />
         </figure>
 
         <div className="article-shell">
@@ -80,7 +80,7 @@ export default async function PhotographyDetailPage({params}: Props) {
           <section className="photography-gallery" aria-label="Photography gallery">
             {gallery.map((image, index) => (
               <div className="photography-gallery-item" key={`${image}-${index}`}>
-                <Image src={image} alt="" fill sizes="(max-width: 900px) 100vw, 33vw" />
+                <WatermarkedImage src={image} alt="" fill sizes="(max-width: 900px) 100vw, 33vw" watermark="moment" />
               </div>
             ))}
           </section>

@@ -1,7 +1,7 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import type {Article} from '@/types/content'
 import {formatDate} from '@/components/date'
+import {WatermarkedImage} from '@/components/WatermarkedImage'
 
 type ArticleCardProps = {
   article: Article
@@ -13,7 +13,7 @@ export function ArticleCard({article, wide = false, variant = 'standard'}: Artic
   return (
     <article className={`card card-${variant}`}>
       <Link href={`/article/${article.slug}`} className={`thumb ${wide ? 'wide' : ''}`}>
-        <Image src={article.image} alt="" fill sizes={wide ? '(max-width: 900px) 100vw, 50vw' : '(max-width: 900px) 100vw, 33vw'} />
+        <WatermarkedImage src={article.image} alt="" fill sizes={wide ? '(max-width: 900px) 100vw, 50vw' : '(max-width: 900px) 100vw, 33vw'} />
       </Link>
       <div className="card-copy">
         <div className="eyebrow">{article.category.title}</div>

@@ -1,8 +1,8 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import {useEffect, useMemo, useState} from 'react'
+import {WatermarkedImage} from '@/components/WatermarkedImage'
 
 export type JournalHeroSlide = {
   kind: 'article' | 'photography' | 'video'
@@ -71,7 +71,14 @@ export function JournalHeroCarousel({slides}: JournalHeroCarouselProps) {
             tabIndex={index === activeIndex ? undefined : -1}
             key={slide.slug}
           >
-            <Image src={image} alt="" fill priority={index === 0} sizes="100vw" />
+            <WatermarkedImage
+              src={image}
+              alt=""
+              fill
+              priority={index === 0}
+              sizes="100vw"
+              watermark={slide.kind === 'photography' ? 'moment' : 'story'}
+            />
             {slide.kind === 'video' ? <span className="journal-hero-play" aria-hidden="true">▶</span> : null}
           </Link>
         )
