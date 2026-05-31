@@ -48,8 +48,27 @@ export const photographyType = defineType({
     defineField({name: 'slug', title: 'Slug', type: 'slug', options: {source: 'title'}, validation: (Rule) => Rule.required()}),
     defineField({name: 'description', title: 'Description', type: 'text', rows: 3}),
     defineField({name: 'mainImage', title: 'Main image', type: 'image', options: {hotspot: true}, validation: (Rule) => Rule.required()}),
+    defineField({name: 'caption', title: 'Caption', type: 'text', rows: 3}),
+    defineField({name: 'credit', title: 'Photo Credit', type: 'string'}),
     defineField({name: 'gallery', title: 'Gallery', type: 'array', of: [{type: 'image', options: {hotspot: true}}]}),
     defineField({name: 'location', title: 'Location', type: 'string'}),
+    defineField({name: 'dateTaken', title: 'Date Taken', type: 'date'}),
+    defineField({
+      name: 'visualCategory',
+      title: 'Visual Category',
+      type: 'string',
+      options: {
+        layout: 'radio',
+        list: [
+          {title: 'Travel', value: 'Travel'},
+          {title: 'Human', value: 'Human'},
+          {title: 'Culture', value: 'Culture'},
+          {title: 'Spiritual', value: 'Spiritual'},
+          {title: 'Landscape', value: 'Landscape'},
+          {title: 'Journal', value: 'Journal'}
+        ]
+      }
+    }),
     defineField({name: 'photographer', title: 'Photographer / Author', type: 'reference', to: [{type: 'author'}]}),
     defineField({name: 'category', title: 'Category', type: 'reference', to: [{type: 'category'}]}),
     defineField({name: 'publishedAt', title: 'Published at', type: 'datetime', validation: (Rule) => Rule.required()}),

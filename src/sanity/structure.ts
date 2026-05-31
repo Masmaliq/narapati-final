@@ -14,6 +14,7 @@ import {
 } from '@sanity/icons'
 import type {StructureResolver} from 'sanity/structure'
 import {NewsroomDashboard} from './components/NewsroomDashboard'
+import {PhotographyLibrary} from './components/PhotographyLibrary'
 
 const hiddenDocumentTypes = [
   'article',
@@ -89,9 +90,22 @@ export const structure: StructureResolver = (S) =>
           S.list()
             .title('MEDIA')
             .items([
-              S.documentTypeListItem('photography')
+              S.listItem()
                 .title('Photography')
-                .icon(ImageIcon),
+                .icon(ImageIcon)
+                .child(
+                  S.list()
+                    .title('Photography')
+                    .items([
+                      S.listItem()
+                        .title('Photography Library')
+                        .icon(ImageIcon)
+                        .child(S.component(PhotographyLibrary).title('Photography Library')),
+                      S.documentTypeListItem('photography')
+                        .title('All Photography Documents')
+                        .icon(ImageIcon)
+                    ])
+                ),
               S.documentTypeListItem('video')
                 .title('Video Journal')
                 .icon(VideoIcon)
