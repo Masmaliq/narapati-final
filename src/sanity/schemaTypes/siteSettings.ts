@@ -28,6 +28,7 @@ export const siteSettingsType = defineType({
     defineField({name: 'whatsapp', title: 'WhatsApp', type: 'string'}),
     urlField('instagram', 'Instagram'),
     urlField('youtube', 'YouTube'),
+    urlField('tiktok', 'TikTok'),
     urlField('linkedin', 'LinkedIn'),
     urlField('twitterX', 'Twitter / X'),
     textField('privacyText', 'Privacy text', 8),

@@ -113,6 +113,7 @@ export const siteSettings: SiteSettings = {
   whatsapp: '+62 812 0000 2026',
   instagram: 'https://instagram.com/narapatinewsnetwork',
   youtube: 'https://youtube.com/@narapatinewsnetwork',
+  tiktok: '',
   linkedin: 'https://linkedin.com/company/narapati-news-network',
   twitterX: 'https://x.com/narapatinews',
   privacyText: 'Narapati News Network menghormati privasi pembaca dan mengelola data sesuai kebutuhan layanan digital.',

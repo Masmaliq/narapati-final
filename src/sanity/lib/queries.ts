@@ -9,6 +9,7 @@ export const SITE_SETTINGS_QUERY = defineQuery(`*[_type == "siteSettings" && _id
   whatsapp,
   instagram,
   youtube,
+  tiktok,
   linkedin,
   twitterX,
   privacyText,

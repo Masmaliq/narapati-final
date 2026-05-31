@@ -59,6 +59,7 @@ export type SiteSettings = {
   whatsapp: string
   instagram: string
   youtube: string
+  tiktok: string
   linkedin: string
   twitterX: string
   privacyText: string

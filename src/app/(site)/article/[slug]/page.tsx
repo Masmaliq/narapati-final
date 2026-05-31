@@ -3,11 +3,12 @@ import Link from 'next/link'
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
 import {PortableText, type PortableTextComponents} from '@portabletext/react'
+import {ArticleShareBar} from '@/components/ArticleShareBar'
 import {WatermarkedImage} from '@/components/WatermarkedImage'
 import {formatDate} from '@/components/date'
 import {articles} from '@/data/fallback'
 import {articleJsonLd, articlePath, articleUrl, imageUrl, metaDescription, siteName} from '@/lib/seo'
-import {getArticle, getArticles} from '@/sanity/lib/fetch'
+import {getArticle, getArticles, getSiteSettings} from '@/sanity/lib/fetch'
 import {urlFor} from '@/sanity/lib/image'
 
 type Props = {
@@ -144,7 +145,7 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
 export default async function ArticlePage({params}: Props) {
   const {slug} = await params
   const decodedSlug = decodeSlug(slug)
-  const [article, allArticles] = await Promise.all([getArticle(decodedSlug), getArticles()])
+  const [article, allArticles, settings] = await Promise.all([getArticle(decodedSlug), getArticles(), getSiteSettings()])
 
   if (!article) notFound()
 
@@ -160,6 +161,7 @@ export default async function ArticlePage({params}: Props) {
   const body = Array.isArray(article.body) && article.body.length > 0 ? article.body : null
   const authorInitial = article.author.name.charAt(0).toUpperCase()
   const readTime = readingTime(article.body)
+  const shareUrl = articleUrl(article.slug)
 
   return (
     <>
@@ -199,6 +201,14 @@ export default async function ArticlePage({params}: Props) {
             {imageCaption(article.imageCaption, article.imageCredit, article.imageLocation, article.imageDateTaken)}
           </figure>
           <div className="article-shell">
+            <ArticleShareBar
+              title={article.title}
+              url={shareUrl}
+              placement="desktop"
+              instagram={settings.instagram}
+              tiktok={settings.tiktok}
+              youtube={settings.youtube}
+            />
             <div className="article-body" itemProp="articleBody">
               {body ? (
                 <PortableText value={body} components={portableTextComponents} />
@@ -230,6 +240,14 @@ export default async function ArticlePage({params}: Props) {
                 <p>{article.author.role || 'Redaksi Narapati'}</p>
               </div>
             </section>
+            <ArticleShareBar
+              title={article.title}
+              url={shareUrl}
+              placement="mobile"
+              instagram={settings.instagram}
+              tiktok={settings.tiktok}
+              youtube={settings.youtube}
+            />
           </div>
         </div>
       </article>
