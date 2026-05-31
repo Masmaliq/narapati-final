@@ -9,7 +9,7 @@ import {structure} from './src/sanity/structure'
 
 export default defineConfig({
   name: 'narapati-news-network',
-  title: 'Narapati News Network',
+  title: 'Narapati Studio',
   basePath: '/studio',
   projectId,
   dataset,
