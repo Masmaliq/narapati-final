@@ -23,7 +23,8 @@ const hiddenDocumentTypes = [
   'video',
   'photography',
   'podcast',
-  'siteSettings'
+  'siteSettings',
+  'homepageSettings'
 ]
 
 export const structure: StructureResolver = (S) =>
@@ -161,11 +162,11 @@ export const structure: StructureResolver = (S) =>
               S.listItem()
                 .title('Homepage Manager')
                 .icon(HomeIcon)
-                .schemaType('siteSettings')
+                .schemaType('homepageSettings')
                 .child(
                   S.document()
-                    .schemaType('siteSettings')
-                    .documentId('siteSettings')
+                    .schemaType('homepageSettings')
+                    .documentId('homepageSettings')
                     .title('Homepage Manager')
                 )
             ])

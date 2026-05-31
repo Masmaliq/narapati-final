@@ -2,8 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {JournalHeroCarousel, type JournalHeroSlide} from '@/components/JournalHeroCarousel'
 import {WatermarkedImage} from '@/components/WatermarkedImage'
-import {getArticles, getPhotography, getVideos} from '@/sanity/lib/fetch'
-import type {Article, MediaItem, PhotographyItem} from '@/types/content'
+import {getArticles, getHomepageSettings, getPhotography, getVideos} from '@/sanity/lib/fetch'
+import type {Article, HomepageSectionKey, MediaItem, PhotographyItem} from '@/types/content'
 
 function articleHref(slug: string) {
   return `/article/${encodeURIComponent(slug)}`
@@ -58,17 +58,42 @@ function fillItems<T>(source: T[], count: number) {
   return filled.slice(0, count)
 }
 
+const defaultSectionOrder: HomepageSectionKey[] = [
+  'hero',
+  'journal',
+  'featured',
+  'global',
+  'insight',
+  'market',
+  'photography',
+  'video'
+]
+const categorySectionKeys = ['global', 'insight', 'market'] as const
+
+function selectedItems<T extends {slug: string}>(items?: T[]) {
+  return Array.isArray(items) ? items.filter((item) => item?.slug) : []
+}
+
 export default async function HomePage() {
-  const [articles, videos, photography] = await Promise.all([
+  const [articles, videos, photography, homepageSettings] = await Promise.all([
     getArticles(),
     getVideos(),
-    getPhotography()
+    getPhotography(),
+    getHomepageSettings()
   ])
 
   const availableArticles = articles.filter((article) => article.slug)
-  const featured = availableArticles.find((article) => article.featured) || availableArticles[0]
+  const featured = homepageSettings?.heroArticle?.slug || homepageSettings?.featuredArticle?.slug
+    ? homepageSettings.heroArticle || homepageSettings.featuredArticle || availableArticles[0]
+    : availableArticles.find((article) => article.featured) || availableArticles[0]
   const articlesAfterHero = availableArticles.filter((article) => article.slug !== featured?.slug)
   const articlePool = articlesAfterHero.length ? articlesAfterHero : availableArticles
+  const sectionSettings = homepageSettings?.sectionOrder?.length ? homepageSettings.sectionOrder : defaultSectionOrder.map((section) => ({section, visible: true}))
+  const sectionVisible = (section: HomepageSectionKey) => sectionSettings.find((item) => item.section === section)?.visible !== false
+  const configuredSectionKeys = sectionSettings.map((item) => item.section).filter((section): section is HomepageSectionKey => defaultSectionOrder.includes(section))
+  const orderedSections = [...configuredSectionKeys, ...defaultSectionOrder.filter((section) => !configuredSectionKeys.includes(section))]
+  const orderedCategoryKeys = orderedSections.filter((section): section is typeof categorySectionKeys[number] => categorySectionKeys.includes(section as typeof categorySectionKeys[number]))
+  const categoryKeys = orderedCategoryKeys.length ? orderedCategoryKeys : [...categorySectionKeys]
   const heroArticleSlides: JournalHeroSlide[] = uniqueArticles([
     ...(featured ? [featured] : []),
     ...articlePool.filter((article) => article.image)
@@ -113,12 +138,14 @@ export default async function HomePage() {
     ...heroArticleSlides.slice(1)
   ].slice(0, 5)
   const latestArticles = fillItems(
-    uniqueArticles(articlePool),
+    uniqueArticles(selectedItems(homepageSettings?.journalArticles).length ? selectedItems(homepageSettings?.journalArticles) : articlePool),
     3
   )
+  const managedFeaturedArticle = homepageSettings?.featuredArticle?.slug ? homepageSettings.featuredArticle : null
   const topStories = fillItems(
     uniqueArticles([
-      ...availableArticles.filter((article) => article.featured && article.slug !== featured?.slug),
+      ...(managedFeaturedArticle ? [managedFeaturedArticle] : []),
+      ...availableArticles.filter((article) => article.featured && article.slug !== featured?.slug && article.slug !== managedFeaturedArticle?.slug),
       ...articlePool
     ]),
     3
@@ -132,17 +159,26 @@ export default async function HomePage() {
     ]).filter((article) => articlePool.some((item) => item.slug === article.slug)),
     3
   )
-  const journalColumns = [
-    {title: 'Global', stories: fillItems(pickByCategory(availableArticles, 'global'), 1)},
-    {title: 'Insight', stories: fillItems(pickByCategory(availableArticles, 'insight'), 1)},
-    {title: 'Market', stories: fillItems(pickByCategory(availableArticles, 'market'), 1)}
-  ].map((column, index) => ({
-    ...column,
-    article: column.stories[0] || fillItems(availableArticles, 3)[index]
-  }))
-  const photoItems = fillItems(photography as PhotographyItem[], 4)
-  const videoLead = videos[0]
-  const videoList = videos.slice(1, 4)
+  const managedCategoryArticles = {
+    global: selectedItems(homepageSettings?.globalArticles),
+    insight: selectedItems(homepageSettings?.insightArticles),
+    market: selectedItems(homepageSettings?.marketArticles)
+  }
+  const journalColumns = categoryKeys.map((key, index) => {
+    const fallbackStories = fillItems(pickByCategory(availableArticles, key), 1)
+    const managedStories = managedCategoryArticles[key]
+    return {
+      key,
+      title: key.charAt(0).toUpperCase() + key.slice(1),
+      article: (managedStories.length ? managedStories : fallbackStories)[0] || fillItems(availableArticles, 3)[index]
+    }
+  }).filter((column) => sectionVisible(column.key))
+  const managedPhotography = selectedItems(homepageSettings?.photographyItems)
+  const managedVideos = selectedItems(homepageSettings?.videoItems)
+  const photoItems = managedPhotography.length ? managedPhotography.slice(0, 4) : fillItems(photography as PhotographyItem[], 4)
+  const videoItems = managedVideos.length ? managedVideos : videos
+  const videoLead = videoItems[0]
+  const videoList = videoItems.slice(1, 4)
 
   if (!featured) {
     return (
@@ -156,8 +192,9 @@ export default async function HomePage() {
 
   return (
     <main className="journal-home">
-      <JournalHeroCarousel slides={heroSlides} />
+      {sectionVisible('hero') ? <JournalHeroCarousel slides={heroSlides} /> : null}
 
+      {sectionVisible('journal') ? (
       <section className="journal-section journal-section-first nnn-container" aria-labelledby="latest-heading">
         <div className="journal-section-head journal-section-head-split">
           <span id="latest-heading">Journal</span>
@@ -183,7 +220,9 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
+      ) : null}
 
+      {sectionVisible('featured') ? (
       <section className="journal-section journal-story-section nnn-container" aria-label="Top stories dan catatan perjalanan">
         <div className="journal-top-story">
           <div className="journal-section-head journal-section-head-featured">
@@ -230,7 +269,9 @@ export default async function HomePage() {
           </div>
         </aside>
       </section>
+      ) : null}
 
+      {journalColumns.length ? (
       <section className="journal-section journal-category-section nnn-container" aria-label="Global Insight Market">
         <div className="journal-category-grid">
           {journalColumns.map(({title, article}, index) => article ? (
@@ -251,8 +292,9 @@ export default async function HomePage() {
           ) : null)}
         </div>
       </section>
+      ) : null}
 
-      {photoItems.length ? (
+      {sectionVisible('photography') && photoItems.length ? (
         <section className="journal-visual" aria-labelledby="visual-heading">
           <div className="nnn-container">
             <div className="journal-dark-head">
@@ -279,7 +321,7 @@ export default async function HomePage() {
         </section>
       ) : null}
 
-      {videoLead ? (
+      {sectionVisible('video') && videoLead ? (
         <section className="journal-section journal-video-journal nnn-container" aria-labelledby="video-heading">
           <div className="journal-section-head">
             <span id="video-heading">Video</span>

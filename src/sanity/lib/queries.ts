@@ -20,6 +20,53 @@ export const SITE_SETTINGS_QUERY = defineQuery(`*[_type == "siteSettings" && _id
   advertiseContent
 }`)
 
+const ARTICLE_CARD_FIELDS = `{
+  title,
+  "slug": slug.current,
+  "dek": coalesce(dek, ""),
+  featured,
+  publishedAt,
+  "image": mainImage.asset->url,
+  "category": category->{title, "slug": slug.current, "description": coalesce(description, "")},
+  "author": author->{name, role, "image": image.asset->url}
+}`
+
+const VIDEO_CARD_FIELDS = `{
+  title,
+  "slug": slug.current,
+  dek,
+  publishedAt,
+  duration,
+  "image": coverImage.asset->url,
+  videoUrl,
+  youtubeUrl
+}`
+
+const PHOTOGRAPHY_CARD_FIELDS = `{
+  title,
+  "slug": slug.current,
+  "dek": coalesce(description, pt::text(body), ""),
+  publishedAt,
+  "duration": coalesce(location, category->title, "Photography"),
+  "image": mainImage.asset->url,
+  location,
+  featured,
+  "category": category->{title, "slug": slug.current, "description": coalesce(description, "")},
+  "author": photographer->{name, role, "image": image.asset->url}
+}`
+
+export const HOMEPAGE_SETTINGS_QUERY = defineQuery(`*[_type == "homepageSettings" && _id == "homepageSettings"][0] {
+  sectionOrder[]{section, visible},
+  "heroArticle": heroArticle->${ARTICLE_CARD_FIELDS},
+  "featuredArticle": featuredArticle->${ARTICLE_CARD_FIELDS},
+  "journalArticles": journalArticles[]->${ARTICLE_CARD_FIELDS},
+  "globalArticles": globalArticles[]->${ARTICLE_CARD_FIELDS},
+  "insightArticles": insightArticles[]->${ARTICLE_CARD_FIELDS},
+  "marketArticles": marketArticles[]->${ARTICLE_CARD_FIELDS},
+  "videoItems": videoItems[]->${VIDEO_CARD_FIELDS},
+  "photographyItems": photographyItems[]->${PHOTOGRAPHY_CARD_FIELDS}
+}`)
+
 export const ARTICLES_QUERY = defineQuery(`*[
   _type == "article" &&
   !(_id in path("drafts.**")) &&

@@ -69,3 +69,22 @@ export type SiteSettings = {
   contactContent: string
   advertiseContent: string
 }
+
+export type HomepageSectionKey = 'hero' | 'journal' | 'featured' | 'global' | 'insight' | 'market' | 'photography' | 'video'
+
+export type HomepageSectionSetting = {
+  section: HomepageSectionKey
+  visible?: boolean
+}
+
+export type HomepageSettings = {
+  sectionOrder?: HomepageSectionSetting[]
+  heroArticle?: Article | null
+  featuredArticle?: Article | null
+  journalArticles?: Article[]
+  globalArticles?: Article[]
+  insightArticles?: Article[]
+  marketArticles?: Article[]
+  videoItems?: MediaItem[]
+  photographyItems?: PhotographyItem[]
+}
