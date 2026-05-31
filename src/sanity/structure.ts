@@ -13,6 +13,7 @@ import {
   VideoIcon
 } from '@sanity/icons'
 import type {StructureResolver} from 'sanity/structure'
+import {EditorialCalendar} from './components/EditorialCalendar'
 import {NewsroomDashboard} from './components/NewsroomDashboard'
 import {PhotographyLibrary} from './components/PhotographyLibrary'
 
@@ -48,6 +49,10 @@ export const structure: StructureResolver = (S) =>
               S.documentTypeListItem('article')
                 .title('All Articles')
                 .icon(DocumentTextIcon),
+              S.listItem()
+                .title('Editorial Calendar')
+                .icon(CalendarIcon)
+                .child(S.component(EditorialCalendar).title('Editorial Calendar')),
               S.listItem()
                 .title('Drafts')
                 .icon(EditIcon)
