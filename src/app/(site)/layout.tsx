@@ -1,6 +1,6 @@
 import type {Metadata} from 'next'
 import type {ReactNode} from 'react'
-import {Cormorant_Garamond, Inter} from 'next/font/google'
+import {Cormorant_Garamond, Inter, Spectral} from 'next/font/google'
 import '@/app/globals.css'
 import {Footer} from '@/components/Footer'
 import {Header} from '@/components/Header'
@@ -18,6 +18,12 @@ const inter = Inter({
   weight: ['400', '500', '600', '700', '800']
 })
 
+const spectral = Spectral({
+  subsets: ['latin'],
+  variable: '--font-spectral',
+  weight: ['400', '500', '600', '700']
+})
+
 export const metadata: Metadata = {
   title: {
     default: 'Narapati News Network',
@@ -31,7 +37,7 @@ export const revalidate = 0
 
 export default function SiteLayout({children}: {children: ReactNode}) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
+    <html lang="en" className={`${cormorant.variable} ${inter.variable} ${spectral.variable}`}>
       <body>
         <Header />
         <main>{children}</main>

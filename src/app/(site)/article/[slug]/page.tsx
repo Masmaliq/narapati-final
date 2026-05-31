@@ -30,6 +30,18 @@ function articleHref(slug: string) {
   return articlePath(slug)
 }
 
+function readingTime(body?: unknown[]) {
+  const text = Array.isArray(body)
+    ? body.map((block) => {
+        if (!block || typeof block !== 'object' || !('children' in block)) return ''
+        const children = (block as {children?: Array<{text?: string}>}).children
+        return Array.isArray(children) ? children.map((child) => child.text || '').join(' ') : ''
+      }).join(' ')
+    : ''
+  const words = text.trim().split(/\s+/).filter(Boolean).length
+  return `${Math.max(1, Math.ceil(words / 220))} menit baca`
+}
+
 type PortableImageValue = {
   asset?: unknown
   alt?: string
@@ -147,6 +159,7 @@ export default async function ArticlePage({params}: Props) {
   const related = [...relatedArticles, ...fallbackRelated]
   const body = Array.isArray(article.body) && article.body.length > 0 ? article.body : null
   const authorInitial = article.author.name.charAt(0).toUpperCase()
+  const readTime = readingTime(article.body)
 
   return (
     <>
@@ -169,6 +182,7 @@ export default async function ArticlePage({params}: Props) {
                   <span itemProp="name">{article.author.name}</span>
                 </span>
                 <time dateTime={article.publishedAt} itemProp="datePublished">{formatDate(article.publishedAt)}</time>
+                <span>{readTime}</span>
                 <span itemProp="publisher" itemScope itemType="https://schema.org/Organization">
                   <span itemProp="name">Narapati News Network</span>
                 </span>
@@ -202,26 +216,20 @@ export default async function ArticlePage({params}: Props) {
                 </>
               )}
             </div>
-            <aside className="article-aside" aria-label="Article information">
-              <div className="author-card">
-                <div className="author-avatar">
-                  {article.author.image ? (
-                    <Image src={article.author.image} alt="" fill sizes="56px" />
-                  ) : (
-                    <span>{authorInitial}</span>
-                  )}
-                </div>
-                <div>
-                  <span className="eyebrow">Penulis</span>
-                  <h2>{article.author.name}</h2>
-                  <p>{article.author.role || 'Editorial'}</p>
-                </div>
+            <section className="article-author-signature" aria-label="Author">
+              <div className="article-author-avatar">
+                {article.author.image ? (
+                  <Image src={article.author.image} alt="" fill sizes="64px" />
+                ) : (
+                  <span>{authorInitial}</span>
+                )}
               </div>
-              <div className="editorial-note">
-                <strong>Editorial note</strong>
-                <p>NNN separates reporting, analysis, and opinion. Article updates are reviewed by section editors before publication.</p>
+              <div>
+                <span>Written by</span>
+                <h2>{article.author.name}</h2>
+                <p>{article.author.role || 'Redaksi Narapati'}</p>
               </div>
-            </aside>
+            </section>
           </div>
         </div>
       </article>
@@ -231,7 +239,7 @@ export default async function ArticlePage({params}: Props) {
             <div className="section-header">
               <div>
                 <div className="eyebrow">Baca Juga</div>
-                <h2 className="section-title">Related Articles</h2>
+                <h2 className="section-title">Tulisan Lainnya</h2>
               </div>
             </div>
             <div className="related-grid">
