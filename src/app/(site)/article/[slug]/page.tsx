@@ -35,14 +35,18 @@ type PortableImageValue = {
   alt?: string
   caption?: string
   credit?: string
+  location?: string
+  dateTaken?: string
 }
 
-function imageCaption(caption?: string, credit?: string) {
+function imageCaption(caption?: string, credit?: string, location?: string, dateTaken?: string) {
   if (!caption?.trim()) return null
+  const details = [location, dateTaken ? formatDate(dateTaken) : null].filter(Boolean).join(' · ')
 
   return (
     <figcaption className="article-image-caption">
       <span>{caption}</span>
+      {details ? <small>{details}</small> : null}
       {credit?.trim() ? <cite>{credit}</cite> : null}
     </figcaption>
   )
@@ -67,7 +71,7 @@ const portableTextComponents: PortableTextComponents = {
               sizes="(max-width: 900px) 100vw, 760px"
             />
           </span>
-          {imageCaption(image.caption, image.credit)}
+          {imageCaption(image.caption, image.credit, image.location, image.dateTaken)}
         </figure>
       )
     }
@@ -178,7 +182,7 @@ export default async function ArticlePage({params}: Props) {
               <WatermarkedImage src={article.image} alt={article.imageAlt || article.title} fill priority sizes="100vw" />
               <meta itemProp="url" content={imageUrl(article.image)} />
             </div>
-            {imageCaption(article.imageCaption, article.imageCredit)}
+            {imageCaption(article.imageCaption, article.imageCredit, article.imageLocation, article.imageDateTaken)}
           </figure>
           <div className="article-shell">
             <div className="article-body" itemProp="articleBody">

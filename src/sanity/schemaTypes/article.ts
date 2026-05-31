@@ -15,6 +15,17 @@ const editorialImageFields = [
     description: 'Example: Foto: Narapati Network / Malik Ibrahim'
   }),
   defineField({
+    name: 'location',
+    title: 'Location',
+    type: 'string',
+    description: 'Example: Karawang'
+  }),
+  defineField({
+    name: 'dateTaken',
+    title: 'Date Taken',
+    type: 'date'
+  }),
+  defineField({
     name: 'alt',
     title: 'Alt Text',
     type: 'string',

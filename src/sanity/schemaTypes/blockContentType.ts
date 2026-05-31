@@ -81,6 +81,17 @@ export const blockContentType = defineType({
           type: 'string',
           title: 'Photo Credit',
           description: 'Example: Foto: Narapati Network / Malik Ibrahim',
+        },
+        {
+          name: 'location',
+          type: 'string',
+          title: 'Location',
+          description: 'Example: Karawang',
+        },
+        {
+          name: 'dateTaken',
+          type: 'date',
+          title: 'Date Taken',
         }
       ]
     }),

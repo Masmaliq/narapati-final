@@ -50,6 +50,8 @@ export const ARTICLE_QUERY = defineQuery(`*[
   "imageAlt": coalesce(mainImage.alt, title),
   "imageCaption": coalesce(mainImage.caption, ""),
   "imageCredit": coalesce(mainImage.credit, ""),
+  "imageLocation": coalesce(mainImage.location, ""),
+  "imageDateTaken": coalesce(mainImage.dateTaken, ""),
   "category": category->{title, "slug": slug.current, "description": coalesce(description, "")},
   "author": author->{name, role, "image": image.asset->url}
 }`)

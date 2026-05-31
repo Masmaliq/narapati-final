@@ -23,6 +23,8 @@ export type Article = {
   imageAlt?: string
   imageCaption?: string
   imageCredit?: string
+  imageLocation?: string
+  imageDateTaken?: string
   author: Author
   body?: PortableTextBlock[]
   featured?: boolean
