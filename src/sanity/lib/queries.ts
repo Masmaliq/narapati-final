@@ -47,6 +47,9 @@ export const ARTICLE_QUERY = defineQuery(`*[
   publishedAt,
   body,
   "image": mainImage.asset->url,
+  "imageAlt": coalesce(mainImage.alt, title),
+  "imageCaption": coalesce(mainImage.caption, ""),
+  "imageCredit": coalesce(mainImage.credit, ""),
   "category": category->{title, "slug": slug.current, "description": coalesce(description, "")},
   "author": author->{name, role, "image": image.asset->url}
 }`)

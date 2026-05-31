@@ -20,6 +20,9 @@ export type Article = {
   category: Category
   publishedAt: string
   image: string
+  imageAlt?: string
+  imageCaption?: string
+  imageCredit?: string
   author: Author
   body?: PortableTextBlock[]
   featured?: boolean

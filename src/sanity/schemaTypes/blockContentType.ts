@@ -68,7 +68,19 @@ export const blockContentType = defineType({
         {
           name: 'alt',
           type: 'string',
-          title: 'Alternative Text',
+          title: 'Alt Text',
+        },
+        {
+          name: 'caption',
+          type: 'text',
+          title: 'Image Caption',
+          rows: 3,
+        },
+        {
+          name: 'credit',
+          type: 'string',
+          title: 'Photo Credit',
+          description: 'Example: Foto: Narapati Network / Malik Ibrahim',
         }
       ]
     }),

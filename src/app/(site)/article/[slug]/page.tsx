@@ -2,11 +2,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type {Metadata} from 'next'
 import {notFound} from 'next/navigation'
-import {PortableText} from '@portabletext/react'
+import {PortableText, type PortableTextComponents} from '@portabletext/react'
 import {formatDate} from '@/components/date'
 import {articles} from '@/data/fallback'
 import {articleJsonLd, articlePath, articleUrl, imageUrl, metaDescription, siteName} from '@/lib/seo'
 import {getArticle, getArticles} from '@/sanity/lib/fetch'
+import {urlFor} from '@/sanity/lib/image'
 
 type Props = {
   params: Promise<{slug: string}>
@@ -26,6 +27,48 @@ function decodeSlug(slug: string) {
 
 function articleHref(slug: string) {
   return articlePath(slug)
+}
+
+type PortableImageValue = {
+  asset?: unknown
+  alt?: string
+  caption?: string
+  credit?: string
+}
+
+function imageCaption(caption?: string, credit?: string) {
+  if (!caption?.trim()) return null
+
+  return (
+    <figcaption className="article-image-caption">
+      <span>{caption}</span>
+      {credit?.trim() ? <cite>{credit}</cite> : null}
+    </figcaption>
+  )
+}
+
+const portableTextComponents: PortableTextComponents = {
+  types: {
+    image: ({value}) => {
+      const image = value as PortableImageValue
+      if (!image?.asset) return null
+
+      const src = urlFor(image).width(1400).url()
+
+      return (
+        <figure className="article-inline-image">
+          <Image
+            src={src}
+            alt={image.alt || image.caption || ''}
+            width={1400}
+            height={900}
+            sizes="(max-width: 900px) 100vw, 760px"
+          />
+          {imageCaption(image.caption, image.credit)}
+        </figure>
+      )
+    }
+  }
 }
 
 export async function generateMetadata({params}: Props): Promise<Metadata> {
@@ -127,14 +170,17 @@ export default async function ArticlePage({params}: Props) {
           </div>
         </header>
         <div className="container">
-          <figure className="article-cover" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
-            <Image src={article.image} alt="" fill priority sizes="100vw" />
-            <meta itemProp="url" content={imageUrl(article.image)} />
+          <figure className="article-cover-frame" itemProp="image" itemScope itemType="https://schema.org/ImageObject">
+            <div className="article-cover">
+              <Image src={article.image} alt={article.imageAlt || article.title} fill priority sizes="100vw" />
+              <meta itemProp="url" content={imageUrl(article.image)} />
+            </div>
+            {imageCaption(article.imageCaption, article.imageCredit)}
           </figure>
           <div className="article-shell">
             <div className="article-body" itemProp="articleBody">
               {body ? (
-                <PortableText value={body} />
+                <PortableText value={body} components={portableTextComponents} />
               ) : (
                 <>
                   <p>
