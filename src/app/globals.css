@@ -8811,26 +8811,26 @@ html {
 
 .article-shell {
   display: block;
-  max-width: 660px;
+  max-width: 680px;
   margin: 0 auto;
   padding: clamp(38px, 4.8vw, 62px) 0 clamp(50px, 6.6vw, 82px);
 }
 
 .article-body {
-  max-width: 660px;
+  max-width: 680px;
   margin: 0 auto;
   color: #3f4754;
   font-family: var(--font-spectral), Spectral, Georgia, serif;
-  font-size: 1.18rem;
+  font-size: 1.22rem;
   font-weight: 400;
-  letter-spacing: -0.004em;
-  line-height: 1.74;
+  letter-spacing: -0.01em;
+  line-height: 1.75;
 }
 
 .article-body > *,
 .article-body p {
   margin-top: 0;
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 
 .article-body p {
