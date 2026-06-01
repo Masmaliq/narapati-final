@@ -93,15 +93,6 @@ function StatCard({label, value}: {label: string; value: number}) {
   )
 }
 
-function OverviewItem({label, value}: {label: string; value: string | number}) {
-  return (
-    <div style={styles.overviewItem}>
-      <span style={styles.overviewLabel}>{label}</span>
-      <strong style={styles.overviewValue}>{value || 'Belum tersedia'}</strong>
-    </div>
-  )
-}
-
 function RecentList({title, items}: {title: string; items: RecentItem[]}) {
   return (
     <section style={styles.recentPanel}>
@@ -127,6 +118,22 @@ function RecentList({title, items}: {title: string; items: RecentItem[]}) {
     </section>
   )
 }
+
+function activityItems(data: DashboardData) {
+  return [
+    data.recentArticles[0]?.title ? `Artikel terbaru dipublikasikan: ${data.recentArticles[0].title}` : '',
+    data.recentVideos[0]?.title ? `Visual journal diperbarui: ${data.recentVideos[0].title}` : '',
+    data.recentPhotography[0]?.title ? `Media baru diunggah: ${data.recentPhotography[0].title}` : '',
+    data.draftArticles ? `${data.draftArticles} draft menunggu review` : ''
+  ].filter(Boolean)
+}
+
+const calendarRhythm = [
+  ['Senin', 'Insight'],
+  ['Rabu', 'Global'],
+  ['Jumat', 'Market'],
+  ['Minggu', 'Visual Journal']
+]
 
 export function NewsroomDashboard() {
   const client = useClient({apiVersion})
@@ -164,6 +171,10 @@ export function NewsroomDashboard() {
       `}</style>
       <section style={styles.hero}>
         <span style={styles.eyebrow}>Narapati Studio</span>
+        <div style={styles.greeting}>
+          <strong style={styles.greetingTitle}>Selamat datang, Maliq.</strong>
+          <span style={styles.greetingText}>Kelola ritme tulisan, visual journal, dan arsip Narapati hari ini.</span>
+        </div>
         <h1 style={styles.title}>Editorial Desk</h1>
         <p style={styles.description}>
           Ruang kerja editorial untuk mengelola tulisan, visual journal, fotografi, dan narasi Narapati.
@@ -191,17 +202,40 @@ export function NewsroomDashboard() {
         <StatCard label="Visual Journal" value={data.videoPosts} />
       </section>
 
-      <section style={styles.overviewPanel} aria-label="Editorial overview">
-        <div style={styles.panelHead}>
-          <span style={styles.panelKicker}>Overview</span>
-          <h2 style={styles.panelTitle}>Editorial Overview</h2>
-        </div>
-        <div style={styles.overviewGrid}>
-          <OverviewItem label="Published this month" value={data.publishedThisMonth} />
-          <OverviewItem label="Draft waiting review" value={data.draftsWaitingReview} />
-          <OverviewItem label="Recently updated" value={data.recentlyUpdated} />
-          <OverviewItem label="Most viewed article" value={data.mostViewedArticle || data.recentArticles[0]?.title || 'Belum tersedia'} />
-        </div>
+      <section style={styles.rhythmGrid} aria-label="Editorial rhythm">
+        <section style={styles.overviewPanel} aria-label="Latest activity">
+          <div style={styles.panelHead}>
+            <span style={styles.panelKicker}>Rhythm</span>
+            <h2 style={styles.panelTitle}>Latest Activity</h2>
+          </div>
+          <div style={styles.activityList}>
+            {activityItems(data).length ? (
+              activityItems(data).map((item, index) => (
+                <article style={styles.activityItem} key={`${item}-${index}`}>
+                  <span style={styles.activityDot} />
+                  <strong style={styles.activityText}>{item}</strong>
+                </article>
+              ))
+            ) : (
+              <p style={styles.emptyText}>Belum ada aktivitas terbaru.</p>
+            )}
+          </div>
+        </section>
+
+        <section style={styles.overviewPanel} aria-label="Editorial calendar">
+          <div style={styles.panelHead}>
+            <span style={styles.panelKicker}>Calendar</span>
+            <h2 style={styles.panelTitle}>Editorial Calendar</h2>
+          </div>
+          <div style={styles.calendarList}>
+            {calendarRhythm.map(([day, desk]) => (
+              <article style={styles.calendarItem} key={day}>
+                <span style={styles.calendarDay}>{day}</span>
+                <strong style={styles.calendarDesk}>{desk}</strong>
+              </article>
+            ))}
+          </div>
+        </section>
       </section>
 
       {loading ? <p style={styles.loadingText}>Loading editorial desk...</p> : null}
@@ -236,7 +270,7 @@ const styles = {
     textTransform: 'uppercase' as const
   },
   title: {
-    margin: '12px 0 10px',
+    margin: '14px 0 10px',
     color: '#0f172a',
     fontFamily: 'Georgia, serif',
     fontSize: 'clamp(42px, 5vw, 76px)',
@@ -250,6 +284,24 @@ const styles = {
     color: 'rgba(15, 23, 42, 0.64)',
     fontSize: 16,
     lineHeight: 1.65
+  },
+  greeting: {
+    display: 'grid',
+    gap: 5,
+    marginTop: 18,
+    color: 'rgba(15, 23, 42, 0.66)'
+  },
+  greetingTitle: {
+    color: '#0f172a',
+    fontFamily: 'Georgia, serif',
+    fontSize: 22,
+    fontWeight: 500,
+    lineHeight: 1.08
+  },
+  greetingText: {
+    color: 'rgba(15, 23, 42, 0.58)',
+    fontSize: 14,
+    lineHeight: 1.5
   },
   quickPanel: {
     display: 'grid',
@@ -285,7 +337,9 @@ const styles = {
   },
   quickButton: {
     display: 'inline-flex',
+    alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 42,
     border: '1px solid #0b1b3b',
     borderRadius: 999,
     background: '#0b1b3b',
@@ -293,7 +347,7 @@ const styles = {
     fontSize: 12,
     fontWeight: 700,
     letterSpacing: '0.08em',
-    padding: '12px 14px',
+    padding: '0 12px',
     textDecoration: 'none',
     textTransform: 'uppercase' as const,
     transition: 'background 220ms ease, border-color 220ms ease, color 220ms ease'
@@ -337,16 +391,49 @@ const styles = {
     marginBottom: 22,
     overflow: 'hidden'
   },
-  overviewGrid: {
+  rhythmGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-    gap: 0
+    gridTemplateColumns: 'minmax(0, 1.35fr) minmax(260px, 0.85fr)',
+    gap: 18,
+    marginBottom: 22
   },
-  overviewItem: {
+  activityList: {
+    display: 'grid'
+  },
+  activityItem: {
+    display: 'grid',
+    gridTemplateColumns: '10px minmax(0, 1fr)',
+    gap: 12,
+    alignItems: 'start',
     borderTop: '1px solid rgba(221, 211, 195, 0.62)',
-    padding: '18px'
+    padding: '14px 18px'
   },
-  overviewLabel: {
+  activityDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 999,
+    background: '#b38a56',
+    marginTop: 8
+  },
+  activityText: {
+    color: '#0f172a',
+    fontFamily: 'Georgia, serif',
+    fontSize: 18,
+    fontWeight: 500,
+    lineHeight: 1.18
+  },
+  calendarList: {
+    display: 'grid'
+  },
+  calendarItem: {
+    display: 'flex',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    gap: 18,
+    borderTop: '1px solid rgba(221, 211, 195, 0.62)',
+    padding: '14px 18px'
+  },
+  calendarDay: {
     display: 'block',
     color: '#b38a56',
     fontSize: 11,
@@ -354,14 +441,13 @@ const styles = {
     letterSpacing: '0.14em',
     textTransform: 'uppercase' as const
   },
-  overviewValue: {
-    display: 'block',
-    marginTop: 8,
+  calendarDesk: {
     color: '#0f172a',
     fontFamily: 'Georgia, serif',
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: 500,
-    lineHeight: 1.08
+    lineHeight: 1.08,
+    textAlign: 'right' as const
   },
   loadingText: {
     color: 'rgba(15, 23, 42, 0.52)',
