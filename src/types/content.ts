@@ -27,6 +27,7 @@ export type Article = {
   imageDateTaken?: string
   author: Author
   body?: PortableTextBlock[]
+  bodyText?: string
   featured?: boolean
 }
 

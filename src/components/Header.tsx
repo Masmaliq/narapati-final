@@ -18,6 +18,7 @@ export async function Header() {
     title: article.title,
     slug: article.slug,
     dek: article.dek,
+    bodyText: article.bodyText,
     image: article.image,
     publishedAt: article.publishedAt,
     category: {
