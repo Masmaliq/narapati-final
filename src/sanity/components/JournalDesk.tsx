@@ -40,8 +40,15 @@ const articleQuery = `*[_type == "article" && defined(title)] | order(_updatedAt
 const quickActions = [
   {label: 'New Article', href: '/studio/intent/create/template=article'},
   {label: 'View Drafts', href: '/studio/structure/article-drafts'},
+  {label: 'View Published', href: '/studio/structure/article-published'},
   {label: 'Editorial Calendar', href: '/studio/structure/editorial-calendar'},
   {label: 'Scheduled Posts', href: '/studio/structure/article-scheduled'}
+]
+
+const articleArchiveActions = [
+  {label: 'New Article', href: '/studio/intent/create/template=article'},
+  {label: 'View Drafts', href: '/studio/structure/article-drafts'},
+  {label: 'View Published', href: '/studio/structure/article-published'}
 ]
 
 const articleFilters = ['Semua', 'Draft', 'Review', 'Terbit', 'Terjadwal', 'Arsip']
@@ -176,8 +183,15 @@ export function JournalArticleList() {
         <p style={styles.description}>Kelola seluruh artikel Narapati, mulai dari draft, review, terjadwal, hingga terbit.</p>
       </section>
 
+      <section style={styles.archiveActions} aria-label="Top article actions">
+        {articleArchiveActions.map((action) => (
+          <a href={action.href} style={action.label === 'New Article' ? styles.primaryButton : styles.secondaryButton} key={action.label}>
+            {action.label}
+          </a>
+        ))}
+      </section>
+
       <section style={styles.archiveToolbar} aria-label="Article archive controls">
-        <a href="/studio/intent/create/template=article" style={styles.primaryButton}>New Article</a>
         <label style={styles.archiveSearchLabel}>
           <span>Cari</span>
           <input
@@ -341,9 +355,15 @@ const styles = {
   },
   archiveToolbar: {
     display: 'grid',
-    gridTemplateColumns: 'minmax(150px, 190px) minmax(260px, 1fr)',
+    gridTemplateColumns: 'minmax(260px, 1fr)',
     gap: 14,
     alignItems: 'stretch',
+    marginBottom: 14
+  },
+  archiveActions: {
+    display: 'flex',
+    flexWrap: 'wrap' as const,
+    gap: 10,
     marginBottom: 14
   },
   primaryButton: {
@@ -354,6 +374,22 @@ const styles = {
     borderRadius: 999,
     background: '#0b1b3b',
     color: '#fbf8f2',
+    fontSize: 12,
+    fontWeight: 700,
+    letterSpacing: '0.08em',
+    minHeight: 44,
+    padding: '0 16px',
+    textDecoration: 'none',
+    textTransform: 'uppercase' as const
+  },
+  secondaryButton: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: '1px solid rgba(179, 138, 86, 0.34)',
+    borderRadius: 999,
+    background: 'rgba(255, 253, 248, 0.66)',
+    color: '#0b1b3b',
     fontSize: 12,
     fontWeight: 700,
     letterSpacing: '0.08em',

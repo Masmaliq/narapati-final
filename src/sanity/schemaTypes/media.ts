@@ -39,6 +39,14 @@ export const videoType = defineType({
   ]
 })
 
+const photographyImageFields = [
+  defineField({name: 'caption', title: 'Editorial Caption', type: 'text', rows: 3}),
+  defineField({name: 'credit', title: 'Photo Credit', type: 'string'}),
+  defineField({name: 'location', title: 'Location', type: 'string'}),
+  defineField({name: 'dateTaken', title: 'Date Taken', type: 'date'}),
+  defineField({name: 'altText', title: 'Alt Text', type: 'string'})
+]
+
 export const photographyType = defineType({
   name: 'photography',
   title: 'Photography Desk',
@@ -94,6 +102,7 @@ export const photographyType = defineType({
       options: {hotspot: true},
       group: 'visual',
       fieldset: 'visualStory',
+      fields: photographyImageFields,
       validation: (Rule) => Rule.required()
     }),
     defineField({
@@ -137,7 +146,13 @@ export const photographyType = defineType({
       description: 'Short accessibility text for screen readers and SEO.',
       validation: (Rule) => Rule.required().warning('Alt text membantu aksesibilitas dan pencarian.')
     }),
-    defineField({name: 'gallery', title: 'Gallery', type: 'array', of: [{type: 'image', options: {hotspot: true}}]}),
+    defineField({
+      name: 'gallery',
+      title: 'Gallery',
+      type: 'array',
+      group: 'visual',
+      of: [{type: 'image', options: {hotspot: true}, fields: photographyImageFields}]
+    }),
     defineField({
       name: 'visualCategory',
       title: 'Visual Category',

@@ -11,6 +11,7 @@ type CalendarItem = {
   publishedAt?: string
   category?: string
   author?: string
+  status?: string
 }
 
 const calendarQuery = `*[
@@ -29,11 +30,29 @@ const calendarQuery = `*[
     _type == "article" => author->name,
     _type == "photography" => photographer->name,
     _type == "video" => "Video Journal"
+  ),
+  "status": select(
+    status == "archived" => "Archived",
+    status == "review" => "Review",
+    status == "scheduled" => "Scheduled",
+    status == "draft" => "Draft",
+    status == "published" => "Published",
+    _id in path("drafts.**") => "Draft",
+    defined(publishedAt) && publishedAt > now() => "Scheduled",
+    "Published"
   )
 }`
 
 const contentFilters = ['All', 'Global', 'Insight', 'Market', 'Video', 'Photography']
-const statusFilters = ['All', 'Draft', 'Scheduled', 'Published']
+const statusFilters = ['All', 'Draft', 'Review', 'Scheduled', 'Published', 'Archived']
+const calendarViews = ['Weekly View', 'Monthly View', 'List View']
+
+const rhythm = [
+  ['Senin', 'Global'],
+  ['Rabu', 'Insight'],
+  ['Jumat', 'Market'],
+  ['Minggu', 'Visual Journal / Photography']
+]
 
 function monthStart(date: Date) {
   return new Date(date.getFullYear(), date.getMonth(), 1)
@@ -58,6 +77,7 @@ function parseDateKey(value?: string) {
 }
 
 function getStatus(item: CalendarItem) {
+  if (item.status) return item.status
   if (item._id.startsWith('drafts.')) return 'Draft'
   if (item.publishedAt && new Date(item.publishedAt) > new Date()) return 'Scheduled'
   return 'Published'
@@ -97,12 +117,37 @@ function buildMonthDays(currentMonth: Date) {
   })
 }
 
+function buildWeekDays(anchor: Date) {
+  const start = new Date(anchor)
+  start.setDate(anchor.getDate() - anchor.getDay())
+
+  return Array.from({length: 7}, (_, index) => {
+    const date = new Date(start)
+    date.setDate(start.getDate() + index)
+    return date
+  })
+}
+
+function statusChipStyle(status?: string) {
+  const key = status || 'Published'
+  const variants: Record<string, CSSProperties> = {
+    Draft: {borderColor: 'rgba(110, 118, 129, 0.24)', background: 'rgba(110, 118, 129, 0.08)', color: '#5e6673'},
+    Review: {borderColor: 'rgba(179, 138, 86, 0.4)', background: 'rgba(179, 138, 86, 0.13)', color: '#9a6f2f'},
+    Scheduled: {borderColor: 'rgba(15, 23, 42, 0.42)', background: 'rgba(255, 253, 248, 0.88)', color: '#0f172a'},
+    Published: {borderColor: 'rgba(11, 27, 59, 0.18)', background: 'rgba(11, 27, 59, 0.08)', color: '#0b1b3b'},
+    Archived: {borderColor: 'rgba(15, 23, 42, 0.16)', background: 'rgba(15, 23, 42, 0.05)', color: 'rgba(15, 23, 42, 0.54)'}
+  }
+
+  return {...styles.statusBadge, ...(variants[key] || variants.Published)}
+}
+
 export function EditorialCalendar() {
   const client = useClient({apiVersion})
   const [items, setItems] = useState<CalendarItem[]>([])
   const [currentMonth, setCurrentMonth] = useState(() => monthStart(new Date()))
   const [contentFilter, setContentFilter] = useState('All')
   const [statusFilter, setStatusFilter] = useState('All')
+  const [calendarView, setCalendarView] = useState('Monthly View')
   const [loading, setLoading] = useState(true)
   const [savingId, setSavingId] = useState<string | null>(null)
 
@@ -131,7 +176,7 @@ export function EditorialCalendar() {
   }, [contentFilter, items, statusFilter])
 
   const unscheduledItems = filteredItems.filter((item) => !parseDateKey(item.publishedAt))
-  const days = buildMonthDays(currentMonth)
+  const days = calendarView === 'Weekly View' ? buildWeekDays(new Date()) : buildMonthDays(currentMonth)
   const monthKey = `${currentMonth.getFullYear()}-${currentMonth.getMonth()}`
 
   async function scheduleItem(itemId: string, dateKey: string) {
@@ -154,13 +199,44 @@ export function EditorialCalendar() {
     <main style={styles.shell}>
       <section style={styles.hero}>
         <span style={styles.eyebrow}>Planning Desk</span>
-        <h1 style={styles.title}>Editorial Calendar</h1>
+        <h1 style={styles.title}>Kalender Editorial</h1>
         <p style={styles.description}>
-          Monthly newsroom planning for articles, video journal, and photography stories across Global, Insight, and Market.
+          Atur ritme publikasi Narapati berdasarkan kanal, tanggal, dan status editorial.
         </p>
       </section>
 
+      <section style={styles.quickActions} aria-label="Calendar quick actions">
+        <a href="/studio/intent/create/template=article" style={styles.primaryAction}>Schedule Article</a>
+        <a href="/studio/intent/create/template=article" style={styles.secondaryAction}>Create Draft</a>
+        <button type="button" style={styles.secondaryAction}>Move Date</button>
+      </section>
+
+      <section style={styles.rhythmPanel} aria-label="Publishing rhythm suggestion">
+        <span style={styles.sectionLabel}>Publishing Rhythm</span>
+        <div style={styles.rhythmGrid}>
+          {rhythm.map(([day, channel]) => (
+            <article style={styles.rhythmItem} key={day}>
+              <strong>{day}</strong>
+              <span>{channel}</span>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section style={styles.controls}>
+        <div style={styles.filters}>
+          {calendarViews.map((view) => (
+            <button
+              style={view === calendarView ? {...styles.filterButton, ...styles.filterActive} : styles.filterButton}
+              type="button"
+              onClick={() => setCalendarView(view)}
+              key={view}
+            >
+              {view}
+            </button>
+          ))}
+        </div>
+
         <div style={styles.monthControls}>
           <button style={styles.navButton} type="button" onClick={() => setCurrentMonth((date) => addMonths(date, -1))}>
             Prev
@@ -200,7 +276,15 @@ export function EditorialCalendar() {
 
       {loading ? <p style={styles.loading}>Loading newsroom calendar...</p> : null}
 
-      {unscheduledItems.length ? (
+      {!loading && !filteredItems.length ? (
+        <section style={styles.emptyState}>
+          <h2>Belum ada jadwal editorial.</h2>
+          <p>Mulai susun ritme publikasi Narapati dengan draft pertama minggu ini.</p>
+          <a href="/studio/intent/create/template=article" style={styles.primaryAction}>Tambah Jadwal</a>
+        </section>
+      ) : null}
+
+      {unscheduledItems.length && calendarView !== 'List View' ? (
         <section style={styles.unscheduled}>
           <span style={styles.sectionLabel}>Unscheduled / Draft Desk</span>
           <div style={styles.unscheduledList}>
@@ -211,36 +295,53 @@ export function EditorialCalendar() {
         </section>
       ) : null}
 
-      <section style={styles.calendar} aria-label="Monthly editorial calendar">
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-          <div style={styles.weekday} key={day}>{day}</div>
-        ))}
-
-        {days.map((day) => {
-          const dateKey = toDateKey(day)
-          const dayItems = filteredItems.filter((item) => parseDateKey(item.publishedAt) === dateKey)
-          const outsideMonth = day.getMonth() !== currentMonth.getMonth()
-
-          return (
-            <div
-              style={outsideMonth ? {...styles.dayCell, ...styles.dayCellMuted} : styles.dayCell}
-              onDragOver={(event) => event.preventDefault()}
-              onDrop={(event) => {
-                const itemId = event.dataTransfer.getData('text/plain')
-                if (itemId) scheduleItem(itemId, dateKey)
-              }}
-              key={`${monthKey}-${dateKey}`}
-            >
-              <span style={styles.dayNumber}>{day.getDate()}</span>
-              <div style={styles.dayItems}>
-                {dayItems.map((item) => (
-                  <CalendarChip item={item} saving={savingId === item._id} key={item._id} />
-                ))}
+      {calendarView === 'List View' ? (
+        <section style={styles.listView} aria-label="Editorial calendar list">
+          {filteredItems.map((item) => (
+            <article style={styles.listItem} key={item._id}>
+              <div>
+                <span style={styles.chipMeta}>{getStatus(item)} · {typeLabel(item)}</span>
+                <h2 style={styles.listTitle}>{item.title || 'Untitled'}</h2>
               </div>
-            </div>
-          )
-        })}
-      </section>
+              <span style={styles.listMeta}>{item.category || typeLabel(item)}</span>
+              <span style={styles.listMeta}>{item.author || 'Narapati Desk'}</span>
+              <span style={styles.listMeta}>{formatDateTime(item.publishedAt)}</span>
+              <span style={statusChipStyle(getStatus(item))}>{getStatus(item)}</span>
+            </article>
+          ))}
+        </section>
+      ) : filteredItems.length ? (
+        <section style={styles.calendar} aria-label={`${calendarView} editorial calendar`}>
+          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+            <div style={styles.weekday} key={day}>{day}</div>
+          ))}
+
+          {days.map((day) => {
+            const dateKey = toDateKey(day)
+            const dayItems = filteredItems.filter((item) => parseDateKey(item.publishedAt) === dateKey)
+            const outsideMonth = calendarView === 'Monthly View' && day.getMonth() !== currentMonth.getMonth()
+
+            return (
+              <div
+                style={outsideMonth ? {...styles.dayCell, ...styles.dayCellMuted} : styles.dayCell}
+                onDragOver={(event) => event.preventDefault()}
+                onDrop={(event) => {
+                  const itemId = event.dataTransfer.getData('text/plain')
+                  if (itemId) scheduleItem(itemId, dateKey)
+                }}
+                key={`${monthKey}-${calendarView}-${dateKey}`}
+              >
+                <span style={styles.dayNumber}>{day.getDate()}</span>
+                <div style={styles.dayItems}>
+                  {dayItems.map((item) => (
+                    <CalendarChip item={item} saving={savingId === item._id} key={item._id} />
+                  ))}
+                </div>
+              </div>
+            )
+          })}
+        </section>
+      ) : null}
     </main>
   )
 }
@@ -255,7 +356,10 @@ function CalendarChip({item, saving}: {item: CalendarItem; saving: boolean}) {
       style={{
         ...styles.chip,
         ...(status === 'Draft' ? styles.chipDraft : {}),
-        ...(status === 'Scheduled' ? styles.chipScheduled : {})
+        ...(status === 'Review' ? styles.chipReview : {}),
+        ...(status === 'Scheduled' ? styles.chipScheduled : {}),
+        ...(status === 'Published' ? styles.chipPublished : {}),
+        ...(status === 'Archived' ? styles.chipArchived : {})
       }}
       title="Drag to reschedule"
     >
@@ -307,6 +411,63 @@ const styles: Record<string, CSSProperties> = {
     display: 'grid',
     gap: 12,
     marginBottom: 18
+  },
+  quickActions: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginBottom: 16
+  },
+  primaryAction: {
+    alignItems: 'center',
+    border: '1px solid #0f172a',
+    borderRadius: 999,
+    background: '#0f172a',
+    color: '#fbf8f2',
+    display: 'inline-flex',
+    fontSize: 12,
+    fontWeight: 800,
+    justifyContent: 'center',
+    letterSpacing: '0.08em',
+    minHeight: 42,
+    padding: '0 16px',
+    textDecoration: 'none',
+    textTransform: 'uppercase'
+  },
+  secondaryAction: {
+    alignItems: 'center',
+    border: '1px solid rgba(179, 138, 86, 0.34)',
+    borderRadius: 999,
+    background: 'rgba(255, 253, 248, 0.66)',
+    color: '#0f172a',
+    cursor: 'pointer',
+    display: 'inline-flex',
+    fontSize: 12,
+    fontWeight: 800,
+    justifyContent: 'center',
+    letterSpacing: '0.08em',
+    minHeight: 42,
+    padding: '0 16px',
+    textDecoration: 'none',
+    textTransform: 'uppercase'
+  },
+  rhythmPanel: {
+    border: '1px solid rgba(221, 211, 195, 0.92)',
+    borderRadius: 12,
+    background: 'rgba(255, 253, 248, 0.62)',
+    marginBottom: 18,
+    padding: 16
+  },
+  rhythmGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+    gap: 10
+  },
+  rhythmItem: {
+    borderTop: '1px solid rgba(179, 138, 86, 0.22)',
+    display: 'grid',
+    gap: 4,
+    paddingTop: 10
   },
   monthControls: {
     display: 'flex',
@@ -383,6 +544,45 @@ const styles: Record<string, CSSProperties> = {
     gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
     gap: 10
   },
+  emptyState: {
+    border: '1px dashed rgba(179, 138, 86, 0.34)',
+    borderRadius: 14,
+    background: 'rgba(255, 253, 248, 0.58)',
+    display: 'grid',
+    gap: 12,
+    marginTop: 18,
+    padding: 28
+  },
+  listView: {
+    display: 'grid',
+    border: '1px solid rgba(221, 211, 195, 0.92)',
+    borderRadius: 14,
+    background: 'rgba(255, 253, 248, 0.58)',
+    overflow: 'hidden'
+  },
+  listItem: {
+    display: 'grid',
+    gridTemplateColumns: 'minmax(260px, 1fr) minmax(120px, 0.35fr) minmax(140px, 0.4fr) minmax(140px, 0.4fr) auto',
+    gap: 14,
+    alignItems: 'center',
+    borderBottom: '1px solid rgba(221, 211, 195, 0.72)',
+    padding: 16
+  },
+  listTitle: {
+    color: '#0f172a',
+    fontFamily: 'var(--font-serif)',
+    fontSize: 22,
+    fontWeight: 500,
+    lineHeight: 1.05,
+    margin: '5px 0 0'
+  },
+  listMeta: {
+    color: 'rgba(15, 23, 42, 0.56)',
+    fontSize: 11,
+    fontWeight: 800,
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase'
+  },
   calendar: {
     display: 'grid',
     gridTemplateColumns: 'repeat(7, minmax(132px, 1fr))',
@@ -432,10 +632,23 @@ const styles: Record<string, CSSProperties> = {
     boxShadow: '0 10px 24px rgba(15, 23, 42, 0.045)'
   },
   chipDraft: {
-    borderColor: 'rgba(15, 23, 42, 0.22)'
+    borderColor: 'rgba(110, 118, 129, 0.24)',
+    background: 'rgba(110, 118, 129, 0.08)'
+  },
+  chipReview: {
+    borderColor: 'rgba(179, 138, 86, 0.5)',
+    background: 'rgba(179, 138, 86, 0.12)'
   },
   chipScheduled: {
-    borderColor: 'rgba(179, 138, 86, 0.5)'
+    borderColor: 'rgba(15, 23, 42, 0.42)'
+  },
+  chipPublished: {
+    borderColor: 'rgba(11, 27, 59, 0.18)',
+    background: 'rgba(11, 27, 59, 0.08)'
+  },
+  chipArchived: {
+    borderColor: 'rgba(15, 23, 42, 0.16)',
+    background: 'rgba(15, 23, 42, 0.05)'
   },
   chipMeta: {
     color: '#b38a56',
@@ -462,5 +675,15 @@ const styles: Record<string, CSSProperties> = {
     fontWeight: 800,
     letterSpacing: '0.1em',
     textTransform: 'uppercase'
+  },
+  statusBadge: {
+    border: '1px solid rgba(179, 138, 86, 0.24)',
+    borderRadius: 999,
+    fontSize: 11,
+    fontWeight: 800,
+    letterSpacing: '0.08em',
+    padding: '7px 10px',
+    textTransform: 'uppercase',
+    whiteSpace: 'nowrap'
   }
 }

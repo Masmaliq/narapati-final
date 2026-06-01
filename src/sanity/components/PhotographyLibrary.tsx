@@ -13,6 +13,7 @@ type PhotoItem = {
   dateTaken?: string
   publishedAt?: string
   visualCategory?: string
+  category?: string
   image?: string
   status?: string
 }
@@ -28,6 +29,7 @@ const photographyQuery = `*[_type == "photography"] | order(coalesce(dateTaken, 
   dateTaken,
   publishedAt,
   visualCategory,
+  "category": coalesce(category->title, visualCategory, "Photography"),
   "image": mainImage.asset->url,
   "status": select(
     status == "archived" => "Archived",
@@ -168,6 +170,7 @@ export function PhotographyLibrary() {
                 <span>{item.location || 'Indonesia'}</span>
                 <span>{formatDate(item.dateTaken || item.publishedAt)}</span>
                 <span>{item.credit || 'Narapati Visual Desk'}</span>
+                <span>{item.category || 'Photography'}</span>
               </div>
               <span style={statusStyle(item.status)}>{item.status || 'Published'}</span>
               <a style={styles.actionLink} href={`/studio/structure/photography;${item._id}`}>Edit</a>
