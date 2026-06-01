@@ -3,6 +3,8 @@ import {getSiteSettings} from '@/sanity/lib/fetch'
 
 const aboutPageContent = {
   eyebrow: 'Tentang Narapati Journal',
+  editorialStatement: 'Journal of a Modern Wanderer',
+  editorialSubtitle: 'Tentang dunia, manusia, dan perjalanan memahami kehidupan.',
   leadLabel: 'Narapati Journal',
   cards: [
     {
@@ -29,11 +31,12 @@ export default async function AboutPage() {
 
   return (
     <>
-      <section className="page-hero identity-hero">
+      <section className="page-hero identity-hero about-hero">
         <div className="container">
           <div className="eyebrow">{aboutPageContent.eyebrow}</div>
           <h1>{settings.siteTitle}</h1>
-          <p>{settings.description}</p>
+          <p className="about-editorial-statement">{aboutPageContent.editorialStatement}</p>
+          <p className="about-editorial-subtitle">{aboutPageContent.editorialSubtitle}</p>
         </div>
       </section>
       <section className="container identity-page">
