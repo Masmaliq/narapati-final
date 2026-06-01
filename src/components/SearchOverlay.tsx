@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import {useEffect, useMemo, useRef, useState} from 'react'
-import {flushSync} from 'react-dom'
+import {createPortal, flushSync} from 'react-dom'
 import {Search, X} from 'lucide-react'
 import {formatDate} from '@/components/date'
 
@@ -96,15 +96,8 @@ export function SearchOverlay({articles}: SearchOverlayProps) {
       .slice(0, 8)
   }, [articles, query])
 
-  return (
-    <>
-      <button className="search-trigger" type="button" onClick={openSearch} aria-label="Open search">
-        <Search size={16} />
-        <span>Search</span>
-        <kbd>⌘K</kbd>
-      </button>
-
-      {open ? (
+  const searchDialog = open && typeof document !== 'undefined'
+    ? createPortal(
         <div className="search-overlay" role="dialog" aria-modal="true" aria-label="Search Narapati articles">
           <button className="search-backdrop" type="button" onClick={() => setOpen(false)} aria-label="Close search" />
           <div className="search-panel">
@@ -164,8 +157,20 @@ export function SearchOverlay({articles}: SearchOverlayProps) {
               )}
             </div>
           </div>
-        </div>
-      ) : null}
+        </div>,
+        document.body
+      )
+    : null
+
+  return (
+    <>
+      <button className="search-trigger" type="button" onClick={openSearch} aria-label="Open search">
+        <Search size={16} />
+        <span>Search</span>
+        <kbd>⌘K</kbd>
+      </button>
+
+      {searchDialog}
     </>
   )
 }
