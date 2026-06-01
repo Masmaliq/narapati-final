@@ -33,18 +33,18 @@ export const structure: StructureResolver = (S) =>
     .title('Narapati Studio')
     .items([
       S.listItem()
-        .title('Dashboard')
+        .title('Editorial Desk')
         .icon(DashboardIcon)
-        .child(S.component(NewsroomDashboard).title('Dashboard Overview')),
+        .child(S.component(NewsroomDashboard).title('Editorial Desk')),
 
       S.divider(),
 
       S.listItem()
-        .title('JOURNAL')
+        .title('Journal')
         .icon(BookIcon)
         .child(
           S.list()
-            .title('JOURNAL')
+            .title('Journal')
             .items([
               S.documentTypeListItem('article')
                 .title('All Articles')
@@ -59,7 +59,7 @@ export const structure: StructureResolver = (S) =>
                 .schemaType('article')
                 .child(
                   S.documentList()
-                    .title('Draft Articles')
+                    .title('Draft')
                     .schemaType('article')
                     .filter('_type == "article" && _id in path("drafts.**")')
                     .defaultOrdering([{field: '_updatedAt', direction: 'desc'}])
@@ -70,7 +70,7 @@ export const structure: StructureResolver = (S) =>
                 .schemaType('article')
                 .child(
                   S.documentList()
-                    .title('Published Articles')
+                    .title('Published')
                     .schemaType('article')
                     .filter('_type == "article" && !(_id in path("drafts.**"))')
                     .defaultOrdering([{field: 'publishedAt', direction: 'desc'}])
@@ -89,48 +89,59 @@ export const structure: StructureResolver = (S) =>
             ])
         ),
 
+      S.documentTypeListItem('video')
+        .title('Visual Journal')
+        .icon(VideoIcon),
+
       S.listItem()
-        .title('MEDIA')
+        .title('Photography')
         .icon(ImageIcon)
         .child(
           S.list()
-            .title('MEDIA')
+            .title('Photography')
             .items([
               S.listItem()
-                .title('Photography')
+                .title('Photography Library')
                 .icon(ImageIcon)
-                .child(
-                  S.list()
-                    .title('Photography')
-                    .items([
-                      S.listItem()
-                        .title('Photography Library')
-                        .icon(ImageIcon)
-                        .child(S.component(PhotographyLibrary).title('Photography Library')),
-                      S.documentTypeListItem('photography')
-                        .title('All Photography Documents')
-                        .icon(ImageIcon)
-                    ])
-                ),
-              S.documentTypeListItem('video')
-                .title('Video Journal')
-                .icon(VideoIcon)
+                .child(S.component(PhotographyLibrary).title('Photography Library')),
+              S.documentTypeListItem('photography')
+                .title('All Photography Documents')
+                .icon(ImageIcon)
             ])
         ),
 
       S.listItem()
-        .title('EDITORIAL')
-        .icon(EditIcon)
+        .title('Media Library')
+        .icon(ImageIcon)
+        .child(S.component(PhotographyLibrary).title('Media Library')),
+
+      S.documentTypeListItem('author')
+        .title('Authors')
+        .icon(UserIcon),
+
+      S.listItem()
+        .title('Site Settings')
+        .icon(CogIcon)
         .child(
           S.list()
-            .title('EDITORIAL')
+            .title('Site Settings')
             .items([
+              S.documentTypeListItem('siteSettings')
+                .title('Site Settings')
+                .icon(CogIcon),
+              S.listItem()
+                .title('Homepage Manager')
+                .icon(HomeIcon)
+                .schemaType('homepageSettings')
+                .child(
+                  S.document()
+                    .schemaType('homepageSettings')
+                    .documentId('homepageSettings')
+                    .title('Homepage Manager')
+                ),
               S.documentTypeListItem('category')
                 .title('Categories')
                 .icon(TagsIcon),
-              S.documentTypeListItem('author')
-                .title('Authors')
-                .icon(UserIcon),
               S.listItem()
                 .title('Redaksi Page')
                 .icon(DocumentTextIcon)
@@ -150,29 +161,6 @@ export const structure: StructureResolver = (S) =>
                     .schemaType('siteSettings')
                     .documentId('siteSettings')
                     .title('About Narapati')
-                )
-            ])
-        ),
-
-      S.listItem()
-        .title('SITE')
-        .icon(CogIcon)
-        .child(
-          S.list()
-            .title('SITE')
-            .items([
-              S.documentTypeListItem('siteSettings')
-                .title('Site Settings')
-                .icon(CogIcon),
-              S.listItem()
-                .title('Homepage Manager')
-                .icon(HomeIcon)
-                .schemaType('homepageSettings')
-                .child(
-                  S.document()
-                    .schemaType('homepageSettings')
-                    .documentId('homepageSettings')
-                    .title('Homepage Manager')
                 )
             ])
         ),

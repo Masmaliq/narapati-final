@@ -16,6 +16,10 @@ type DashboardData = {
   draftArticles: number
   photographyPosts: number
   videoPosts: number
+  publishedThisMonth: number
+  draftsWaitingReview: number
+  recentlyUpdated: number
+  mostViewedArticle?: string
   recentArticles: RecentItem[]
   recentPhotography: RecentItem[]
   recentVideos: RecentItem[]
@@ -27,6 +31,10 @@ const dashboardQuery = `{
   "draftArticles": count(*[_type == "article" && _id in path("drafts.**")]),
   "photographyPosts": count(*[_type == "photography" && !(_id in path("drafts.**"))]),
   "videoPosts": count(*[_type == "video" && !(_id in path("drafts.**"))]),
+  "publishedThisMonth": count(*[_type == "article" && !(_id in path("drafts.**")) && publishedAt >= dateTime(now()) - 60*60*24*30]),
+  "draftsWaitingReview": count(*[_type == "article" && _id in path("drafts.**")]),
+  "recentlyUpdated": count(*[_updatedAt >= dateTime(now()) - 60*60*24*7 && _type in ["article", "photography", "video"]]),
+  "mostViewedArticle": *[_type == "article" && !(_id in path("drafts.**"))] | order(publishedAt desc)[0].title,
   "recentArticles": *[_type == "article" && !(_id in path("drafts.**"))] | order(publishedAt desc)[0...5] {
     title,
     publishedAt,
@@ -40,7 +48,7 @@ const dashboardQuery = `{
   "recentVideos": *[_type == "video" && !(_id in path("drafts.**"))] | order(publishedAt desc)[0...4] {
     title,
     publishedAt,
-    "category": "Video Journal"
+    "category": "Visual Journal"
   }
 }`
 
@@ -50,10 +58,21 @@ const fallbackData: DashboardData = {
   draftArticles: 0,
   photographyPosts: 0,
   videoPosts: 0,
+  publishedThisMonth: 0,
+  draftsWaitingReview: 0,
+  recentlyUpdated: 0,
+  mostViewedArticle: '',
   recentArticles: [],
   recentPhotography: [],
   recentVideos: []
 }
+
+const quickActions = [
+  {label: 'New Article', href: '/studio/intent/create/template=article'},
+  {label: 'New Visual Journal', href: '/studio/intent/create/template=video'},
+  {label: 'New Photography', href: '/studio/intent/create/template=photography'},
+  {label: 'Upload Media', href: '/studio/intent/create/template=photography'}
+]
 
 function formatDate(value?: string) {
   if (!value) return 'Belum dijadwalkan'
@@ -68,9 +87,18 @@ function formatDate(value?: string) {
 function StatCard({label, value}: {label: string; value: number}) {
   return (
     <article style={styles.statCard}>
-      <span style={styles.statLabel}>{label}</span>
       <strong style={styles.statValue}>{value}</strong>
+      <span style={styles.statLabel}>{label}</span>
     </article>
+  )
+}
+
+function OverviewItem({label, value}: {label: string; value: string | number}) {
+  return (
+    <div style={styles.overviewItem}>
+      <span style={styles.overviewLabel}>{label}</span>
+      <strong style={styles.overviewValue}>{value || 'Belum tersedia'}</strong>
+    </div>
   )
 }
 
@@ -78,7 +106,7 @@ function RecentList({title, items}: {title: string; items: RecentItem[]}) {
   return (
     <section style={styles.recentPanel}>
       <div style={styles.panelHead}>
-        <span style={styles.panelKicker}>Recent</span>
+        <span style={styles.panelKicker}>Latest</span>
         <h2 style={styles.panelTitle}>{title}</h2>
       </div>
       <div style={styles.recentList}>
@@ -127,28 +155,61 @@ export function NewsroomDashboard() {
 
   return (
     <main style={styles.shell}>
+      <style>{`
+        .narapati-desk-quick-action:hover {
+          border-color: #b38a56 !important;
+          background: #b38a56 !important;
+          color: #0f172a !important;
+        }
+      `}</style>
       <section style={styles.hero}>
         <span style={styles.eyebrow}>Narapati Studio</span>
-        <h1 style={styles.title}>Newsroom Dashboard</h1>
+        <h1 style={styles.title}>Editorial Desk</h1>
         <p style={styles.description}>
-          Ruang kerja editorial untuk membaca ritme publikasi, visual journal, dan agenda narasi Narapati.
+          Ruang kerja editorial untuk mengelola tulisan, visual journal, fotografi, dan narasi Narapati.
         </p>
       </section>
 
-      <section style={styles.statsGrid} aria-label="Newsroom overview">
-        <StatCard label="Total Articles" value={data.totalArticles} />
-        <StatCard label="Published Articles" value={data.publishedArticles} />
-        <StatCard label="Draft Articles" value={data.draftArticles} />
-        <StatCard label="Photography Posts" value={data.photographyPosts} />
-        <StatCard label="Video Journal Posts" value={data.videoPosts} />
+      <section style={styles.quickPanel} aria-label="Quick create">
+        <div>
+          <span style={styles.sectionLabel}>Quick Create</span>
+          <h2 style={styles.quickTitle}>Mulai cerita baru</h2>
+        </div>
+        <div style={styles.quickActions}>
+          {quickActions.map((action) => (
+            <a className="narapati-desk-quick-action" style={styles.quickButton} href={action.href} key={action.label}>
+              {action.label}
+            </a>
+          ))}
+        </div>
       </section>
 
-      {loading ? <p style={styles.loadingText}>Loading editorial overview...</p> : null}
+      <section style={styles.statsGrid} aria-label="Editorial statistics">
+        <StatCard label="Published" value={data.publishedArticles} />
+        <StatCard label="Draft" value={data.draftArticles} />
+        <StatCard label="Photography" value={data.photographyPosts} />
+        <StatCard label="Visual Journal" value={data.videoPosts} />
+      </section>
+
+      <section style={styles.overviewPanel} aria-label="Editorial overview">
+        <div style={styles.panelHead}>
+          <span style={styles.panelKicker}>Overview</span>
+          <h2 style={styles.panelTitle}>Editorial Overview</h2>
+        </div>
+        <div style={styles.overviewGrid}>
+          <OverviewItem label="Published this month" value={data.publishedThisMonth} />
+          <OverviewItem label="Draft waiting review" value={data.draftsWaitingReview} />
+          <OverviewItem label="Recently updated" value={data.recentlyUpdated} />
+          <OverviewItem label="Most viewed article" value={data.mostViewedArticle || data.recentArticles[0]?.title || 'Belum tersedia'} />
+        </div>
+      </section>
+
+      {loading ? <p style={styles.loadingText}>Loading editorial desk...</p> : null}
 
       <section style={styles.recentGrid}>
-        <RecentList title="Articles" items={data.recentArticles} />
-        <RecentList title="Photography" items={data.recentPhotography} />
-        <RecentList title="Video Journal" items={data.recentVideos} />
+        <RecentList title="Latest Journal Entries" items={data.recentArticles} />
+        <RecentList title="Latest Photography" items={data.recentPhotography} />
+        <RecentList title="Latest Visual Journal" items={data.recentVideos} />
       </section>
     </main>
   )
@@ -162,9 +223,9 @@ const styles = {
     padding: 'clamp(28px, 5vw, 56px)'
   },
   hero: {
-    maxWidth: 820,
+    maxWidth: 860,
     borderBottom: '1px solid rgba(179, 138, 86, 0.28)',
-    marginBottom: 28,
+    marginBottom: 24,
     paddingBottom: 24
   },
   eyebrow: {
@@ -178,30 +239,79 @@ const styles = {
     margin: '12px 0 10px',
     color: '#0f172a',
     fontFamily: 'Georgia, serif',
-    fontSize: 'clamp(36px, 5vw, 72px)',
+    fontSize: 'clamp(42px, 5vw, 76px)',
     fontWeight: 500,
     letterSpacing: '-0.03em',
     lineHeight: 0.95
   },
   description: {
-    maxWidth: 620,
+    maxWidth: 680,
     margin: 0,
     color: 'rgba(15, 23, 42, 0.64)',
     fontSize: 16,
     lineHeight: 1.65
   },
+  quickPanel: {
+    display: 'grid',
+    gridTemplateColumns: 'minmax(220px, 0.8fr) minmax(0, 1.6fr)',
+    gap: 18,
+    alignItems: 'center',
+    border: '1px solid rgba(179, 138, 86, 0.28)',
+    borderRadius: 16,
+    background: 'rgba(255, 253, 248, 0.78)',
+    boxShadow: '0 22px 60px rgba(15, 23, 42, 0.045)',
+    marginBottom: 18,
+    padding: '20px clamp(18px, 3vw, 28px)'
+  },
+  sectionLabel: {
+    color: '#b38a56',
+    fontSize: 11,
+    fontWeight: 800,
+    letterSpacing: '0.18em',
+    textTransform: 'uppercase' as const
+  },
+  quickTitle: {
+    margin: '7px 0 0',
+    color: '#0f172a',
+    fontFamily: 'Georgia, serif',
+    fontSize: 28,
+    fontWeight: 500,
+    lineHeight: 1
+  },
+  quickActions: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+    gap: 10
+  },
+  quickButton: {
+    display: 'inline-flex',
+    justifyContent: 'center',
+    border: '1px solid #0b1b3b',
+    borderRadius: 999,
+    background: '#0b1b3b',
+    color: '#fbf8f2',
+    fontSize: 12,
+    fontWeight: 700,
+    letterSpacing: '0.08em',
+    padding: '12px 14px',
+    textDecoration: 'none',
+    textTransform: 'uppercase' as const,
+    transition: 'background 220ms ease, border-color 220ms ease, color 220ms ease'
+  },
   statsGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
     gap: 14,
-    marginBottom: 30
+    marginBottom: 18
   },
   statCard: {
+    display: 'grid',
+    gap: 12,
     border: '1px solid rgba(221, 211, 195, 0.92)',
-    borderRadius: 10,
-    background: 'rgba(255, 253, 248, 0.72)',
-    boxShadow: '0 18px 50px rgba(15, 23, 42, 0.045)',
-    padding: '18px 18px 20px'
+    borderRadius: 12,
+    background: 'rgba(255, 253, 248, 0.68)',
+    boxShadow: '0 18px 50px rgba(15, 23, 42, 0.035)',
+    padding: '22px 20px 18px'
   },
   statLabel: {
     display: 'block',
@@ -214,12 +324,44 @@ const styles = {
   },
   statValue: {
     display: 'block',
-    marginTop: 18,
     color: '#b38a56',
     fontFamily: 'Georgia, serif',
-    fontSize: 42,
+    fontSize: 56,
     fontWeight: 500,
-    lineHeight: 0.9
+    lineHeight: 0.86
+  },
+  overviewPanel: {
+    border: '1px solid rgba(221, 211, 195, 0.92)',
+    borderRadius: 14,
+    background: 'rgba(255, 253, 248, 0.62)',
+    marginBottom: 22,
+    overflow: 'hidden'
+  },
+  overviewGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+    gap: 0
+  },
+  overviewItem: {
+    borderTop: '1px solid rgba(221, 211, 195, 0.62)',
+    padding: '18px'
+  },
+  overviewLabel: {
+    display: 'block',
+    color: '#b38a56',
+    fontSize: 11,
+    fontWeight: 800,
+    letterSpacing: '0.14em',
+    textTransform: 'uppercase' as const
+  },
+  overviewValue: {
+    display: 'block',
+    marginTop: 8,
+    color: '#0f172a',
+    fontFamily: 'Georgia, serif',
+    fontSize: 22,
+    fontWeight: 500,
+    lineHeight: 1.08
   },
   loadingText: {
     color: 'rgba(15, 23, 42, 0.52)',
@@ -234,7 +376,7 @@ const styles = {
   },
   recentPanel: {
     border: '1px solid rgba(221, 211, 195, 0.92)',
-    borderRadius: 12,
+    borderRadius: 14,
     background: 'rgba(255, 253, 248, 0.62)',
     overflow: 'hidden'
   },

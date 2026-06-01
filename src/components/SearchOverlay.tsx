@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import {useEffect, useMemo, useRef, useState} from 'react'
+import {flushSync} from 'react-dom'
 import {Search, X} from 'lucide-react'
 import {formatDate} from '@/components/date'
 
@@ -30,10 +31,19 @@ function articleHref(slug: string) {
   return `/article/${encodeURIComponent(slug)}`
 }
 
+function normalize(value?: string) {
+  return value?.toLowerCase().trim() || ''
+}
+
 export function SearchOverlay({articles}: SearchOverlayProps) {
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
+
+  function openSearch() {
+    flushSync(() => setOpen(true))
+    window.requestAnimationFrame(() => inputRef.current?.focus())
+  }
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -41,7 +51,7 @@ export function SearchOverlay({articles}: SearchOverlayProps) {
 
       if (isSearchShortcut) {
         event.preventDefault()
-        setOpen(true)
+        openSearch()
       }
 
       if (event.key === 'Escape') {
@@ -66,7 +76,7 @@ export function SearchOverlay({articles}: SearchOverlayProps) {
   }, [open])
 
   const results = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase()
+    const normalizedQuery = normalize(query)
 
     if (!normalizedQuery) return []
 
@@ -79,7 +89,7 @@ export function SearchOverlay({articles}: SearchOverlayProps) {
           article.category?.title,
           article.category?.slug,
           article.author?.name
-        ].join(' ').toLowerCase()
+        ].map((value) => value || '').join(' ').toLowerCase()
 
         return searchable.includes(normalizedQuery)
       })
@@ -88,7 +98,7 @@ export function SearchOverlay({articles}: SearchOverlayProps) {
 
   return (
     <>
-      <button className="search-trigger" type="button" onClick={() => setOpen(true)} aria-label="Open search">
+      <button className="search-trigger" type="button" onClick={openSearch} aria-label="Open search">
         <Search size={16} />
         <span>Search</span>
         <kbd>⌘K</kbd>
