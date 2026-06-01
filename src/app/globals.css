@@ -8854,16 +8854,16 @@ html {
   margin: 0 auto;
   color: #3f4754;
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 400;
   letter-spacing: normal;
-  line-height: 1.58;
+  line-height: 1.35;
 }
 
 .article-body > *,
 .article-body p {
   margin-top: 0;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .article-body p {
@@ -9118,8 +9118,8 @@ html {
   }
 
   .article-body {
-    font-size: 1.15rem;
-    line-height: 1.6;
+    font-size: 1.125rem;
+    line-height: 1.35;
   }
 
 }
@@ -9174,7 +9174,7 @@ html {
 
   .article-body {
     font-size: 1.125rem;
-    line-height: 1.6;
+    line-height: 1.35;
   }
 
   .article-body p {
@@ -9184,7 +9184,7 @@ html {
 
   .article-body > *,
   .article-body p {
-    margin-bottom: 20px;
+    margin-bottom: 14px;
   }
 
   .article-body p:first-child::first-letter {
@@ -9282,6 +9282,13 @@ html {
 
 .header-search .search-trigger:hover::after {
   transform: scaleX(1);
+}
+
+.header-nav a {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 @media (max-width: 760px) {
