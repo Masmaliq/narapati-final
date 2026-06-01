@@ -5,6 +5,7 @@ import '@/app/globals.css'
 import {Footer} from '@/components/Footer'
 import {Header} from '@/components/Header'
 import {ScrollReveal} from '@/components/ScrollReveal'
+import {defaultOgImage, siteDescription, siteName, siteUrl} from '@/lib/seo'
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -26,10 +27,41 @@ const spectral = Spectral({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Narapati Journal',
-    template: '%s | Narapati Journal'
+    default: siteName,
+    template: `%s | ${siteName}`
   },
-  description: 'Premium independent journalism from Narapati Journal.'
+  description: siteDescription,
+  applicationName: siteName,
+  appleWebApp: {
+    title: siteName,
+    capable: true
+  },
+  openGraph: {
+    type: 'website',
+    title: siteName,
+    description: siteDescription,
+    url: siteUrl,
+    siteName,
+    images: [
+      {
+        url: defaultOgImage,
+        width: 1200,
+        height: 630,
+        alt: siteName
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteName,
+    description: siteDescription,
+    images: [defaultOgImage]
+  },
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png'
+  }
 }
 
 export const dynamic = 'force-dynamic'

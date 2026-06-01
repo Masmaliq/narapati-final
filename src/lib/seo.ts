@@ -1,7 +1,7 @@
 import type {Article} from '@/types/content'
 
 export const siteName = 'Narapati Journal'
-export const siteDescription = 'Premium independent journalism from Narapati Journal.'
+export const siteDescription = 'Journal independen tentang bisnis, kepemimpinan, nilai hidup, dan perjalanan memahami kehidupan melalui tulisan, video, dan fotografi.'
 export const defaultOgImage = 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=85'
 
 export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://narapatinews.com').replace(/\/$/, '')
