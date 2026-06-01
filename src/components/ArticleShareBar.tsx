@@ -15,6 +15,7 @@ type ArticleShareBarProps = {
 type ShareItem = {
   label: string
   shortLabel: string
+  variant: string
   href?: string
   action?: 'copy'
 }
@@ -39,26 +40,30 @@ export function ArticleShareBar({title, url, placement = 'desktop', instagram, t
       {
         label: 'Bagikan ke WhatsApp',
         shortLabel: 'WA',
+        variant: 'whatsapp',
         href: `https://wa.me/?text=${encoded(shareText)}`
       },
       {
         label: 'Bagikan ke Facebook',
         shortLabel: 'FB',
+        variant: 'facebook',
         href: `https://www.facebook.com/sharer/sharer.php?u=${encoded(shareUrl)}`
       },
       {
         label: 'Bagikan ke X',
         shortLabel: 'X',
+        variant: 'x',
         href: `https://twitter.com/intent/tweet?text=${encoded(title)}&url=${encoded(shareUrl)}`
       },
       {
         label: 'Salin link',
         shortLabel: '',
+        variant: 'copy',
         action: 'copy'
       },
-      instagram ? {label: 'Instagram Narapati', shortLabel: 'IG', href: instagram} : null,
-      tiktok ? {label: 'TikTok Narapati', shortLabel: 'TT', href: tiktok} : null,
-      youtube ? {label: 'YouTube Narapati', shortLabel: 'YT', href: youtube} : null
+      instagram ? {label: 'Instagram Narapati', shortLabel: 'IG', variant: 'instagram', href: instagram} : null,
+      tiktok ? {label: 'TikTok Narapati', shortLabel: 'TT', variant: 'tiktok', href: tiktok} : null,
+      youtube ? {label: 'YouTube Narapati', shortLabel: 'YT', variant: 'youtube', href: youtube} : null
     ].filter(Boolean) as ShareItem[]
   }, [instagram, shareUrl, tiktok, title, youtube])
 
@@ -76,12 +81,12 @@ export function ArticleShareBar({title, url, placement = 'desktop', instagram, t
     <nav className={`article-share article-share-${placement}`} aria-label="Bagikan artikel">
       <div className="article-share-list">
         {items.map((item) => item.action === 'copy' ? (
-          <button className="article-share-button" type="button" onClick={copyLink} aria-label={item.label} key={item.label}>
-            <Link2 size={14} strokeWidth={1.6} />
+          <button className={`article-share-button article-share-${item.variant}`} type="button" onClick={copyLink} aria-label={item.label} key={item.label}>
+            <Link2 size={17} strokeWidth={1.8} />
           </button>
         ) : (
           <a
-            className="article-share-button"
+            className={`article-share-button article-share-${item.variant}`}
             href={item.href}
             target="_blank"
             rel="noopener noreferrer"
