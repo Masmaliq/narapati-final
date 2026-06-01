@@ -9324,22 +9324,12 @@ html {
   aspect-ratio: 1;
   pointer-events: none;
   content: '';
-  opacity: 1;
-  background:
-    radial-gradient(ellipse at 50% 23%, rgba(180, 129, 62, 0.14) 0 5%, transparent 5.8%),
-    radial-gradient(ellipse at 41% 34%, rgba(180, 129, 62, 0.13) 0 10%, transparent 10.8%),
-    radial-gradient(ellipse at 59% 34%, rgba(180, 129, 62, 0.13) 0 10%, transparent 10.8%),
-    radial-gradient(ellipse at 33% 50%, rgba(180, 129, 62, 0.12) 0 13%, transparent 13.8%),
-    radial-gradient(ellipse at 67% 50%, rgba(180, 129, 62, 0.12) 0 13%, transparent 13.8%),
-    radial-gradient(ellipse at 50% 62%, rgba(180, 129, 62, 0.11) 0 16%, transparent 16.8%),
-    radial-gradient(ellipse at 29% 71%, rgba(180, 129, 62, 0.1) 0 11%, transparent 11.8%),
-    radial-gradient(ellipse at 72% 74%, rgba(180, 129, 62, 0.1) 0 12%, transparent 12.8%),
-    radial-gradient(ellipse at 23% 44%, transparent 0 22%, rgba(180, 129, 62, 0.12) 22.4% 23.4%, transparent 23.8%),
-    radial-gradient(ellipse at 78% 52%, transparent 0 24%, rgba(180, 129, 62, 0.11) 24.4% 25.4%, transparent 25.8%),
-    radial-gradient(ellipse at 48% 48%, transparent 0 31%, rgba(180, 129, 62, 0.1) 31.4% 32.2%, transparent 32.6%),
-    linear-gradient(118deg, transparent 43%, rgba(180, 129, 62, 0.1) 43.4% 44%, transparent 44.4%),
-    linear-gradient(62deg, transparent 51%, rgba(180, 129, 62, 0.09) 51.4% 52%, transparent 52.4%);
-  filter: saturate(0.95);
+  opacity: 0.09;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 420 420' fill='none'%3E%3Cg stroke='%23C9A46A' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M205 367C211 305 202 245 220 184C230 148 254 116 294 83'/%3E%3Cpath d='M214 300C178 270 147 250 106 244'/%3E%3Cpath d='M219 238C260 223 294 204 319 169'/%3E%3Cpath d='M203 192C169 168 135 151 91 151'/%3E%3Cpath d='M236 151C248 118 272 88 316 62'/%3E%3C/g%3E%3Cg fill='%23C9A46A'%3E%3Cpath fill-opacity='.44' d='M291 78C326 58 354 65 373 89C345 99 319 101 291 78Z'/%3E%3Cpath fill-opacity='.34' d='M302 95C335 92 359 108 369 138C337 134 315 123 302 95Z'/%3E%3Cpath fill-opacity='.38' d='M270 106C283 76 307 56 339 50C335 82 315 102 270 106Z'/%3E%3Cpath fill-opacity='.48' d='M318 167C349 141 379 141 401 160C374 177 347 185 318 167Z'/%3E%3Cpath fill-opacity='.34' d='M305 187C338 187 361 204 370 233C339 228 317 216 305 187Z'/%3E%3Cpath fill-opacity='.4' d='M109 241C77 219 48 223 28 244C55 258 82 262 109 241Z'/%3E%3Cpath fill-opacity='.3' d='M119 264C88 267 66 286 60 315C89 307 110 293 119 264Z'/%3E%3Cpath fill-opacity='.34' d='M91 148C59 125 29 128 9 149C36 164 64 168 91 148Z'/%3E%3Cpath fill-opacity='.28' d='M105 169C73 174 52 195 50 225C78 215 99 200 105 169Z'/%3E%3Cpath fill-opacity='.42' d='M236 151C244 119 266 95 298 83C298 116 279 141 236 151Z'/%3E%3C/g%3E%3Cg stroke='%23C9A46A' stroke-width='2' stroke-linecap='round' opacity='.72'%3E%3Cpath d='M156 92C177 73 207 68 234 84C211 98 184 106 156 92Z'/%3E%3Cpath d='M164 114C188 109 213 116 234 137C207 139 184 134 164 114Z'/%3E%3Cpath d='M165 92C170 69 188 49 214 39C218 65 203 85 165 92Z'/%3E%3Cpath d='M232 82C244 58 267 43 296 40C290 69 269 86 232 82Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: saturate(0.98);
 }
 
 .site-footer.luxury-footer::before {
@@ -9376,14 +9366,14 @@ html {
 .luxury-footer-kicker::before {
   content: '';
   display: block;
-  width: 42px;
-  height: 10px;
+  width: 76px;
+  height: 16px;
   margin: 0 auto 16px;
-  opacity: 0.72;
-  background:
-    linear-gradient(135deg, transparent 35%, rgba(179, 138, 86, 0.72) 36% 44%, transparent 45%),
-    linear-gradient(45deg, transparent 35%, rgba(179, 138, 86, 0.72) 36% 44%, transparent 45%);
-  background-size: 14px 10px;
+  opacity: 0.68;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 76 16' fill='none'%3E%3Cg stroke='%23B38A56' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 8H25'/%3E%3Cpath d='M51 8H74'/%3E%3Cpath d='M38 13C35 9 35 5 38 3C41 5 41 9 38 13Z'/%3E%3Cpath d='M31 9C34 5 37 5 38 8C36 10 33 11 31 9Z'/%3E%3Cpath d='M45 9C42 5 39 5 38 8C40 10 43 11 45 9Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 @media (max-width: 620px) {
