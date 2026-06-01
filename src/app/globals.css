@@ -8656,14 +8656,14 @@ html {
 }
 
 .article-hero h1 {
-  max-width: 860px;
+  max-width: 960px;
   margin: 0 auto;
-  color: #0d1b34;
+  color: #0b1b3b;
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(2.4rem, 4vw, 3.9rem);
-  font-weight: 500;
-  letter-spacing: -0.018em;
-  line-height: 1.08;
+  font-size: clamp(2.35rem, 3.55vw, 3.4rem);
+  font-weight: 650;
+  letter-spacing: -0.012em;
+  line-height: 1.02;
 }
 
 .article-hero p {
@@ -8844,26 +8844,26 @@ html {
 
 .article-shell {
   display: block;
-  max-width: 680px;
+  max-width: 740px;
   margin: 0 auto;
-  padding: clamp(38px, 4.8vw, 62px) 0 clamp(50px, 6.6vw, 82px);
+  padding: clamp(58px, 7vw, 96px) 0 clamp(64px, 8vw, 104px);
 }
 
 .article-body {
-  max-width: 680px;
+  max-width: 740px;
   margin: 0 auto;
   color: #3f4754;
-  font-family: var(--font-spectral), Spectral, Georgia, serif;
-  font-size: 1.22rem;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.25rem;
   font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1.75;
+  letter-spacing: normal;
+  line-height: 1.58;
 }
 
 .article-body > *,
 .article-body p {
   margin-top: 0;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
 
 .article-body p {
@@ -8873,7 +8873,7 @@ html {
 
 .article-body p:first-child::first-letter {
   float: left;
-  color: #0d1b34;
+  color: #0b1b3b;
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   font-size: 4.15rem;
   font-weight: 500;
@@ -9114,13 +9114,14 @@ html {
 
   .article-hero h1 {
     font-size: 3rem;
-    line-height: 1.08;
+    line-height: 1.03;
   }
 
   .article-body {
-    font-size: 1.12rem;
-    line-height: 1.74;
+    font-size: 1.15rem;
+    line-height: 1.6;
   }
+
 }
 
 @media (max-width: 620px) {
@@ -9129,8 +9130,8 @@ html {
   }
 
   .article-hero h1 {
-    font-size: 2.2rem;
-    line-height: 1.08;
+    font-size: 2.12rem;
+    line-height: 1.04;
   }
 
   .article-hero p {
@@ -9168,12 +9169,12 @@ html {
   }
 
   .article-shell {
-    padding: 34px 0 58px;
+    padding: 42px 0 62px;
   }
 
   .article-body {
-    font-size: 1.05rem;
-    line-height: 1.72;
+    font-size: 1.125rem;
+    line-height: 1.6;
   }
 
   .article-body p {
@@ -9305,5 +9306,110 @@ html {
 
   .header-search .search-trigger::after {
     display: none;
+  }
+}
+
+/* Final Narapati Journal footer heritage refinement */
+.site-footer.luxury-footer {
+  position: relative;
+  overflow: hidden;
+  background: #f3efe7;
+}
+
+.site-footer.luxury-footer::before,
+.site-footer.luxury-footer::after {
+  position: absolute;
+  z-index: 0;
+  width: clamp(360px, 38vw, 520px);
+  aspect-ratio: 1;
+  pointer-events: none;
+  content: '';
+  opacity: 1;
+  background:
+    radial-gradient(ellipse at 50% 23%, rgba(180, 129, 62, 0.14) 0 5%, transparent 5.8%),
+    radial-gradient(ellipse at 41% 34%, rgba(180, 129, 62, 0.13) 0 10%, transparent 10.8%),
+    radial-gradient(ellipse at 59% 34%, rgba(180, 129, 62, 0.13) 0 10%, transparent 10.8%),
+    radial-gradient(ellipse at 33% 50%, rgba(180, 129, 62, 0.12) 0 13%, transparent 13.8%),
+    radial-gradient(ellipse at 67% 50%, rgba(180, 129, 62, 0.12) 0 13%, transparent 13.8%),
+    radial-gradient(ellipse at 50% 62%, rgba(180, 129, 62, 0.11) 0 16%, transparent 16.8%),
+    radial-gradient(ellipse at 29% 71%, rgba(180, 129, 62, 0.1) 0 11%, transparent 11.8%),
+    radial-gradient(ellipse at 72% 74%, rgba(180, 129, 62, 0.1) 0 12%, transparent 12.8%),
+    radial-gradient(ellipse at 23% 44%, transparent 0 22%, rgba(180, 129, 62, 0.12) 22.4% 23.4%, transparent 23.8%),
+    radial-gradient(ellipse at 78% 52%, transparent 0 24%, rgba(180, 129, 62, 0.11) 24.4% 25.4%, transparent 25.8%),
+    radial-gradient(ellipse at 48% 48%, transparent 0 31%, rgba(180, 129, 62, 0.1) 31.4% 32.2%, transparent 32.6%),
+    linear-gradient(118deg, transparent 43%, rgba(180, 129, 62, 0.1) 43.4% 44%, transparent 44.4%),
+    linear-gradient(62deg, transparent 51%, rgba(180, 129, 62, 0.09) 51.4% 52%, transparent 52.4%);
+  filter: saturate(0.95);
+}
+
+.site-footer.luxury-footer::before {
+  top: 26px;
+  right: -116px;
+  transform: rotate(-16deg);
+}
+
+.site-footer.luxury-footer::after {
+  bottom: -128px;
+  left: -122px;
+  transform: rotate(168deg);
+}
+
+.luxury-footer-inner {
+  position: relative;
+  z-index: 1;
+  gap: clamp(12px, 1.4vw, 18px);
+  padding-top: clamp(80px, 8vw, 100px);
+  padding-bottom: clamp(36px, 4.5vw, 58px);
+}
+
+.luxury-footer-monogram {
+  width: 58px;
+  height: 58px;
+  font-size: 1.92rem;
+}
+
+.luxury-footer-kicker {
+  position: relative;
+  margin-top: 16px;
+}
+
+.luxury-footer-kicker::before {
+  content: '';
+  display: block;
+  width: 42px;
+  height: 10px;
+  margin: 0 auto 16px;
+  opacity: 0.72;
+  background:
+    linear-gradient(135deg, transparent 35%, rgba(179, 138, 86, 0.72) 36% 44%, transparent 45%),
+    linear-gradient(45deg, transparent 35%, rgba(179, 138, 86, 0.72) 36% 44%, transparent 45%);
+  background-size: 14px 10px;
+}
+
+@media (max-width: 620px) {
+  .site-footer.luxury-footer::before,
+  .site-footer.luxury-footer::after {
+    width: clamp(220px, 64vw, 300px);
+  }
+
+  .site-footer.luxury-footer::before {
+    top: 18px;
+    right: -82px;
+  }
+
+  .site-footer.luxury-footer::after {
+    bottom: -92px;
+    left: -86px;
+  }
+
+  .luxury-footer-inner {
+    padding-top: 74px;
+    padding-bottom: 36px;
+  }
+
+  .luxury-footer-monogram {
+    width: 52px;
+    height: 52px;
+    font-size: 1.72rem;
   }
 }
