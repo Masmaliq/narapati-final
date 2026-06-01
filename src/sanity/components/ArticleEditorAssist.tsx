@@ -135,6 +135,7 @@ const styles = {
     borderRadius: 14,
     background: 'linear-gradient(180deg, rgba(251, 248, 242, 0.95), rgba(246, 241, 232, 0.78))',
     color: '#0f172a',
+    fontFamily: 'var(--font-sans)',
     padding: 18
   },
   kicker: {

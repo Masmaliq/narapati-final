@@ -254,6 +254,7 @@ const styles = {
     minHeight: '100%',
     background: 'linear-gradient(180deg, #fbf8f2 0%, #f6f1e8 100%)',
     color: '#0f172a',
+    fontFamily: 'var(--font-sans)',
     padding: 'clamp(28px, 5vw, 56px)'
   },
   hero: {
@@ -272,7 +273,7 @@ const styles = {
   title: {
     margin: '14px 0 10px',
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 'clamp(42px, 5vw, 76px)',
     fontWeight: 500,
     letterSpacing: '-0.03em',
@@ -293,7 +294,7 @@ const styles = {
   },
   greetingTitle: {
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 22,
     fontWeight: 500,
     lineHeight: 1.08
@@ -325,7 +326,7 @@ const styles = {
   quickTitle: {
     margin: '7px 0 0',
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 28,
     fontWeight: 500,
     lineHeight: 1
@@ -379,7 +380,7 @@ const styles = {
   statValue: {
     display: 'block',
     color: '#b38a56',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 56,
     fontWeight: 500,
     lineHeight: 0.86
@@ -417,7 +418,7 @@ const styles = {
   },
   activityText: {
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 18,
     fontWeight: 500,
     lineHeight: 1.18
@@ -443,7 +444,7 @@ const styles = {
   },
   calendarDesk: {
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 18,
     fontWeight: 500,
     lineHeight: 1.08,
@@ -480,7 +481,7 @@ const styles = {
   panelTitle: {
     margin: '7px 0 0',
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 27,
     fontWeight: 500,
     lineHeight: 1
@@ -497,7 +498,7 @@ const styles = {
   },
   recentIndex: {
     color: 'rgba(179, 138, 86, 0.78)',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 18,
     lineHeight: 1
   },
@@ -507,7 +508,7 @@ const styles = {
   },
   recentTitle: {
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 18,
     fontWeight: 500,
     lineHeight: 1.08

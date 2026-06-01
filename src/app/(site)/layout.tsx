@@ -1,6 +1,6 @@
 import type {Metadata} from 'next'
 import type {ReactNode} from 'react'
-import {Cormorant_Garamond, Inter, Spectral} from 'next/font/google'
+import {Cormorant_Garamond, Inter, Source_Serif_4} from 'next/font/google'
 import '@/app/globals.css'
 import {Footer} from '@/components/Footer'
 import {Header} from '@/components/Header'
@@ -19,9 +19,9 @@ const inter = Inter({
   weight: ['400', '500', '600', '700', '800']
 })
 
-const spectral = Spectral({
+const sourceSerif = Source_Serif_4({
   subsets: ['latin'],
-  variable: '--font-spectral',
+  variable: '--font-source-serif',
   weight: ['400', '500', '600', '700']
 })
 
@@ -69,7 +69,7 @@ export const revalidate = 0
 
 export default function SiteLayout({children}: {children: ReactNode}) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${inter.variable} ${spectral.variable}`}>
+    <html lang="en" className={`${cormorant.variable} ${inter.variable} ${sourceSerif.variable}`}>
       <body>
         <Header />
         <main>{children}</main>

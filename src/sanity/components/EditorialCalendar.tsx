@@ -272,6 +272,7 @@ const styles: Record<string, CSSProperties> = {
     minHeight: '100%',
     background: 'linear-gradient(180deg, #fbf8f2 0%, #f6f1e8 100%)',
     color: '#0f172a',
+    fontFamily: 'var(--font-sans)',
     padding: 'clamp(24px, 4vw, 48px)'
   },
   hero: {
@@ -289,7 +290,7 @@ const styles: Record<string, CSSProperties> = {
   },
   title: {
     margin: '10px 0',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 'clamp(36px, 5vw, 70px)',
     fontWeight: 500,
     letterSpacing: '-0.035em',
@@ -316,7 +317,7 @@ const styles: Record<string, CSSProperties> = {
   },
   monthTitle: {
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 28,
     fontWeight: 500
   },
@@ -412,7 +413,7 @@ const styles: Record<string, CSSProperties> = {
   dayNumber: {
     display: 'block',
     color: 'rgba(15, 23, 42, 0.6)',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 19,
     marginBottom: 8
   },
@@ -445,7 +446,7 @@ const styles: Record<string, CSSProperties> = {
   },
   chipTitle: {
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 15,
     fontWeight: 500,
     lineHeight: 1.05

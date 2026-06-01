@@ -243,6 +243,7 @@ const styles = {
     minHeight: '100%',
     background: 'linear-gradient(180deg, #fbf8f2 0%, #f6f1e8 100%)',
     color: '#0f172a',
+    fontFamily: 'var(--font-sans)',
     padding: 'clamp(28px, 5vw, 56px)'
   },
   hero: {
@@ -269,7 +270,7 @@ const styles = {
   title: {
     margin: '12px 0 10px',
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 'clamp(42px, 5vw, 76px)',
     fontWeight: 500,
     letterSpacing: '-0.03em',
@@ -278,7 +279,7 @@ const styles = {
   titleSmall: {
     margin: 0,
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 'clamp(34px, 4vw, 58px)',
     fontWeight: 500,
     letterSpacing: '-0.025em',
@@ -328,7 +329,7 @@ const styles = {
     maxWidth: 680,
     margin: '8px 0 0',
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 22,
     lineHeight: 1.25
   },
@@ -434,7 +435,7 @@ const styles = {
   articleTitle: {
     margin: 0,
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 24,
     fontWeight: 500,
     lineHeight: 1.08
@@ -493,7 +494,7 @@ const styles = {
   emptyTitle: {
     margin: 0,
     color: '#0f172a',
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'var(--font-serif)',
     fontSize: 30,
     fontWeight: 500,
     lineHeight: 1.05
