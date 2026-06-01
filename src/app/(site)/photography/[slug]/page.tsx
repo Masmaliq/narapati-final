@@ -69,7 +69,7 @@ export default async function PhotographyDetailPage({params}: Props) {
             <div className="editorial-note">
               <strong>Visual note</strong>
               <p>
-                Photography stories from NNN document people, places, and details shaping Indonesia&apos;s business,
+                Photography stories from Narapati Journal document people, places, and details shaping Indonesia&apos;s business,
                 leadership, and nilai hidup conversations.
               </p>
             </div>

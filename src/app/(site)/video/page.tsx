@@ -9,7 +9,7 @@ export default async function VideoPage() {
       <section className="page-hero">
         <div className="container">
           <div className="eyebrow">Video</div>
-          <h1>NNN Video</h1>
+          <h1>Narapati Journal Video</h1>
           <p>Field dispatches, studio interviews, and visual explainers from the Narapati editorial desk.</p>
         </div>
       </section>

@@ -23,19 +23,19 @@ export const redaksiContent: RedaksiContent = {
   heroLabel: 'EDITORIAL',
   heroTitle: 'Independen. Visioner. Untuk Indonesia.',
   heroDescription:
-    'Ruang redaksi Narapati News Network disusun untuk menjaga akurasi, akuntabilitas, dan standar editorial yang tenang, tajam, serta bertanggung jawab.',
+    'Ruang redaksi Narapati Journal disusun untuk menjaga akurasi, akuntabilitas, dan standar editorial yang tenang, tajam, serta bertanggung jawab.',
 
   introLabel: 'Editorial',
   introTitle: 'Suara Pemimpin, Perspektif Nusantara.',
   introDescription:
-    'Tim editorial NNN bekerja melalui desk yang fokus pada bisnis, kepemimpinan, analisis, video, dan photography. Setiap karya dirancang untuk memberi konteks yang jernih bagi pembaca modern Indonesia.',
+    'Tim editorial Narapati Journal bekerja melalui desk yang fokus pada bisnis, kepemimpinan, analisis, video, dan photography. Setiap karya dirancang untuk memberi konteks yang jernih bagi pembaca modern Indonesia.',
 
   mastheadLabel: 'Masthead',
   mastheadTitle: 'Struktur Redaksi',
 
   ethicsTitle: 'Kode Etik & Kontak Redaksi',
   ethicsDescription:
-    'NNN menjunjung prinsip akurasi, independensi, keberimbangan, dan tanggung jawab publik dalam setiap penerbitan.',
+    'Narapati Journal menjunjung prinsip akurasi, independensi, keberimbangan, dan tanggung jawab publik dalam setiap penerbitan.',
   ethicsContactText: 'Koreksi, hak jawab, dan catatan editorial dapat dikirim ke redaksi@narapati.news.',
 
   cards: [

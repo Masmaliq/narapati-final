@@ -70,7 +70,7 @@ export default async function VideoDetailPage({params}: Props) {
             <h1>{item.title}</h1>
             <p>{item.dek}</p>
             <div className="article-meta-row">
-              <span>{item.duration || 'NNN Video'}</span>
+              <span>{item.duration || 'Narapati Journal Video'}</span>
               <time dateTime={item.publishedAt}>{formatDate(item.publishedAt)}</time>
             </div>
           </div>
@@ -104,8 +104,8 @@ export default async function VideoDetailPage({params}: Props) {
           </div>
           <aside className="article-aside" aria-label="Video information">
             <div className="editorial-note">
-              <strong>NNN Video</strong>
-              <p>Video editorial dari Narapati News Network menampilkan wawancara, laporan visual, dan penjelasan isu strategis.</p>
+              <strong>Narapati Journal Video</strong>
+              <p>Video editorial dari Narapati Journal menampilkan wawancara, laporan visual, dan penjelasan isu strategis.</p>
             </div>
           </aside>
         </div>

@@ -7,7 +7,7 @@ const advertisePageContent = {
     title: 'Partnership & Brand Collaboration'
   },
   lead: {
-    label: 'NNN',
+    label: 'Narapati Journal',
     title: 'Bangun percakapan berkualitas bersama audiens Narapati.'
   },
   cardLabel: 'Partnership',

@@ -43,7 +43,7 @@ export const siteSettingsType = defineType({
     prepare() {
       return {
         title: 'Site Settings',
-        subtitle: 'Global Narapati News Network settings'
+        subtitle: 'Global Narapati Journal settings'
       }
     }
   }

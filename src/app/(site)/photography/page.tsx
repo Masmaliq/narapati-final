@@ -15,7 +15,7 @@ export default async function PhotographyPage() {
       <section className="page-hero">
         <div className="container">
           <div className="eyebrow">Visual Desk</div>
-          <h1>NNN Photography</h1>
+          <h1>Narapati Journal Photography</h1>
           <p>Visual essays, documentary frames, and editorial photography from the Narapati newsroom.</p>
         </div>
       </section>

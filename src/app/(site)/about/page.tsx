@@ -2,8 +2,8 @@ import {TextBlocks} from '@/components/RichText'
 import {getSiteSettings} from '@/sanity/lib/fetch'
 
 const aboutPageContent = {
-  eyebrow: 'Tentang NNN',
-  leadLabel: 'NNN',
+  eyebrow: 'Tentang Narapati Journal',
+  leadLabel: 'Narapati Journal',
   cards: [
     {
       title: 'Business',

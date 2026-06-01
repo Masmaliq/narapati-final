@@ -26,10 +26,10 @@ const spectral = Spectral({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Narapati News Network',
-    template: '%s | Narapati News Network'
+    default: 'Narapati Journal',
+    template: '%s | Narapati Journal'
   },
-  description: 'Premium independent journalism from Narapati News Network.'
+  description: 'Premium independent journalism from Narapati Journal.'
 }
 
 export const dynamic = 'force-dynamic'

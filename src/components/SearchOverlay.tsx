@@ -111,7 +111,7 @@ export function SearchOverlay({articles}: SearchOverlayProps) {
 
             <div className="search-results-meta">
               <span>{query ? `${results.length} result${results.length === 1 ? '' : 's'}` : 'Latest articles'}</span>
-              <span>Narapati News Network</span>
+              <span>Narapati Journal</span>
             </div>
 
             <div className="search-results">

@@ -186,7 +186,7 @@ export default async function ArticlePage({params}: Props) {
                 <time dateTime={article.publishedAt} itemProp="datePublished">{formatDate(article.publishedAt)}</time>
                 <span>{readTime}</span>
                 <span itemProp="publisher" itemScope itemType="https://schema.org/Organization">
-                  <span itemProp="name">Narapati News Network</span>
+                  <span itemProp="name">Narapati Journal</span>
                 </span>
               </div>
             </div>
@@ -215,7 +215,7 @@ export default async function ArticlePage({params}: Props) {
               ) : (
                 <>
                   <p>
-                    Narapati News Network reports with an emphasis on context, continuity, and the decisions behind public events. This story is connected to a wider editorial file that follows capital, policy, and institutional change across Indonesia and the region.
+                    Narapati Journal reports with an emphasis on context, continuity, and the decisions behind public events. This story is connected to a wider editorial file that follows capital, policy, and institutional change across Indonesia and the region.
                   </p>
                   <p>
                     Our newsroom combines field reporting with document-led analysis, speaking with public officials, private sector leaders, researchers, and communities affected by the policy choices being made today.

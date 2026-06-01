@@ -4,11 +4,11 @@ import {getSiteSettings} from '@/sanity/lib/fetch'
 const contactPageContent = {
   hero: {
     eyebrow: 'Contact',
-    title: 'Hubungi NNN',
-    description: 'Untuk pertanyaan redaksi, kerja sama, undangan liputan, dan komunikasi bisnis Narapati News Network.'
+    title: 'Hubungi Narapati Journal',
+    description: 'Untuk pertanyaan redaksi, kerja sama, undangan liputan, dan komunikasi bisnis Narapati Journal.'
   },
   lead: {
-    label: 'NNN',
+    label: 'Narapati Journal',
     title: 'Ruang komunikasi resmi Narapati.'
   },
   contactItems: [

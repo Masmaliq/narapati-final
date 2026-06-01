@@ -68,7 +68,7 @@ export const podcasts: MediaItem[] = [
 
 export const videos: MediaItem[] = [
   {
-    title: 'NNN Dispatch: Jakarta’s Transit-Oriented Future',
+    title: 'Narapati Journal Dispatch: Jakarta’s Transit-Oriented Future',
     slug: 'jakarta-transit-oriented-future',
     dek: 'A field report on how mixed-use districts are changing the daily rhythm of the capital.',
     publishedAt: '2026-05-12',
@@ -105,7 +105,7 @@ export const photography: MediaItem[] = [
 ]
 
 export const siteSettings: SiteSettings = {
-  siteTitle: 'Narapati News Network',
+  siteTitle: 'Narapati Journal',
   tagline: 'Independen. Visioner. Untuk Indonesia.',
   description: 'Media independen untuk bisnis, kepemimpinan, nilai hidup, video, dan photography.',
   address: 'Jakarta, Indonesia - alamat kantor menyusul',
@@ -116,11 +116,11 @@ export const siteSettings: SiteSettings = {
   tiktok: '',
   linkedin: 'https://linkedin.com/company/narapati-news-network',
   twitterX: 'https://x.com/narapatinews',
-  privacyText: 'Narapati News Network menghormati privasi pembaca dan mengelola data sesuai kebutuhan layanan digital.',
-  kodeEtikText: 'Ruang redaksi NNN bekerja dengan prinsip akurasi, independensi, akuntabilitas, dan hak jawab.',
-  footerCopyright: '© 2026 Narapati News Network. All rights reserved.',
+  privacyText: 'Narapati Journal menghormati privasi pembaca dan mengelola data sesuai kebutuhan layanan digital.',
+  kodeEtikText: 'Ruang redaksi Narapati Journal bekerja dengan prinsip akurasi, independensi, akuntabilitas, dan hak jawab.',
+  footerCopyright: '© 2026 Narapati Journal. All rights reserved.',
   aboutContent:
-    'Narapati News Network adalah platform media digital independen yang menghadirkan jurnalisme premium tentang bisnis, kepemimpinan, nilai hidup, video, dan photography.\n\nNNN dibangun untuk pembaca yang membutuhkan konteks, kejernihan, dan perspektif editorial yang matang.',
+    'Narapati Journal adalah platform media digital independen yang menghadirkan jurnalisme premium tentang bisnis, kepemimpinan, nilai hidup, video, dan photography.\n\nNarapati Journal dibangun untuk pembaca yang membutuhkan konteks, kejernihan, dan perspektif editorial yang matang.',
   redaksiContent:
     'Ruang redaksi Narapati disusun untuk peliputan yang terukur, akuntabel, dan berorientasi pada kualitas. Setiap materi editorial melewati proses penyuntingan dan penilaian konteks sebelum dipublikasikan.',
   contactContent:
