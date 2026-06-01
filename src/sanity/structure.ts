@@ -14,6 +14,7 @@ import {
 } from '@sanity/icons'
 import type {StructureResolver} from 'sanity/structure'
 import {EditorialCalendar} from './components/EditorialCalendar'
+import {JournalArticleList, JournalDesk} from './components/JournalDesk'
 import {NewsroomDashboard} from './components/NewsroomDashboard'
 import {PhotographyLibrary} from './components/PhotographyLibrary'
 
@@ -46,15 +47,23 @@ export const structure: StructureResolver = (S) =>
           S.list()
             .title('Journal')
             .items([
-              S.documentTypeListItem('article')
-                .title('All Articles')
-                .icon(DocumentTextIcon),
               S.listItem()
-                .title('Editorial Calendar')
+                .title('Journal Desk')
+                .icon(BookIcon)
+                .child(S.component(JournalDesk).title('Journal Desk')),
+              S.listItem()
+                .title('Semua Tulisan')
+                .id('article-all')
+                .icon(DocumentTextIcon)
+                .child(S.component(JournalArticleList).title('Semua Tulisan')),
+              S.listItem()
+                .title('Kalender Editorial')
+                .id('editorial-calendar')
                 .icon(CalendarIcon)
-                .child(S.component(EditorialCalendar).title('Editorial Calendar')),
+                .child(S.component(EditorialCalendar).title('Kalender Editorial')),
               S.listItem()
-                .title('Drafts')
+                .title('Draft')
+                .id('article-drafts')
                 .icon(EditIcon)
                 .schemaType('article')
                 .child(
@@ -65,23 +74,25 @@ export const structure: StructureResolver = (S) =>
                     .defaultOrdering([{field: '_updatedAt', direction: 'desc'}])
                 ),
               S.listItem()
-                .title('Published')
+                .title('Terbit')
+                .id('article-published')
                 .icon(PublishIcon)
                 .schemaType('article')
                 .child(
                   S.documentList()
-                    .title('Published')
+                    .title('Terbit')
                     .schemaType('article')
                     .filter('_type == "article" && !(_id in path("drafts.**"))')
                     .defaultOrdering([{field: 'publishedAt', direction: 'desc'}])
                 ),
               S.listItem()
-                .title('Scheduled')
+                .title('Terjadwal')
+                .id('article-scheduled')
                 .icon(CalendarIcon)
                 .schemaType('article')
                 .child(
                   S.documentList()
-                    .title('Scheduled Articles')
+                    .title('Terjadwal')
                     .schemaType('article')
                     .filter('_type == "article" && !(_id in path("drafts.**")) && publishedAt > now()')
                     .defaultOrdering([{field: 'publishedAt', direction: 'asc'}])

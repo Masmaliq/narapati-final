@@ -14,11 +14,12 @@ type PhotoItem = {
   publishedAt?: string
   visualCategory?: string
   image?: string
+  status?: string
 }
 
 const visualFilters = ['All', 'Travel', 'Human', 'Culture', 'Spiritual', 'Landscape', 'Journal']
 
-const photographyQuery = `*[_type == "photography" && !(_id in path("drafts.**"))] | order(coalesce(dateTaken, publishedAt) desc) {
+const photographyQuery = `*[_type == "photography"] | order(coalesce(dateTaken, publishedAt, _updatedAt) desc) {
   _id,
   title,
   caption,
@@ -27,7 +28,15 @@ const photographyQuery = `*[_type == "photography" && !(_id in path("drafts.**")
   dateTaken,
   publishedAt,
   visualCategory,
-  "image": mainImage.asset->url
+  "image": mainImage.asset->url,
+  "status": select(
+    status == "archived" => "Archived",
+    status == "review" => "Review",
+    status == "published" => "Published",
+    status == "draft" => "Draft",
+    _id in path("drafts.**") => "Draft",
+    "Published"
+  )
 }`
 
 function formatDate(value?: string) {
@@ -38,6 +47,18 @@ function formatDate(value?: string) {
     month: 'short',
     year: 'numeric'
   }).format(new Date(value))
+}
+
+function statusStyle(status?: string) {
+  const key = status || 'Published'
+  const variants: Record<string, object> = {
+    Draft: {borderColor: 'rgba(110, 118, 129, 0.24)', background: 'rgba(110, 118, 129, 0.08)', color: '#5e6673'},
+    Review: {borderColor: 'rgba(179, 138, 86, 0.34)', background: 'rgba(179, 138, 86, 0.12)', color: '#9a6f2f'},
+    Published: {borderColor: 'rgba(11, 27, 59, 0.18)', background: 'rgba(11, 27, 59, 0.08)', color: '#0b1b3b'},
+    Archived: {borderColor: 'rgba(15, 23, 42, 0.16)', background: 'rgba(15, 23, 42, 0.05)', color: 'rgba(15, 23, 42, 0.54)'}
+  }
+
+  return {...styles.statusBadge, ...(variants[key] || variants.Published)}
 }
 
 export function PhotographyLibrary() {
@@ -88,9 +109,9 @@ export function PhotographyLibrary() {
     <main style={styles.shell}>
       <section style={styles.hero}>
         <span style={styles.eyebrow}>Visual Journal Archive</span>
-        <h1 style={styles.title}>Photography Library</h1>
+        <h1 style={styles.title}>Photography Desk</h1>
         <p style={styles.description}>
-          Arsip visual Narapati untuk membaca manusia, ruang, perjalanan, kebudayaan, dan momen yang membentuk cerita.
+          Kelola arsip visual, caption editorial, lokasi, kredit foto, dan cerita di balik gambar Narapati.
         </p>
       </section>
 
@@ -127,40 +148,33 @@ export function PhotographyLibrary() {
 
       {loading ? <p style={styles.loadingText}>Loading visual archive...</p> : null}
 
-      <section style={styles.grid} aria-label="Photography grid">
+      <section style={styles.list} aria-label="Photography list view">
         {filteredItems.length ? (
           filteredItems.map((item) => (
-            <article style={styles.card} key={item._id}>
-              <a style={styles.imageLink} href={`/studio/structure/photography;${item._id}`}>
+            <article style={styles.row} key={item._id}>
+              <a style={styles.thumbnailLink} href={`/studio/structure/photography;${item._id}`}>
                 {item.image ? (
-                  <img src={item.image} alt={item.title || ''} style={styles.image} />
+                  <img src={item.image} alt={item.title || ''} style={styles.thumbnail} />
                 ) : (
                   <span style={styles.imageEmpty}>No Image</span>
                 )}
               </a>
-              <div style={styles.cardCopy}>
+              <div style={styles.rowCopy}>
                 <span style={styles.category}>{item.visualCategory || 'Journal'}</span>
-                <h2 style={styles.cardTitle}>{item.title || 'Untitled'}</h2>
+                <h2 style={styles.rowTitle}>{item.title || 'Untitled'}</h2>
                 {item.caption ? <p style={styles.caption}>{item.caption}</p> : null}
-                <dl style={styles.metaList}>
-                  <div>
-                    <dt>Credit</dt>
-                    <dd>{item.credit || 'Narapati Visual Desk'}</dd>
-                  </div>
-                  <div>
-                    <dt>Location</dt>
-                    <dd>{item.location || 'Indonesia'}</dd>
-                  </div>
-                  <div>
-                    <dt>Date Taken</dt>
-                    <dd>{formatDate(item.dateTaken || item.publishedAt)}</dd>
-                  </div>
-                </dl>
               </div>
+              <div style={styles.rowMeta}>
+                <span>{item.location || 'Indonesia'}</span>
+                <span>{formatDate(item.dateTaken || item.publishedAt)}</span>
+                <span>{item.credit || 'Narapati Visual Desk'}</span>
+              </div>
+              <span style={statusStyle(item.status)}>{item.status || 'Published'}</span>
+              <a style={styles.actionLink} href={`/studio/structure/photography;${item._id}`}>Edit</a>
             </article>
           ))
         ) : (
-          <div style={styles.emptyState}>No photos match this library view.</div>
+          <div style={styles.emptyState}>Belum ada foto yang cocok dengan tampilan arsip ini.</div>
         )}
       </section>
     </main>
@@ -288,26 +302,31 @@ const styles = {
     letterSpacing: '0.08em',
     textTransform: 'uppercase' as const
   },
-  grid: {
+  list: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-    gap: 18
-  },
-  card: {
-    overflow: 'hidden',
     border: '1px solid rgba(221, 211, 195, 0.92)',
     borderRadius: 14,
-    background: 'rgba(255, 253, 248, 0.7)',
-    boxShadow: '0 20px 50px rgba(15, 23, 42, 0.052)'
+    background: 'rgba(255, 253, 248, 0.68)',
+    overflow: 'hidden'
   },
-  imageLink: {
+  row: {
+    display: 'grid',
+    gridTemplateColumns: '112px minmax(220px, 1fr) minmax(210px, 0.72fr) auto auto',
+    gap: 18,
+    alignItems: 'center',
+    borderBottom: '1px solid rgba(221, 211, 195, 0.68)',
+    padding: 18
+  },
+  thumbnailLink: {
     position: 'relative' as const,
     display: 'block',
+    width: 112,
     aspectRatio: '4 / 3',
+    borderRadius: 10,
     overflow: 'hidden',
     background: '#ded4c5'
   },
-  image: {
+  thumbnail: {
     display: 'block',
     width: '100%',
     height: '100%',
@@ -322,10 +341,9 @@ const styles = {
     letterSpacing: '0.12em',
     textTransform: 'uppercase' as const
   },
-  cardCopy: {
+  rowCopy: {
     display: 'grid',
-    gap: 10,
-    padding: 18
+    gap: 8
   },
   category: {
     color: '#b38a56',
@@ -334,14 +352,14 @@ const styles = {
     letterSpacing: '0.16em',
     textTransform: 'uppercase' as const
   },
-  cardTitle: {
+  rowTitle: {
     margin: 0,
     color: '#0f172a',
     fontFamily: 'Georgia, serif',
-    fontSize: 25,
+    fontSize: 23,
     fontWeight: 500,
     letterSpacing: '-0.01em',
-    lineHeight: 1
+    lineHeight: 1.05
   },
   caption: {
     margin: 0,
@@ -349,12 +367,32 @@ const styles = {
     fontSize: 14,
     lineHeight: 1.55
   },
-  metaList: {
+  rowMeta: {
     display: 'grid',
-    gap: 8,
-    borderTop: '1px solid rgba(179, 138, 86, 0.18)',
-    margin: '4px 0 0',
-    paddingTop: 12
+    gap: 7,
+    color: 'rgba(15, 23, 42, 0.56)',
+    fontSize: 11,
+    fontWeight: 700,
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase' as const
+  },
+  statusBadge: {
+    border: '1px solid rgba(179, 138, 86, 0.24)',
+    borderRadius: 999,
+    fontSize: 11,
+    fontWeight: 800,
+    letterSpacing: '0.08em',
+    padding: '7px 10px',
+    textTransform: 'uppercase' as const,
+    whiteSpace: 'nowrap' as const
+  },
+  actionLink: {
+    color: '#b38a56',
+    fontSize: 11,
+    fontWeight: 800,
+    letterSpacing: '0.1em',
+    textDecoration: 'none',
+    textTransform: 'uppercase' as const
   },
   emptyState: {
     border: '1px solid rgba(221, 211, 195, 0.92)',

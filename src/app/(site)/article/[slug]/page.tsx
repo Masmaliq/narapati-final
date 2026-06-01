@@ -178,7 +178,7 @@ export default async function ArticlePage({params}: Props) {
                 {article.category.title}
               </Link>
               <h1 itemProp="headline">{article.title}</h1>
-              <p itemProp="description">{article.dek}</p>
+              <meta itemProp="description" content={article.dek} />
               <div className="article-meta-row">
                 <span itemProp="author" itemScope itemType="https://schema.org/Person">
                   <span itemProp="name">{article.author.name}</span>
