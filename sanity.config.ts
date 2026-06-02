@@ -15,6 +15,12 @@ export default defineConfig({
   basePath: '/studio',
   projectId,
   dataset,
-  plugins: [structureTool({structure}), visionTool({defaultApiVersion: apiVersion})],
+  plugins: [
+    structureTool({
+      structure,
+      defaultDocumentNode: (S) => S.document().views([S.view.form()])
+    }),
+    visionTool({defaultApiVersion: apiVersion})
+  ],
   schema: {types: schemaTypes}
 })

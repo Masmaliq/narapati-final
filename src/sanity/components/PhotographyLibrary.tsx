@@ -63,6 +63,10 @@ function statusStyle(status?: string) {
   return {...styles.statusBadge, ...(variants[key] || variants.Published)}
 }
 
+function documentEditUrl(id: string) {
+  return `/studio/intent/edit/id=${encodeURIComponent(id)};type=photography`
+}
+
 export function PhotographyLibrary() {
   const client = useClient({apiVersion})
   const [items, setItems] = useState<PhotoItem[]>([])
@@ -154,7 +158,7 @@ export function PhotographyLibrary() {
         {filteredItems.length ? (
           filteredItems.map((item) => (
             <article style={styles.row} key={item._id}>
-              <a style={styles.thumbnailLink} href={`/studio/structure/photography;${item._id}`}>
+              <a style={styles.thumbnailLink} href={documentEditUrl(item._id)}>
                 {item.image ? (
                   <img src={item.image} alt={item.title || ''} style={styles.thumbnail} />
                 ) : (
@@ -173,7 +177,7 @@ export function PhotographyLibrary() {
                 <span>{item.category || 'Photography'}</span>
               </div>
               <span style={statusStyle(item.status)}>{item.status || 'Published'}</span>
-              <a style={styles.actionLink} href={`/studio/structure/photography;${item._id}`}>Edit</a>
+              <a style={styles.actionLink} href={documentEditUrl(item._id)}>Edit</a>
             </article>
           ))
         ) : (

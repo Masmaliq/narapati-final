@@ -108,6 +108,10 @@ function duplicateUrl(item: JournalArticle) {
   return `/studio/intent/create?${params.toString()}`
 }
 
+function documentEditUrl(id: string, type: 'article' | 'photography') {
+  return `/studio/intent/edit/id=${encodeURIComponent(id)};type=${type}`
+}
+
 export function JournalDesk() {
   return (
     <main style={styles.shell}>
@@ -233,10 +237,10 @@ export function JournalArticleList() {
               </div>
               <span style={statusStyle(item.status)}>{statusLabels[item.status || 'Published'] || 'Terbit'}</span>
               <div style={styles.rowActions}>
-                <a href={`/studio/structure/article;${item._id}`} style={styles.rowAction}>Edit</a>
+                <a href={documentEditUrl(item._id, 'article')} style={styles.rowAction}>Edit</a>
                 {item.slug ? <a href={`/article/${encodeURIComponent(item.slug)}`} target="_blank" rel="noreferrer" style={styles.rowAction}>Preview</a> : null}
                 <a href={duplicateUrl(item)} style={styles.rowAction}>Duplicate</a>
-                <a href={`/studio/structure/article;${item._id}`} style={styles.rowActionMuted}>Archive</a>
+                <a href={documentEditUrl(item._id, 'article')} style={styles.rowActionMuted}>Archive</a>
               </div>
             </article>
           ))}
