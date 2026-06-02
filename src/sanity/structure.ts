@@ -55,7 +55,22 @@ export const structure: StructureResolver = (S) =>
                 .title('Semua Tulisan')
                 .id('article-all')
                 .icon(DocumentTextIcon)
-                .child(S.component(JournalArticleList).title('Semua Tulisan')),
+                .schemaType('article')
+                .child(
+                  S.component(JournalArticleList)
+                    .title('Semua Tulisan')
+                    .canHandleIntent(
+                      (intentName, params) =>
+                        (intentName === 'edit' || intentName === 'create') &&
+                        params.type === 'article'
+                    )
+                    .child((documentId) =>
+                      S.document()
+                        .schemaType('article')
+                        .documentId(documentId)
+                        .title('Article Editor')
+                    )
+                ),
               S.listItem()
                 .title('Kalender Editorial')
                 .id('editorial-calendar')
@@ -72,6 +87,12 @@ export const structure: StructureResolver = (S) =>
                     .schemaType('article')
                     .filter('_type == "article" && _id in path("drafts.**")')
                     .defaultOrdering([{field: '_updatedAt', direction: 'desc'}])
+                    .child((documentId) =>
+                      S.document()
+                        .schemaType('article')
+                        .documentId(documentId)
+                        .title('Article Editor')
+                    )
                 ),
               S.listItem()
                 .title('Terbit')
@@ -84,6 +105,12 @@ export const structure: StructureResolver = (S) =>
                     .schemaType('article')
                     .filter('_type == "article" && !(_id in path("drafts.**"))')
                     .defaultOrdering([{field: 'publishedAt', direction: 'desc'}])
+                    .child((documentId) =>
+                      S.document()
+                        .schemaType('article')
+                        .documentId(documentId)
+                        .title('Article Editor')
+                    )
                 ),
               S.listItem()
                 .title('Terjadwal')
@@ -96,6 +123,12 @@ export const structure: StructureResolver = (S) =>
                     .schemaType('article')
                     .filter('_type == "article" && !(_id in path("drafts.**")) && publishedAt > now()')
                     .defaultOrdering([{field: 'publishedAt', direction: 'asc'}])
+                    .child((documentId) =>
+                      S.document()
+                        .schemaType('article')
+                        .documentId(documentId)
+                        .title('Article Editor')
+                    )
                 )
             ])
         ),

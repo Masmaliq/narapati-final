@@ -2,6 +2,7 @@
 
 import {useEffect, useMemo, useState} from 'react'
 import {useClient} from 'sanity'
+import {IntentLink} from 'sanity/router'
 import {apiVersion} from '@/sanity/env'
 
 type JournalArticle = {
@@ -38,7 +39,7 @@ const articleQuery = `*[_type == "article" && defined(title)] | order(_updatedAt
 }`
 
 const quickActions = [
-  {label: 'New Article', href: '/studio/intent/create/template=article'},
+  {label: 'New Article', intent: 'create'},
   {label: 'View Drafts', href: '/studio/structure/article-drafts'},
   {label: 'View Published', href: '/studio/structure/article-published'},
   {label: 'Editorial Calendar', href: '/studio/structure/editorial-calendar'},
@@ -46,7 +47,7 @@ const quickActions = [
 ]
 
 const articleArchiveActions = [
-  {label: 'New Article', href: '/studio/intent/create/template=article'},
+  {label: 'New Article', intent: 'create'},
   {label: 'View Drafts', href: '/studio/structure/article-drafts'},
   {label: 'View Published', href: '/studio/structure/article-published'}
 ]
@@ -108,8 +109,16 @@ function duplicateUrl(item: JournalArticle) {
   return `/studio/intent/create?${params.toString()}`
 }
 
-function documentEditUrl(id: string, type: 'article' | 'photography') {
-  return `/studio/intent/edit/id=${encodeURIComponent(id)};type=${type}`
+function documentEditParams(id: string, type: 'article') {
+  return {id, type}
+}
+
+function articleCreateParams() {
+  return {type: 'article'}
+}
+
+function isCreateAction(action: {label: string; href?: string; intent?: string}) {
+  return action.intent === 'create'
 }
 
 export function JournalDesk() {
@@ -122,11 +131,17 @@ export function JournalDesk() {
       </section>
 
       <section style={styles.quickPanel} aria-label="Journal quick actions">
-        {quickActions.map((action) => (
-          <a href={action.href} style={styles.quickAction} key={action.label}>
-            {action.label}
-          </a>
-        ))}
+        {quickActions.map((action) =>
+          isCreateAction(action) ? (
+            <IntentLink intent="create" params={articleCreateParams()} style={styles.quickAction} key={action.label}>
+              {action.label}
+            </IntentLink>
+          ) : (
+            <a href={action.href} style={styles.quickAction} key={action.label}>
+              {action.label}
+            </a>
+          )
+        )}
       </section>
 
       <section style={styles.notePanel}>
@@ -188,11 +203,17 @@ export function JournalArticleList() {
       </section>
 
       <section style={styles.archiveActions} aria-label="Top article actions">
-        {articleArchiveActions.map((action) => (
-          <a href={action.href} style={action.label === 'New Article' ? styles.primaryButton : styles.secondaryButton} key={action.label}>
-            {action.label}
-          </a>
-        ))}
+        {articleArchiveActions.map((action) =>
+          isCreateAction(action) ? (
+            <IntentLink intent="create" params={articleCreateParams()} style={styles.primaryButton} key={action.label}>
+              {action.label}
+            </IntentLink>
+          ) : (
+            <a href={action.href} style={styles.secondaryButton} key={action.label}>
+              {action.label}
+            </a>
+          )
+        )}
       </section>
 
       <section style={styles.archiveToolbar} aria-label="Article archive controls">
@@ -228,7 +249,9 @@ export function JournalArticleList() {
             <article style={styles.articleRow} key={item._id}>
               <div style={styles.articleMain}>
                 <span style={styles.articleCategory}>{item.category || 'Journal'}</span>
-                <h2 style={styles.articleTitle}>{item.title || 'Untitled'}</h2>
+                <IntentLink intent="edit" params={documentEditParams(item._id, 'article')} style={styles.articleTitleLink}>
+                  <h2 style={styles.articleTitle}>{item.title || 'Untitled'}</h2>
+                </IntentLink>
                 <div style={styles.articleMeta}>
                   <span>{item.author || 'Narapati'}</span>
                   <span>Updated {formatDate(item.updatedAt)}</span>
@@ -237,10 +260,10 @@ export function JournalArticleList() {
               </div>
               <span style={statusStyle(item.status)}>{statusLabels[item.status || 'Published'] || 'Terbit'}</span>
               <div style={styles.rowActions}>
-                <a href={documentEditUrl(item._id, 'article')} style={styles.rowAction}>Edit</a>
+                <IntentLink intent="edit" params={documentEditParams(item._id, 'article')} style={styles.rowAction}>Edit</IntentLink>
                 {item.slug ? <a href={`/article/${encodeURIComponent(item.slug)}`} target="_blank" rel="noreferrer" style={styles.rowAction}>Preview</a> : null}
                 <a href={duplicateUrl(item)} style={styles.rowAction}>Duplicate</a>
-                <a href={documentEditUrl(item._id, 'article')} style={styles.rowActionMuted}>Archive</a>
+                <IntentLink intent="edit" params={documentEditParams(item._id, 'article')} style={styles.rowActionMuted}>Archive</IntentLink>
               </div>
             </article>
           ))}
@@ -249,7 +272,7 @@ export function JournalArticleList() {
         <section style={styles.emptyState}>
           <h2 style={styles.emptyTitle}>Belum ada tulisan.</h2>
           <p style={styles.emptyText}>Mulai tulis artikel pertama Narapati.</p>
-          <a href="/studio/intent/create/template=article" style={styles.emptyButton}>New Article</a>
+          <IntentLink intent="create" params={articleCreateParams()} style={styles.emptyButton}>New Article</IntentLink>
         </section>
       )}
     </main>
@@ -479,6 +502,10 @@ const styles = {
     fontSize: 24,
     fontWeight: 500,
     lineHeight: 1.08
+  },
+  articleTitleLink: {
+    color: 'inherit',
+    textDecoration: 'none'
   },
   articleMeta: {
     display: 'flex',
