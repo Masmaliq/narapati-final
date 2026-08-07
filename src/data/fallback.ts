@@ -8,6 +8,10 @@ export const categories: Category[] = [
 ]
 
 export const navigationItems: NavigationItem[] = [
+  {label: 'Insight', type: 'category', href: '/category/insight', visible: true, openInNewTab: false},
+  {label: 'Market', type: 'category', href: '/category/market', visible: true, openInNewTab: false},
+  {label: 'Video', type: 'internal', href: '/video', visible: true, openInNewTab: false},
+  {label: 'Photography', type: 'internal', href: '/photography', visible: true, openInNewTab: false}
 ]
 
 export const articles: Article[] = [

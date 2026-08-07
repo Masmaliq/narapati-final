@@ -54,7 +54,7 @@ export const navigationSettingsType = defineType({
               validation: (Rule) => Rule.required()
             }),
             defineField({
-              name: 'category',
+              name: 'categoryReference',
               title: 'Category Reference',
               type: 'reference',
               to: [{type: 'category'}],
@@ -118,7 +118,7 @@ export const navigationSettingsType = defineType({
               linkType: 'linkType',
               visible: 'visible',
               highlight: 'highlight',
-              category: 'category.title',
+              category: 'categoryReference.title',
               internalPath: 'internalPath',
               externalUrl: 'externalUrl'
             },
