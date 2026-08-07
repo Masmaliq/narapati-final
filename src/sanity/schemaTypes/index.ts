@@ -4,6 +4,7 @@ import {categoryType} from './category'
 import {photographyType, podcastType, videoType} from './media'
 import {siteSettingsType} from './siteSettings'
 import {homepageSettingsType} from './homepageSettings'
+import {navigationSettingsType} from './navigationSettings'
 
 export const schemaTypes = [
   articleType,
@@ -13,5 +14,6 @@ export const schemaTypes = [
   videoType,
   photographyType,
   siteSettingsType,
-  homepageSettingsType
+  homepageSettingsType,
+  navigationSettingsType
 ]

@@ -1,6 +1,7 @@
 'use client'
 
-import {type CSSProperties, useEffect, useMemo, useState} from 'react'
+import Link from 'next/link'
+import {type CSSProperties, useCallback, useEffect, useMemo, useState} from 'react'
 import {useClient} from 'sanity'
 import {apiVersion} from '@/sanity/env'
 
@@ -151,18 +152,18 @@ export function EditorialCalendar() {
   const [loading, setLoading] = useState(true)
   const [savingId, setSavingId] = useState<string | null>(null)
 
-  function loadItems() {
+  const loadItems = useCallback(() => {
     setLoading(true)
     client
       .fetch<CalendarItem[]>(calendarQuery)
       .then((result) => setItems(result || []))
       .catch((error) => console.error('Failed to load Editorial Calendar', error))
       .finally(() => setLoading(false))
-  }
+  }, [client])
 
   useEffect(() => {
     loadItems()
-  }, [])
+  }, [loadItems])
 
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
@@ -206,8 +207,8 @@ export function EditorialCalendar() {
       </section>
 
       <section style={styles.quickActions} aria-label="Calendar quick actions">
-        <a href="/studio/intent/create/template=article" style={styles.primaryAction}>Schedule Article</a>
-        <a href="/studio/intent/create/template=article" style={styles.secondaryAction}>Create Draft</a>
+        <Link href="/studio/intent/create/template=article" style={styles.primaryAction}>Schedule Article</Link>
+        <Link href="/studio/intent/create/template=article" style={styles.secondaryAction}>Create Draft</Link>
         <button type="button" style={styles.secondaryAction}>Move Date</button>
       </section>
 
@@ -280,7 +281,7 @@ export function EditorialCalendar() {
         <section style={styles.emptyState}>
           <h2>Belum ada jadwal editorial.</h2>
           <p>Mulai susun ritme publikasi Narapati dengan draft pertama minggu ini.</p>
-          <a href="/studio/intent/create/template=article" style={styles.primaryAction}>Tambah Jadwal</a>
+          <Link href="/studio/intent/create/template=article" style={styles.primaryAction}>Tambah Jadwal</Link>
         </section>
       ) : null}
 

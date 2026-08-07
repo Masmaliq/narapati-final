@@ -1,13 +1,16 @@
 export function NarapatiStudioIcon() {
   return (
-    <img
-      src="/favicon.png"
-      alt="Narapati Studio"
+    <span
+      aria-label="Narapati Studio"
+      role="img"
       style={{
         display: 'block',
         width: '1.65em',
         height: '1.65em',
-        objectFit: 'contain'
+        backgroundImage: 'url(/favicon.png)',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain'
       }}
     />
   )

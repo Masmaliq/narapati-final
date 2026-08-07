@@ -26,7 +26,8 @@ const hiddenDocumentTypes = [
   'photography',
   'podcast',
   'siteSettings',
-  'homepageSettings'
+  'homepageSettings',
+  'navigationSettings'
 ]
 
 export const structure: StructureResolver = (S) =>
@@ -182,6 +183,16 @@ export const structure: StructureResolver = (S) =>
                     .schemaType('homepageSettings')
                     .documentId('homepageSettings')
                     .title('Homepage Manager')
+                ),
+              S.listItem()
+                .title('Navbar Manager')
+                .icon(TagsIcon)
+                .schemaType('navigationSettings')
+                .child(
+                  S.document()
+                    .schemaType('navigationSettings')
+                    .documentId('navigationSettings')
+                    .title('Navbar Settings')
                 ),
               S.documentTypeListItem('category')
                 .title('Categories')

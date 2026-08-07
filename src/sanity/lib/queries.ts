@@ -69,6 +69,30 @@ export const HOMEPAGE_SETTINGS_QUERY = defineQuery(`*[_type == "homepageSettings
   "photographyItems": photographyItems[]->${PHOTOGRAPHY_CARD_FIELDS}
 }`)
 
+export const NAVIGATION_SETTINGS_QUERY = defineQuery(`*[_type == "navigationSettings" && _id == "navigationSettings"][0] {
+  "items": items[
+    visible == true &&
+    defined(label) &&
+    (
+      (coalesce(linkType, type) == "category" && defined(category->slug.current)) ||
+      (coalesce(linkType, type) == "internal" && defined(internalPath)) ||
+      (coalesce(linkType, type) == "external" && defined(externalUrl))
+    )
+  ] {
+    label,
+    mobileLabel,
+    "type": coalesce(linkType, type, "category"),
+    visible,
+    openInNewTab,
+    highlight,
+    "href": select(
+      coalesce(linkType, type) == "category" => "/category/" + category->slug.current,
+      coalesce(linkType, type) == "internal" => internalPath,
+      coalesce(linkType, type) == "external" => externalUrl
+    )
+  }
+}`)
+
 export const ARTICLES_QUERY = defineQuery(`*[
   _type == "article" &&
   !(_id in path("drafts.**")) &&

@@ -72,6 +72,18 @@ export type SiteSettings = {
   advertiseContent: string
 }
 
+export type NavigationItemType = 'category' | 'internal' | 'external'
+
+export type NavigationItem = {
+  label: string
+  mobileLabel?: string
+  type: NavigationItemType
+  href: string
+  visible?: boolean
+  openInNewTab?: boolean
+  highlight?: boolean
+}
+
 export type HomepageSectionKey = 'hero' | 'journal' | 'featured' | 'global' | 'insight' | 'market' | 'photography' | 'video'
 
 export type HomepageSectionSetting = {

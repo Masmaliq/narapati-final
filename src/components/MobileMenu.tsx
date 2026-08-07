@@ -4,9 +4,10 @@ import Link from 'next/link'
 import {useEffect, useState} from 'react'
 import {createPortal} from 'react-dom'
 import {Menu, X} from 'lucide-react'
+import type {NavigationItem} from '@/types/content'
 
 type MobileMenuProps = {
-  navItems: Array<[string, string]>
+  navItems: NavigationItem[]
 }
 
 const secondaryLinks: Array<[string, string]> = [
@@ -46,9 +47,16 @@ export function MobileMenu({navItems}: MobileMenuProps) {
             </div>
 
             <nav className="mobile-menu-primary" aria-label="Mobile navigation">
-              {navItems.map(([label, href]) => (
-                <Link href={href} key={href} onClick={() => setOpen(false)}>
-                  {label}
+              {navItems.map((item) => (
+                <Link
+                  href={item.href}
+                  key={`${item.label}-${item.href}`}
+                  className={item.highlight ? 'mobile-menu-highlight' : undefined}
+                  target={item.openInNewTab ? '_blank' : undefined}
+                  rel={item.openInNewTab ? 'noreferrer' : undefined}
+                  onClick={() => setOpen(false)}
+                >
+                  {item.mobileLabel || item.label}
                 </Link>
               ))}
             </nav>

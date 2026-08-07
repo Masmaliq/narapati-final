@@ -192,8 +192,6 @@ export function JournalArticleList() {
     })
   }, [filter, items, query])
 
-  const articleCount = filteredItems.length
-
   return (
     <main style={styles.shell}>
       <section style={styles.heroCompact}>

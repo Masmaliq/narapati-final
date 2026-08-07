@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {MobileMenu} from '@/components/MobileMenu'
 import {SearchOverlay, type SearchArticle} from '@/components/SearchOverlay'
-import {getArticles, getCategories} from '@/sanity/lib/fetch'
+import {getArticles, getNavigationItems} from '@/sanity/lib/fetch'
 
 const breakingInsightQuotes = [
   'Pasar bergerak cepat, tetapi hati manusia tetap mencari makna.',
@@ -13,7 +13,7 @@ const breakingInsightQuotes = [
 ]
 
 export async function Header() {
-  const [articles, categories] = await Promise.all([getArticles(), getCategories()])
+  const [articles, navItems] = await Promise.all([getArticles(), getNavigationItems()])
   const searchArticles: SearchArticle[] = articles.map((article) => ({
     title: article.title,
     slug: article.slug,
@@ -29,15 +29,6 @@ export async function Header() {
       name: article.author.name
     }
   }))
-  const navItems: Array<[string, string]> = ['Global', 'Insight', 'Market', 'Video', 'Photography'].map((label) => {
-    const category = categories.find((item) => item.title.toLowerCase() === label.toLowerCase())
-    if (label === 'Video') return [label, '/video']
-    if (label === 'Photography') return [label, '/photography']
-    return [
-      label,
-      category ? `/category/${encodeURIComponent(category.slug)}` : `/category/${label.toLowerCase()}`
-    ]
-  })
   const today = new Intl.DateTimeFormat('id-ID', {
     day: '2-digit',
     month: 'long',
@@ -73,9 +64,15 @@ export async function Header() {
 
       <nav className="header-nav" aria-label="Main navigation">
         <div className="container header-nav-inner">
-          {navItems.map(([label, href]) => (
-            <Link key={href} href={href}>
-              {label}
+          {navItems.map((item) => (
+            <Link
+              key={`${item.label}-${item.href}`}
+              href={item.href}
+              className={item.highlight ? 'header-nav-highlight' : undefined}
+              target={item.openInNewTab ? '_blank' : undefined}
+              rel={item.openInNewTab ? 'noreferrer' : undefined}
+            >
+              {item.label}
             </Link>
           ))}
         </div>

@@ -4,12 +4,12 @@ type WatermarkedImageProps = ImageProps & {
   watermark?: 'story' | 'moment'
 }
 
-export function WatermarkedImage({watermark = 'story', ...props}: WatermarkedImageProps) {
+export function WatermarkedImage({watermark = 'story', alt = '', ...props}: WatermarkedImageProps) {
   const tagline = watermark === 'moment' ? 'Keep The Moment.' : 'Keep The Story.'
 
   return (
     <>
-      <Image {...props} />
+      <Image {...props} alt={alt} />
       <span className="narapati-watermark" aria-hidden="true">
         <span>N</span>
         <small>{tagline}</small>

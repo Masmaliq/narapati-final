@@ -3,7 +3,7 @@ import Link from 'next/link'
 import {JournalHeroCarousel, type JournalHeroSlide} from '@/components/JournalHeroCarousel'
 import {WatermarkedImage} from '@/components/WatermarkedImage'
 import {getArticles, getHomepageSettings, getPhotography, getVideos} from '@/sanity/lib/fetch'
-import type {Article, HomepageSectionKey, MediaItem, PhotographyItem} from '@/types/content'
+import type {Article, HomepageSectionKey, PhotographyItem} from '@/types/content'
 
 function articleHref(slug: string) {
   return `/article/${encodeURIComponent(slug)}`

@@ -1,10 +1,13 @@
-import type {Article, Category, MediaItem, SiteSettings} from '@/types/content'
+import type {Article, Category, MediaItem, NavigationItem, SiteSettings} from '@/types/content'
 
 export const categories: Category[] = [
   {title: 'Nasional', slug: 'nasional', description: 'Power, policy, and civic life across Indonesia.'},
   {title: 'Global', slug: 'global', description: 'Diplomacy, markets, security, and world affairs.'},
   {title: 'Business', slug: 'business', description: 'Capital, companies, and the people shaping growth.'},
   {title: 'Culture', slug: 'culture', description: 'Ideas, arts, identity, and contemporary life.'}
+]
+
+export const navigationItems: NavigationItem[] = [
 ]
 
 export const articles: Article[] = [

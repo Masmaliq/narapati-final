@@ -160,7 +160,14 @@ export function PhotographyLibrary() {
             <article style={styles.row} key={item._id}>
               <a style={styles.thumbnailLink} href={documentEditUrl(item._id)}>
                 {item.image ? (
-                  <img src={item.image} alt={item.title || ''} style={styles.thumbnail} />
+                  <span
+                    aria-label={item.title || 'Photography thumbnail'}
+                    role="img"
+                    style={{
+                      ...styles.thumbnail,
+                      backgroundImage: `url(${item.image})`
+                    }}
+                  />
                 ) : (
                   <span style={styles.imageEmpty}>No Image</span>
                 )}
@@ -338,7 +345,9 @@ const styles = {
     display: 'block',
     width: '100%',
     height: '100%',
-    objectFit: 'cover' as const
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover'
   },
   imageEmpty: {
     display: 'grid',

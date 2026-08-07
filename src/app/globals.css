@@ -9349,6 +9349,11 @@ html {
   text-decoration-color: rgba(179, 138, 86, 0.55);
 }
 
+.header-nav a.header-nav-highlight,
+.mobile-menu-primary a.mobile-menu-highlight {
+  color: var(--journal-gold);
+}
+
 /* Final Narapati mobile search refinement */
 .search-overlay {
   z-index: 120;
