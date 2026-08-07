@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {JournalHeroCarousel, type JournalHeroSlide} from '@/components/JournalHeroCarousel'
 import {WatermarkedImage} from '@/components/WatermarkedImage'
-import {getArticles, getHomepageSettings, getPhotography, getVideos} from '@/sanity/lib/fetch'
+import {getArticles, getCategories, getHomepageSettings, getPhotography, getVideos} from '@/sanity/lib/fetch'
 import type {Article, HomepageSectionKey, PhotographyItem} from '@/types/content'
 
 function articleHref(slug: string) {
@@ -62,24 +62,22 @@ const defaultSectionOrder: HomepageSectionKey[] = [
   'hero',
   'journal',
   'featured',
-  'global',
   'insight',
   'market',
   'photography',
   'video'
 ]
-const categorySectionKeys = ['global', 'insight', 'market'] as const
-
 function selectedItems<T extends {slug: string}>(items?: T[]) {
   return Array.isArray(items) ? items.filter((item) => item?.slug) : []
 }
 
 export default async function HomePage() {
-  const [articles, videos, photography, homepageSettings] = await Promise.all([
+  const [articles, videos, photography, homepageSettings, categories] = await Promise.all([
     getArticles(),
     getVideos(),
     getPhotography(),
-    getHomepageSettings()
+    getHomepageSettings(),
+    getCategories()
   ])
 
   const availableArticles = articles.filter((article) => article.slug)
@@ -90,10 +88,7 @@ export default async function HomePage() {
   const articlePool = articlesAfterHero.length ? articlesAfterHero : availableArticles
   const sectionSettings = homepageSettings?.sectionOrder?.length ? homepageSettings.sectionOrder : defaultSectionOrder.map((section) => ({section, visible: true}))
   const sectionVisible = (section: HomepageSectionKey) => sectionSettings.find((item) => item.section === section)?.visible !== false
-  const configuredSectionKeys = sectionSettings.map((item) => item.section).filter((section): section is HomepageSectionKey => defaultSectionOrder.includes(section))
-  const orderedSections = [...configuredSectionKeys, ...defaultSectionOrder.filter((section) => !configuredSectionKeys.includes(section))]
-  const orderedCategoryKeys = orderedSections.filter((section): section is typeof categorySectionKeys[number] => categorySectionKeys.includes(section as typeof categorySectionKeys[number]))
-  const categoryKeys = orderedCategoryKeys.length ? orderedCategoryKeys : [...categorySectionKeys]
+  const articleCategories = categories.filter((category) => category.slug && category.title)
   const heroArticleSlides: JournalHeroSlide[] = uniqueArticles([
     ...(featured ? [featured] : []),
     ...articlePool.filter((article) => article.image)
@@ -153,26 +148,28 @@ export default async function HomePage() {
   const travelNotes = fillItems(
     uniqueArticles([
       ...pickByCategory(availableArticles, 'insight'),
-      ...pickByCategory(availableArticles, 'global'),
       ...pickByCategory(availableArticles, 'market'),
       ...availableArticles
     ]).filter((article) => articlePool.some((item) => item.slug === article.slug)),
     3
   )
   const managedCategoryArticles = {
-    global: selectedItems(homepageSettings?.globalArticles),
     insight: selectedItems(homepageSettings?.insightArticles),
     market: selectedItems(homepageSettings?.marketArticles)
   }
-  const journalColumns = categoryKeys.map((key, index) => {
-    const fallbackStories = fillItems(pickByCategory(availableArticles, key), 1)
-    const managedStories = managedCategoryArticles[key]
+  const journalColumns = articleCategories.map((category) => {
+    const key = category.slug.toLowerCase()
+    const fallbackStories = fillItems([
+      ...pickByCategory(availableArticles, category.slug),
+      ...pickByCategory(availableArticles, category.title)
+    ], 1)
+    const managedStories = managedCategoryArticles[key as keyof typeof managedCategoryArticles] || []
     return {
       key,
-      title: key.charAt(0).toUpperCase() + key.slice(1),
-      article: (managedStories.length ? managedStories : fallbackStories)[0] || fillItems(availableArticles, 3)[index]
+      title: category.title,
+      article: (managedStories.length ? managedStories : fallbackStories)[0]
     }
-  }).filter((column) => sectionVisible(column.key))
+  }).filter((column) => column.article)
   const managedPhotography = selectedItems(homepageSettings?.photographyItems)
   const managedVideos = selectedItems(homepageSettings?.videoItems)
   const photoItems = managedPhotography.length ? managedPhotography.slice(0, 4) : fillItems(photography as PhotographyItem[], 4)
@@ -272,7 +269,7 @@ export default async function HomePage() {
       ) : null}
 
       {journalColumns.length ? (
-      <section className="journal-section journal-category-section nnn-container" aria-label="Global Insight Market">
+      <section className="journal-section journal-category-section nnn-container" aria-label="Homepage category articles">
         <div className="journal-category-grid">
           {journalColumns.map(({title, article}, index) => article ? (
             <article className="journal-category-card" key={`${title}-${article.slug}-${index}`}>
