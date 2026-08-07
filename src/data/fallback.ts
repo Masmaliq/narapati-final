@@ -1,10 +1,8 @@
 import type {Article, Category, MediaItem, NavigationItem, SiteSettings} from '@/types/content'
 
 export const categories: Category[] = [
-  {title: 'Nasional', slug: 'nasional', description: 'Power, policy, and civic life across Indonesia.'},
-  {title: 'Global', slug: 'global', description: 'Diplomacy, markets, security, and world affairs.'},
-  {title: 'Business', slug: 'business', description: 'Capital, companies, and the people shaping growth.'},
-  {title: 'Culture', slug: 'culture', description: 'Ideas, arts, identity, and contemporary life.'}
+  {title: 'Insight', slug: 'insight', description: 'Refleksi, nilai hidup, dan sudut pandang editorial Narapati.'},
+  {title: 'Market', slug: 'market', description: 'Bisnis, pasar, dan arah ekonomi dengan pembacaan yang tenang.'}
 ]
 
 export const navigationItems: NavigationItem[] = [
@@ -29,16 +27,16 @@ export const articles: Article[] = [
     title: 'Inside ASEAN’s Quiet Push for Digital Trade Standards',
     slug: 'asean-digital-trade-standards',
     dek: 'The region’s next trade advantage may be written in interoperable rules, trusted data, and practical diplomacy.',
-    category: categories[1],
+    category: categories[0],
     publishedAt: '2026-05-17',
     image: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1400&q=85',
-    author: {name: 'Rafi Wiratama', role: 'Global Affairs Editor'}
+    author: {name: 'Rafi Wiratama', role: 'Insight Editor'}
   },
   {
     title: 'The Family Offices Rewriting Indonesia’s Growth Map',
     slug: 'family-offices-growth-map',
     dek: 'Patient capital is moving into infrastructure, food systems, and climate technology with a longer lens.',
-    category: categories[2],
+    category: categories[1],
     publishedAt: '2026-05-16',
     image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1400&q=85',
     author: {name: 'Mahesa Kartiko', role: 'Business Editor'}
@@ -47,7 +45,7 @@ export const articles: Article[] = [
     title: 'A New Generation of Curators Brings Heritage Into the Present',
     slug: 'curators-heritage-present',
     dek: 'Museums and independent spaces are building bridges between ancestral craft and contemporary audiences.',
-    category: categories[3],
+    category: categories[0],
     publishedAt: '2026-05-15',
     image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1400&q=85',
     author: {name: 'Dara Santoso', role: 'Culture Critic'}
